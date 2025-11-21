@@ -1,23 +1,20 @@
-import { Button } from "@/components/ui/button";
 import { IconUserFilled } from "@tabler/icons-react";
 import { IconUser } from "@tabler/icons-react";
 import { IconUserCog } from "@tabler/icons-react";
-import Link from "next/link";
 import {
   Card,
-  CardAction,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Header from "../components/Header";
 
 export default function Home() {
   return (
-    <div className=" flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex flex-col min-h-screen items-center justify-center">
+      <Header />
       <main
-        className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-around py-16
+        className="flex w-full max-w-3xl flex-col items-center justify-around py-16
        px-16"
       >
         <div className="flex flex-col items-center gap-6 text-center">
@@ -28,7 +25,7 @@ export default function Home() {
             Health and Fitness Club Management System
           </p>
         </div>
-        <div className="w-full flex gap-8 m-4">
+        <div className="w-full flex gap-8 m-4 items-stretch">
           <Card className="w-full max-w-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -86,30 +83,6 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
         </Card>
-        <div className="flex flex-col mt-12 items-center justify-center gap-4 text-base font-medium">
-          <h2 className="max-w-sm my-6 text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            You are entering as a:
-          </h2>
-          <div className="sm:flex-row">
-            <Link href="/member">
-              <Button size="lg" variant="link">
-                <IconUser /> Member
-              </Button>
-            </Link>
-
-            <Link href="trainer">
-              <Button size="lg" variant="link">
-                <IconUserFilled /> Trainer
-              </Button>
-            </Link>
-
-            <Link href="admin">
-              <Button size="lg" variant="link">
-                <IconUserCog /> Administrative Staff
-              </Button>
-            </Link>
-          </div>
-        </div>
       </main>
     </div>
   );
