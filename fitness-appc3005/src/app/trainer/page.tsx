@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -11,19 +10,13 @@ import {
 } from "@/components/ui/card";
 
 import Header from "../../components/Header";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { IconCalendarUser } from "@tabler/icons-react";
-import { DataTable } from "../member/data-table";
+import { IconCalendarUser, IconZoom } from "@tabler/icons-react";
+import { DataTable } from "./data-table";
 import { sessionColumns, Session } from "./columns";
 import { useState, useEffect } from "react";
+import { IconZoomCheck } from "@tabler/icons-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 async function getSessions(): Promise<Session[]> {
   return [
@@ -32,19 +25,20 @@ async function getSessions(): Promise<Session[]> {
       date: new Date().toLocaleDateString("en-CA"),
       title: "Yoga Session",
       capacity: 50,
+      trainer: "Coach Chris",
     },
     {
       id: "728edawr",
       date: new Date().toLocaleDateString("en-CA"),
       title: "Chest Day",
       capacity: 2,
+      trainer: "Instructor Mary",
     },
   ];
 }
 
 export default function Member() {
   const [sessions, setSessions] = useState<Session[]>([]);
-  const [trainer, setTrainer] = useState("trainer1");
 
   useEffect(() => {
     getSessions().then(setSessions);
@@ -56,41 +50,42 @@ export default function Member() {
       <h1 className="max-w-s mb-4 text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
         Trainers
       </h1>
-      <Select
-        defaultValue="trainer1"
-        onValueChange={(value) => setTrainer(value)}
-      >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select a member" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Members</SelectLabel>
-            <SelectItem value="trainer1">Coach Chris</SelectItem>
-            <SelectItem value="trainer2">Instructor Mary</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
-      <Card className="w-full lg:max-w-2xl md:max-w-md sm:max-w-sm">
-        <CardHeader>
-          <CardTitle className="flex gap-2 items-center">
-            Group Class Registration
-            <IconCalendarUser />
-          </CardTitle>
-          <CardDescription>
-            Register for upcoming group sessions here
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <DataTable columns={sessionColumns} data={sessions} />
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full">
-            Register
-          </Button>
-        </CardFooter>
-      </Card>
+      <div className="flex w-full gap-4 flex-wrap justify-center items-center items-stretch">
+        <Card className="w-full lg:max-w-md md:max-w-md sm:max-w-sm">
+          <CardHeader>
+            <CardTitle className="flex gap-2 items-center">
+              Upcoming Group Classes
+              <IconCalendarUser />
+            </CardTitle>
+            <CardDescription>
+              Filter by trainer using the dropdown below
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DataTable columns={sessionColumns} data={sessions} />
+          </CardContent>
+        </Card>
+        <Card className="w-full lg:max-w-md md:max-w-md sm:max-w-sm">
+          <CardHeader>
+            <CardTitle className="flex gap-2 items-center">
+              Member Search
+              <IconZoomCheck />
+            </CardTitle>
+            <CardDescription>
+              Search members by name (case-insensitive) to view their current
+              weight goal and lastly measured weight.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex w-full max-w-sm items-center gap-2">
+              <Input type="text" placeholder="Henry Lee" />
+              <Button type="submit" variant="outline">
+                Search
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

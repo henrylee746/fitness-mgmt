@@ -59,12 +59,14 @@ async function getSessions(): Promise<Session[]> {
       date: new Date().toLocaleDateString("en-CA"),
       title: "Yoga Session",
       capacity: 50,
+      trainer: "Coach Chris",
     },
     {
       id: "728edawr",
       date: new Date().toLocaleDateString("en-CA"),
       title: "Chest Day",
       capacity: 2,
+      trainer: "Instructor Mary",
     },
   ];
 }
@@ -172,7 +174,7 @@ export default function Member() {
             </Button>
           </CardFooter>
         </Card>
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-6">
           <Card className="w-full md:max-w-md lg:max-w-2xl sm:max-w-sm">
             <CardHeader>
               <CardTitle className="flex gap-2 items-center">
@@ -190,8 +192,8 @@ export default function Member() {
                 </p>
                 <p className="text-sm">Weight: {data[0].weight} lbs</p>
                 <Separator className="my-4" />
-                <div className="flex h-5 items-center space-x-4 text-sm">
-                  <div>Weight Goal: {data[0].goal}</div>
+                <div className="flex h-8 items-center space-x-4 text-xs lg:text-sm">
+                  <div>Weight Goal: {data[0].goal} lbs</div>
                   <Separator orientation="vertical" />
                   <div>Classes Upcoming: {data[0].classes}</div>
                   <Separator orientation="vertical" />

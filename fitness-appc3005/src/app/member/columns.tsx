@@ -19,6 +19,7 @@ export type Session = {
   date: string;
   title: string;
   capacity: number;
+  trainer: string;
 };
 
 export const sessionColumns: ColumnDef<Session>[] = [
@@ -55,5 +56,9 @@ export const sessionColumns: ColumnDef<Session>[] = [
   {
     accessorKey: "capacity",
     header: "Space",
+  },
+  {
+    accessorKey: "trainer",
+    header: "Trainer",
   },
 ];
