@@ -36,7 +36,7 @@ import { IconUserScan } from "@tabler/icons-react";
 import { IconDashboardFilled } from "@tabler/icons-react";
 import { IconCalendarUser } from "@tabler/icons-react";
 import { DataTable } from "./data-table";
-import { sessionColumns, Session, Health } from "./columns";
+import { sessionColumns, Session, Health } from "../table-config/columns";
 import { useState, useEffect } from "react";
 
 async function getData(): Promise<Health[]> {
@@ -175,7 +175,7 @@ export default function Member() {
           </CardFooter>
         </Card>
         <div className="flex flex-col gap-6">
-          <Card className="w-full md:max-w-md lg:max-w-2xl sm:max-w-sm">
+          <Card className="w-full md:max-w-md lg:max-w-lg sm:max-w-sm">
             <CardHeader>
               <CardTitle className="flex gap-2 items-center">
                 Dashboard
@@ -205,7 +205,7 @@ export default function Member() {
             )}
             <CardFooter className="flex-col gap-2"></CardFooter>
           </Card>
-          <Card className="w-full lg:max-w-2xl md:max-w-md sm:max-w-sm">
+          <Card className="w-full lg:max-w-lg md:max-w-md sm:max-w-sm">
             <CardHeader>
               <CardTitle className="flex gap-2 items-center">
                 Group Class Registration

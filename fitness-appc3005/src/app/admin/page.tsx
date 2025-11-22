@@ -11,12 +11,11 @@ import {
 
 import Header from "../../components/Header";
 import { IconCalendarUser, IconZoom } from "@tabler/icons-react";
-import { DataTable } from "./data-table";
-import { sessionColumns, Session } from "../table-config/columns";
 import { useState, useEffect } from "react";
 import { IconZoomCheck } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { sessionColumns, Session } from "../table-config/columns";
 
 async function getSessions(): Promise<Session[]> {
   return [
@@ -51,7 +50,7 @@ export default function Member() {
         Trainers
       </h1>
       <div className="flex w-full gap-4 flex-wrap justify-center items-center items-stretch">
-        <Card className="w-full lg:max-w-lg md:max-w-md sm:max-w-sm">
+        <Card className="w-full lg:max-w-md md:max-w-md sm:max-w-sm">
           <CardHeader>
             <CardTitle className="flex gap-2 items-center">
               Upcoming Group Classes
@@ -61,11 +60,9 @@ export default function Member() {
               Filter by trainer using the dropdown below
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <DataTable columns={sessionColumns} data={sessions} />
-          </CardContent>
+          <CardContent></CardContent>
         </Card>
-        <Card className="w-full lg:max-w-lg md:max-w-md sm:max-w-sm">
+        <Card className="w-full lg:max-w-md md:max-w-md sm:max-w-sm">
           <CardHeader>
             <CardTitle className="flex gap-2 items-center">
               Member Search
