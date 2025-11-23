@@ -19,7 +19,7 @@ import MemberSelect from "./components/MemberSelect";
 import ProfileManagement from "./components/ProfileManagement";
 import MemberDashboard from "./components/MemberDashboard";
 
-export default async function Members({ params }: { params: { id: string } }) {
+export default async function Members({ params }: { params: { id?: string } }) {
   const members = await prisma.member.findMany();
 
   return (
