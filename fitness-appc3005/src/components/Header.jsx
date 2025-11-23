@@ -14,7 +14,7 @@ const Header = () => {
             <IconHome /> Home
           </Button>
         </Link>
-        <Link href="/member">
+        <Link href="/member/0">
           <Button size="lg" variant="link">
             <IconUser /> Members
           </Button>

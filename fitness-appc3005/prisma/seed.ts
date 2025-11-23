@@ -59,24 +59,28 @@ async function main() {
     data: [
       {
         trainerId: createdTrainers[0].id,
+        name: "Lifting with John",
         roomId: createdRooms[0].id,
         dateTime: new Date("2025-01-10T10:00:00"),
         capacity: 20,
       },
       {
         trainerId: createdTrainers[0].id,
+        name: "Yoga with John",
         roomId: createdRooms[1].id,
         dateTime: new Date("2025-01-11T14:00:00"),
         capacity: 15,
       },
       {
         trainerId: createdTrainers[1].id,
+        name: "Calisthenics with Lisa",
         roomId: createdRooms[2].id,
         dateTime: new Date("2025-01-12T18:00:00"),
         capacity: 12,
       },
       {
         trainerId: createdTrainers[1].id,
+        name: "Deep meditation with Lisa",
         roomId: createdRooms[0].id,
         dateTime: new Date("2025-01-13T09:00:00"),
         capacity: 20,

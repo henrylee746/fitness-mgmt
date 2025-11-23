@@ -31,6 +31,7 @@ CREATE TABLE "Room" (
 CREATE TABLE "Session" (
     "id" SERIAL NOT NULL,
     "trainerId" INTEGER NOT NULL,
+    "name" TEXT NOT NULL DEFAULT "Session"
     "roomId" INTEGER NOT NULL,
     "dateTime" TIMESTAMP(3) NOT NULL,
     "capacity" INTEGER NOT NULL,
