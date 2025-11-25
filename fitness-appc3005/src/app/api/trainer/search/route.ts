@@ -1,5 +1,6 @@
 import prisma from "../../../../../lib/prisma";
 
+/*Filters Sessions by Trainer*/
 export async function POST(req: Request) {
   try {
     const { id } = await req.json(); // parse JSON from request body

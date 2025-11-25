@@ -11,8 +11,10 @@ import { DataTable } from "./data-table";
 import prisma from "../../../lib/prisma";
 
 export default async function GroupClass() {
-  //Querying so that all list of sessions are displayed before filtering by trainer
-  /*Filters sessions with dates only greater than or equal to (gte) today*/
+  /*Querying so that all list of sessions are displayed before 
+  filtering by trainer
+  Filters sessions with dates only greater than or equal to (gte) today
+  */
   const sessions = await prisma.session.findMany({
     where: {
       dateTime: {

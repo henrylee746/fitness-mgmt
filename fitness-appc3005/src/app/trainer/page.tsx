@@ -7,7 +7,7 @@ export default async function Member() {
       <h1 className="max-w-s mb-4 text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
         Trainers
       </h1>
-      <div className="flex w-full gap-4 flex-wrap justify-center items-center ">
+      <div className="flex w-full gap-4 flex-wrap justify-center">
         <GroupClass />
         <MemberSearch />
       </div>

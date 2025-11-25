@@ -16,6 +16,9 @@ export default function MemberSearch() {
   const [results, setResults] = useState<any[]>([]);
   const [query, setQuery] = useState("");
 
+  //async function for looking up member by name (calls /api/member/search)
+  /*would normally use this as a server action but the api route 
+    can be used for multiple purposes */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!query) return;
@@ -62,7 +65,7 @@ export default function MemberSearch() {
             <ul className="p-4">
               {results.map((member) => (
                 <li key={member.id} className="list-disc py-2">
-                  {member.firstName} {member.lastName} — {member.email}
+                  {member.firstName} {member.lastName} - {member.email}
                   <p className="text-muted-foreground text-sm">
                     Weight: {member?.metrics[member.metrics.length - 1].weight}
                   </p>

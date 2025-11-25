@@ -1,5 +1,6 @@
 import prisma from "../../../../../lib/prisma";
 
+/*Member Search Functionality in Trainers tab*/
 export async function POST(req: Request) {
   try {
     const { name } = await req.json(); // parse JSON from request body

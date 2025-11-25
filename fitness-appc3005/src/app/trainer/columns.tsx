@@ -1,10 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 
-/*For the Dashboard cardboard, no column definition needed 
-as it only uses a Separator*/
 export type Health = {
   id: string;
   date: string;
@@ -14,6 +11,7 @@ export type Health = {
   sessions: string[];
 };
 
+//Session type with room and trainer relations joined together
 export type Session = {
   capacity: number;
   dateTime: Date;
@@ -31,7 +29,11 @@ export type Trainer = {
   name: string;
 };
 
-export const sessionColumns: ColumnDef<Session>[] = [
+interface WithTrainer {
+  trainer: { name: string };
+}
+
+export const sessionColumns: ColumnDef<WithTrainer, Session>[] = [
   {
     accessorKey: "name",
     header: "Session",

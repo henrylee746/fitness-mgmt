@@ -33,12 +33,18 @@ interface WithTrainer {
   trainer: { name: string };
 }
 
+//Two generic paramters: TData, TValue
+//TData represents the structure of each row
+//TValue represents the individual cell values of the table
+//extends WithTrainer: TData must contain a trainer
 interface DataTableProps<TData extends WithTrainer, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   trainers: Trainer[];
 }
 
+//You also need to extend WithTrainer in the function
+//in addition to the interface
 export function DataTable<TData extends WithTrainer, TValue>({
   columns,
   data,
