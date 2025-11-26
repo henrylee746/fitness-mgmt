@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function MemberSelect({
   members,
@@ -23,7 +24,7 @@ export default function MemberSelect({
     router.push(`/member/${id}`);
   };
   return (
-    <Select onValueChange={(value) => handleChange(value)}>
+    <Select value={id?.[0]} onValueChange={(value) => handleChange(value)}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a member" />
       </SelectTrigger>
@@ -31,7 +32,7 @@ export default function MemberSelect({
         <SelectGroup>
           <SelectLabel>Members</SelectLabel>
           {members.map((member: any) => (
-            <SelectItem value={member.id} key={member.id}>
+            <SelectItem value={String(member.id)} key={member.id}>
               {member.firstName + " " + member.lastName}
             </SelectItem>
           ))}

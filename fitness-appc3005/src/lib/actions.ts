@@ -54,7 +54,7 @@ export const registerMember = async (formData: FormData) => {
   await prisma.member.create({
     data: { email, firstName, lastName },
   });
-  revalidatePath("/member");
+  revalidatePath("/member/[[...id]]", "page");
 };
 
 /*Update Profile Details, including making/updating weight metric & target*/
@@ -85,10 +85,12 @@ export const updateMember = async (formData: FormData) => {
   if (weight) metricUpdateData.weight = Number(weight);
   if (weightGoal) metricUpdateData.weightGoal = Number(weightGoal);
 
+  if (weight || weightGoal) metricUpdateData.timestamp = new Date();
+
   await prisma.healthMetric.update({
     where: { id },
     data: metricUpdateData,
   });
 
-  revalidatePath("/member");
+  revalidatePath("/member/[[...id]]", "page");
 };
