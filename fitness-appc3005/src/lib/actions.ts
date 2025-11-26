@@ -21,5 +21,26 @@ export async function updateSessionRoom(formData: FormData) {
 }
 
 export async function createSession(formData: FormData) {
-  const sessionName = formData.get("sessionName");
+  const sessionName = formData.get("sessionName") as string;
+  const capacity = Number(formData.get("capacity"));
+  const trainerId = formData.get("trainer") as string;
+  const roomId = formData.get("roomId") as string;
+
+  const date = formData.get("date") as string; // in format e.g. "2025-03-05"
+  const time = formData.get("time") as string; // in format e.g. "10:30:00"
+
+  // Combine into 1 ISO datetime if needed:
+  const datetime = new Date(`${date}T${time}`);
+
+  await prisma.session.create({
+    data: {
+      name: sessionName,
+      capacity,
+      trainerId: Number(trainerId),
+      roomId: Number(roomId),
+      dateTime: datetime,
+    },
+  });
+
+  revalidatePath("/sessions");
 }
