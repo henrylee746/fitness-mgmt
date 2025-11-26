@@ -58,31 +58,37 @@ export const registerMember = async (formData: FormData) => {
 };
 
 /*Update Profile Details, including making/updating weight metric & target*/
+
 export const updateMember = async (formData: FormData) => {
-  const email = formData.get("email") as string;
-  const firstName = formData.get("firstName") as string;
-  const lastName = formData.get("lastName") as string;
-  const weight = Number(formData.get("currWeight"));
-  const weightGoal = Number(formData.get("weightTarget"));
+  const email = formData.get("email") as string | null;
+  const firstName = formData.get("firstName") as string | null;
+  const lastName = formData.get("lastName") as string | null;
+
+  const weight = formData.get("currWeight");
+  const weightGoal = formData.get("weightTarget");
 
   const id = Number(formData.get("memberId"));
 
+  const memberUpdateData: any = {};
+
+  if (email) memberUpdateData.email = email;
+  if (firstName) memberUpdateData.firstName = firstName;
+  if (lastName) memberUpdateData.lastName = lastName;
+
   await prisma.member.update({
-    where: {
-      id,
-    },
-    data: {
-      email,
-      firstName,
-      lastName,
-    },
+    where: { id },
+    data: memberUpdateData,
   });
+
+  const metricUpdateData: any = {};
+
+  if (weight) metricUpdateData.weight = Number(weight);
+  if (weightGoal) metricUpdateData.weightGoal = Number(weightGoal);
+
   await prisma.healthMetric.update({
     where: { id },
-    data: {
-      weight,
-      weightGoal,
-    },
+    data: metricUpdateData,
   });
+
   revalidatePath("/member");
 };
