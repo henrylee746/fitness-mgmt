@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Trainer } from "../trainer/columns";
 import { Calendar24 } from "@/components/calendar-24";
+import { createSession } from "@/lib/actions";
 
 export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
   return (
@@ -37,12 +38,22 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
       </CardHeader>
       <CardContent>
         <div className="flex w-full items-center  gap-2">
-          <form className="w-full">
-            <div className="flex flex-col gap-4">
+          <form className="w-full" action={createSession}>
+            <div className="flex flex-col gap-4 justify-stretch">
               <CardDescription>Basic Details</CardDescription>
-              <Input id="session" type="text" placeholder="Session Name" />
-              <Input id="capacity" type="number" placeholder="Capacity" />{" "}
-              <Select>
+              <Input
+                id="session"
+                type="text"
+                placeholder="Session Name"
+                name="sessionName"
+              />
+              <Input
+                id="capacity"
+                type="number"
+                placeholder="Capacity"
+                name="capacity"
+              />{" "}
+              <Select name="trainer">
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Select a trainer" />
                 </SelectTrigger>
@@ -60,21 +71,22 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
             </div>
             <div className="flex flex-col gap-4 mt-6">
               <Calendar24 />
-              <CardDescription>Room </CardDescription>
-              <RadioGroup defaultValue="comfortable">
+              <CardDescription>Room</CardDescription>
+              <RadioGroup name="roomId" defaultValue="1">
                 <div className="flex items-center gap-3">
-                  <RadioGroupItem value="default" id="r1" />
-                  <Label htmlFor="r1">Studio A</Label>
+                  <RadioGroupItem value="1" id="1" />
+                  <Label htmlFor="1">Studio A</Label>
                 </div>
                 <div className="flex items-center gap-3">
-                  <RadioGroupItem value="comfortable" id="r2" />
-                  <Label htmlFor="r2">Studio B</Label>
+                  <RadioGroupItem value="2" id="2" />
+                  <Label htmlFor="2">Studio B</Label>
                 </div>
                 <div className="flex items-center gap-3">
-                  <RadioGroupItem value="compact" id="r3" />
-                  <Label htmlFor="r3">Cycling Room</Label>
+                  <RadioGroupItem value="3" id="3" />
+                  <Label htmlFor="3">Cycling Room</Label>
                 </div>
               </RadioGroup>
+
               <Button type="submit" variant="secondary">
                 Create
               </Button>

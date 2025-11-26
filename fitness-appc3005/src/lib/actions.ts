@@ -19,3 +19,7 @@ export async function updateSessionRoom(formData: FormData) {
   // Re-fetch the table data after updating
   revalidatePath("/admin");
 }
+
+export async function createSession(formData: FormData) {
+  const sessionName = formData.get("sessionName");
+}
