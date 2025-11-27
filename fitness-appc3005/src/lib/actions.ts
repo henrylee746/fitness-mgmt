@@ -101,3 +101,19 @@ export const updateMetrics = async (formData: FormData) => {
   });
   revalidatePath("/member/[[...id]]", "page");
 };
+
+export const registerSessions = async (formData: FormData) => {
+  const ids = formData.getAll("sessionIds") as string[];
+  const memberId = formData.get("memberId") as string;
+
+  if (ids.length === 0) return;
+  ids.map(async (id) => {
+    await prisma.booking.create({
+      data: {
+        memberId: Number(memberId),
+        sessionId: Number(id),
+      },
+    });
+  });
+  revalidatePath("/member/[[...id]]", "page");
+};

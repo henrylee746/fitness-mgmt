@@ -15,17 +15,16 @@ import {
 export function Calendar24() {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>();
-  const [time, setTime] = React.useState("10:30:00");
 
   return (
     <>
-      {/* Hidden inputs for form submission */}
+      {/* Hidden input for form submission 
+      (date picker doesn't have a name property to access its value)*/}
       <input
         type="hidden"
         name="date"
         value={date ? date.toISOString().split("T")[0] : ""}
       />
-      <input type="hidden" name="time" value={time} />
 
       <div className="flex gap-4">
         <div className="flex flex-col gap-3">
@@ -68,10 +67,9 @@ export function Calendar24() {
           <Input
             type="time"
             id="time-picker"
+            name="time"
             step="1"
-            value={time}
             required={true}
-            onChange={(e) => setTime(e.target.value)}
             className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
           />
         </div>

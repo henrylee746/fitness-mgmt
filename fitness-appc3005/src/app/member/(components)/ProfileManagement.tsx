@@ -55,7 +55,6 @@ export default function ProfileManagement({ id }: { id: string[] }) {
         </form>
         <form action={updateMetrics}>
           <input type="hidden" name="memberId" value={id[0]} />
-
           <div className="flex flex-col gap-4 my-4">
             <div className="flex flex-col gap-2">
               <CardTitle>Fitness Details</CardTitle>
