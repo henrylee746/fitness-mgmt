@@ -41,6 +41,11 @@ pnpm start
 Then open [http://localhost:3000](http://localhost:3000).
 
 ## 🗂️ Project Structure (Important for Grading)
+
+### ORM Entity Classes
+
+Located in the prisma/schema.prisma file.
+
 ### Prisma Operations
 
 Most mutations (create/update/delete) are in:
