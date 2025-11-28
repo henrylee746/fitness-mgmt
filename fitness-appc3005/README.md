@@ -9,9 +9,17 @@ pnpm i
 #or
 pnpm install
 ```
-(or whicever package manager you prefer, I use pnpm). 
+(or whichever package manager you prefer, I use pnpm). 
 
-Then, run the production server:
+Then, generate an instance of the prisma client by running: 
+
+```bash
+pnpm run postinstall
+```
+This should give you: 
+✔ Generated Prisma Client (7.0.1) to .\generated\prisma in 28ms
+
+Finally, run the production server:
 
 ```bash
 pnpm run build
