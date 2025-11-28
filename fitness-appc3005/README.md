@@ -17,7 +17,7 @@ Then, generate an instance of the prisma client by running:
 pnpm run postinstall
 ```
 This should give you a meesage in the console as such: 
-✔ Generated Prisma Client (7.0.1) to .\generated\prisma 
+✔ Generated Prisma Client (7.0.1) to .\generated\prisma in 28ms
 
 Finally, run the production server:
 
@@ -30,6 +30,5 @@ pnpm start
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the page. From there, you can access all the various functionalities necessary. 
 
 ### For grading purposes:
-- Prisma queries for sessions/trainers/members are in their respective routes spread throughout various server components
-- Most prisma mutations will be in ./src/lib/actions.ts
+- Most prisma queries/mutations will be in ./src/lib/actions.ts
 - The only queries that aren't there are instead located in the api route (./src/app/api/<member/trainer>/route.ts). These routes are responsible for the prisma operations for the Trainers Tab (Filtering Sessions by Trainer, and Member lookup). 
