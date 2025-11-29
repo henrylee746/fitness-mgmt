@@ -66,6 +66,10 @@ Initial data was generated using:
 
 Re-running the seed may fail due to unique constraints (data already inserted).
 
+### Triggers and Views
+
+Triggers are not natively supported on Prisma, Views are currently a preview feature (beta) with unknown stable support, as per the docs: https://www.prisma.io/docs/orm/prisma-schema/data-model/views
+
 These points are also demonstrated in the accompanying YouTube demo.
 
 ### 🛠️ Tech Stack
