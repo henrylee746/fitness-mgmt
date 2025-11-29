@@ -11,7 +11,7 @@ A live deployment is available here:
 
 You can either use the deployment (recommended) or run the project locally.
 
-Or if you'd rather compile and run the production version yourself, you can follow the steps below.
+If you'd rather compile and run the production version yourself, you can follow the steps below.
 
 1. First, once you've cloned the repo, install all dependencies using:
 
