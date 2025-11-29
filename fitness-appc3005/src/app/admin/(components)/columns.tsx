@@ -54,7 +54,8 @@ export const sessionColumns: ColumnDef<SessionExtended>[] = [
         }
       }, [state.success, state.error]);
       return (
-        <Dialog>
+        /*onOpenChange is used to reset the notification when the dialog is closed*/
+        <Dialog onOpenChange={() => setShowNotification(false)}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
