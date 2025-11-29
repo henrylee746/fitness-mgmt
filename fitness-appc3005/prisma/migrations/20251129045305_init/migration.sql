@@ -70,7 +70,16 @@ CREATE UNIQUE INDEX "Trainer_email_key" ON "Trainer"("email");
 CREATE UNIQUE INDEX "Room_name_key" ON "Room"("name");
 
 -- CreateIndex
+CREATE INDEX "Session_trainerId_dateTime_idx" ON "Session"("trainerId", "dateTime");
+
+-- CreateIndex
+CREATE INDEX "Booking_sessionId_idx" ON "Booking"("sessionId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Booking_memberId_sessionId_key" ON "Booking"("memberId", "sessionId");
+
+-- CreateIndex
+CREATE INDEX "HealthMetric_memberId_timestamp_idx" ON "HealthMetric"("memberId", "timestamp");
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
