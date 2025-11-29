@@ -84,3 +84,8 @@ These points are also demonstrated in the accompanying YouTube demo.
 - TypeScript
 - pnpm (package manager)
 - Server Components + API Routes
+
+### Next Steps?
+1. Login functionality using OAuth, BetterAuth.js
+2. More operations such as sorting sessions by date or counting the number of bookings for a session
+3. Implementing Prisma Accelerate for easy scaliability 
