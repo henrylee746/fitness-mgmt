@@ -42,6 +42,12 @@ model Session {
   bookings  Booking[]
   room      Room      @relation(fields: [roomId], references: [id])
   trainer   Trainer   @relation(fields: [trainerId], references: [id])
+
+  @@index([trainerId, dateTime])
+  //Good for finding sessions for a trainer on a specific date
+  //Sorting sessions by date
+  //Finding sessions by trainer
+
 }
 
 model Booking {
@@ -52,7 +58,10 @@ model Booking {
   member    Member   @relation(fields: [memberId], references: [id])
   session   Session  @relation(fields: [sessionId], references: [id])
 
-  @@unique([memberId, sessionId])
+  @@unique([memberId, sessionId]) //prevents duplicate bookings
+  @@index([sessionId])
+  //Good for finding all members of a session
+  //Or counting the number of bookings for a session
 }
 
 model HealthMetric {
@@ -61,5 +70,10 @@ model HealthMetric {
   timestamp DateTime @default(now())
   weight    Int
   weightGoal Int
+
   member    Member   @relation(fields: [memberId], references: [id])
+  @@index([memberId, timestamp])
+  //Would be good for fetching metrics by date
+  //Or a list of ordered historical metrics
+
 }
