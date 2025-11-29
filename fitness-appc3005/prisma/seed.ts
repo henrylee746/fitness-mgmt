@@ -75,7 +75,7 @@ async function main() {
         name: "Deep meditation with Lisa",
         roomId: createdRooms[0].id,
         dateTime: new Date("2025-01-13T09:00:00"),
-        capacity: 20,
+        capacity: 10,
       },
     ],
   });

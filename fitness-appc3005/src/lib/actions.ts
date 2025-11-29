@@ -11,6 +11,32 @@ export async function updateSessionRoom(formData: FormData) {
     throw new Error("Missing sessionId or room");
   }
 
+  // Get current session to check its capacity
+  const session = await prisma.session.findUnique({
+    where: { id: Number(sessionId) },
+    select: { capacity: true },
+  });
+
+  if (!session) {
+    throw new Error("Session not found");
+  }
+
+  // Validate that session capacity does not exceed new room capacity
+  const room = await prisma.room.findUnique({
+    where: { id: Number(roomId) },
+    select: { capacity: true },
+  });
+
+  if (!room) {
+    throw new Error("Room not found");
+  }
+
+  if (session.capacity > room.capacity) {
+    throw new Error(
+      `Session capacity (${session.capacity}) cannot exceed room capacity (${room.capacity})`
+    );
+  }
+
   await prisma.session.update({
     where: { id: Number(sessionId) },
     data: { roomId: Number(roomId) },
@@ -31,6 +57,22 @@ export async function createSession(formData: FormData) {
 
   // Combine into 1 ISO datetime if needed:
   const datetime = new Date(`${date}T${time}`);
+
+  // Validate that session capacity does not exceed room capacity
+  const room = await prisma.room.findUnique({
+    where: { id: Number(roomId) },
+    select: { capacity: true },
+  });
+
+  if (!room) {
+    throw new Error("Room not found");
+  }
+
+  if (capacity > room.capacity) {
+    throw new Error(
+      `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`
+    );
+  }
 
   await prisma.session.create({
     data: {
