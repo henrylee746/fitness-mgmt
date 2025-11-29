@@ -43,7 +43,7 @@ export default function MemberSearch() {
   };
 
   return (
-    <Card className="w-full lg:max-w-lg md:max-w-md sm:max-w-sm">
+    <Card className="w-full xl:max-w-3xl lg:max-w-2xl md:max-w-lg sm:max-w-md">
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="flex gap-2 items-center">

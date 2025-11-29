@@ -28,7 +28,7 @@ import { Trainer } from "@/lib/types";
 
 export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
   return (
-    <Card className="w-full xl:max-w-xl lg:max-w-lg md:max-w-md sm:max-w-sm">
+    <Card className="w-full xl:max-w-3xl lg:max-w-2xl md:max-w-lg sm:max-w-md">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
           Class Management
