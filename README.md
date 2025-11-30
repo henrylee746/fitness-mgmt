@@ -54,7 +54,7 @@ Located in the prisma/schema.prisma file.
 Most mutations (create/update/delete) are in:
 ./src/lib/actions.ts
 
-Some trainer/member mutations occur inside API routes:
+Mutations that occur under the trainer panel are inside API routes:
 ./src/app/api/<member|trainer>/route.ts
 
 ### Queries
