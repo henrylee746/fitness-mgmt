@@ -1,20 +1,30 @@
 -- Create a function to validate session capacity against room capacity
+-- $$ is the delimiter for the function body
+-- "NEW" refers to the incoming row being inserted/updated
 CREATE OR REPLACE FUNCTION check_session_capacity()
-RETURNS TRIGGER AS $$ -- $$ is the delimiter for the function
+RETURNS TRIGGER AS $$
 DECLARE
   room_capacity INTEGER;
 BEGIN
-  SELECT "capacity" INTO room_capacity -- looks at room's capacity
+  -- Get the room's capacity for the session's room
+  SELECT "capacity" INTO room_capacity
   FROM "Room"
-  WHERE "id" = NEW."roomId"; -- "NEW" is the incoming row
+  WHERE "id" = NEW."roomId";
   
+  -- Check if room exists
+  IF room_capacity IS NULL THEN
+    RAISE EXCEPTION 'Room with id % does not exist', NEW."roomId";
+  END IF;
+  
+  -- Reject the insert or update if session capacity exceeds room capacity
   IF NEW."capacity" > room_capacity THEN
     RAISE EXCEPTION 'Session capacity (%) cannot exceed room capacity (%)', NEW."capacity", room_capacity;
-  END IF; --Rejects the insert or update if room capacity is less than session capacity
+  END IF;
   
-  RETURN NEW; -- Returns the incoming row
+  -- Return the incoming row to allow the operation to proceed
+  RETURN NEW;
 END;
-$$ LANGUAGE plpgsql; -- Lets us write variables/if statements/etc.
+$$ LANGUAGE plpgsql;
 
 -- Insert trigger
 CREATE TRIGGER session_capacity_check_insert
