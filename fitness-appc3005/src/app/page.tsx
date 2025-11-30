@@ -47,11 +47,15 @@ export default function Home() {
               Gain access to features such as:
               <ul className="list-disc ml-2 mt-2">
                 {" "}
+                <li>Member Registration (Create a new account)</li>
                 <li>Dashboard (Showing your latest stats and goals)</li>
                 <li>
                   Profile Management (Update your details and fitness goals)
                 </li>
                 <li>Group Class Enrollments</li>
+                <li>
+                  Health Metrics (Track your weight and goals with timestamps)
+                </li>
               </ul>
             </CardDescription>
           </CardHeader>
