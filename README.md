@@ -7,6 +7,9 @@ It includes full CRUD functionality, relational queries, constraints, and a work
 A live deployment is available here:
 👉 (https://comp-3005-fp.vercel.app/)
 
+YouTube Demo: (https://www.youtube.com/watch?v=6MtT47bV9X0)
+*Since recording this, I made a small change to the trigger migration, moving inline comments outside my delimeter. Was causing syntax errors
+
 ## Getting Started
 
 You can either use the deployment (recommended) or run the project locally.
