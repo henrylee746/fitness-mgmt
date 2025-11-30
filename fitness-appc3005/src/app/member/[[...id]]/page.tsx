@@ -49,7 +49,7 @@ export default async function Members({
         Member's Hub
       </h1>
       <div
-        className={` h-full flex flex-col items-center ${
+        className={`h-full flex flex-col items-center ${
           id ? "justify-center" : "justify-start py-8"
         } font-sans`}
       >

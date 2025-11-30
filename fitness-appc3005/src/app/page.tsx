@@ -21,12 +21,12 @@ export default function Home() {
   return (
     <div className="flex flex-col h-full items-center justify-center">
       <div className="flex flex-col items-center gap-6 text-center">
-        <h1 className="max-w-2xl text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-          COMP 3005 - Fall 2025 Final Project: Henry L
-        </h1>
-        <p className="flex gap-2 items-center max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+        <h1 className="max-w-2xl flex flex-col items-center text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
           Health and Fitness Club Management System
           <IconBarbell />
+        </h1>
+        <p className="flex gap-2 items-center max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+          COMP 3005 - Fall 2025 Final Project: Henry L
         </p>
         <Separator />
         <h3 className="max-w-lg text-2xl font-medium leading-10 tracking-tight text-black dark:text-zinc-50">
