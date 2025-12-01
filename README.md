@@ -30,13 +30,13 @@ pnpm install
 Then, an instance of the prisma client will automatically generate, with a message in the shell: 
 
 ```bash
-#Loaded Prisma config from prisma.config.ts.
+Loaded Prisma config from prisma.config.ts.
 
-#Prisma schema loaded from prisma\schema.prisma
+Prisma schema loaded from prisma\schema.prisma
 
-#✔ Generated Prisma Client (7.0.1) to .\generated\prisma in 29ms
+✔ Generated Prisma Client (7.0.1) to .\generated\prisma in 29ms
 ```
-3. Finally, run the production server:
+2. Finally, run the production server:
 
 ```bash
 pnpm run build
