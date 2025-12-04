@@ -1,6 +1,8 @@
 # COMP 3005 Final Project — Fall 2025
 ## Built with Next.js, Prisma ORM, and PostgreSQL
 
+<img width="917" height="877" alt="image" src="https://github.com/user-attachments/assets/6a34327c-1c31-49f5-9f91-be0998845d98" />
+
 This project implements a gym management system that supports members, trainers, bookings, sessions, and health metrics.
 It includes full CRUD functionality, relational queries, constraints, and a working UI built in Next.js.
 
@@ -16,24 +18,27 @@ You can either use the deployment (recommended) or run the project locally.
 
 If you'd rather compile and run the production version yourself, you can follow the steps below.
 
-1. First, once you've cloned the repo, install all dependencies using:
+1. First, once you've cloned the repo, enter the fitness-appc3005 folder and install all dependencies by doing:
 
 ```bash
+cd fitness-appc3005
+#followed by
 pnpm i
 #or
 pnpm install
 ```
 (or whichever package manager you prefer, I use pnpm). 
 
-2. Then, generate an instance of the prisma client by running: 
+Then, an instance of the prisma client will automatically generate, with a message in the shell: 
 
 ```bash
-pnpm run postinstall
-```
-This should give you a meesage in the console as such: 
-✔ Generated Prisma Client (7.0.1) to .\generated\prisma
+Loaded Prisma config from prisma.config.ts.
 
-3. Finally, run the production server:
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (7.0.1) to .\generated\prisma in 29ms
+```
+2. Finally, run the production server:
 
 ```bash
 pnpm run build
