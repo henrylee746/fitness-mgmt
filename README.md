@@ -1,7 +1,8 @@
 # COMP 3005 Final Project — Fall 2025
 ## Built with Next.js, Prisma ORM, and PostgreSQL
 
-<img width="917" height="877" alt="image" src="https://github.com/user-attachments/assets/0ca469ea-d24d-46ce-af0e-c030ed65da47" />
+<img width="1012" height="709" alt="image" src="https://github.com/user-attachments/assets/8809ed57-5229-4237-b1b7-4990687547f6" />
+
 
 This project implements a gym management system that supports members, trainers, bookings, sessions, and health metrics.
 It includes full CRUD functionality, relational queries, constraints, and a working UI built in Next.js.
