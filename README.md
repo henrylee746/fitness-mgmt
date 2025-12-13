@@ -3,7 +3,14 @@
 If you're here to grade the project, please note some of my newest changes (not deployed) are unrelated to the project and that you will have to go to 
 [this branch to see the actual full project code:](https://github.com/henrylee746/COMP3005FP/tree/9be8d8f0281fae9f4cdf13230b334567757b7a45)
 
-To see how to clone this specific version of the repo, go to "Getting Started" below
+If you want to clone the repo to see the codebase in your editor, run:
+
+```bash
+git clone git@github.com:henrylee746/COMP3005FP.git
+cd COMP3005FP      
+git checkout 9be8d8f0281fae9f4cdf13230b334567757b7a45
+``` 
+or you can just download the zip and extract the root directory from there.
 
 # COMP 3005 Final Project — Fall 2025
 ## Built with Next.js, Prisma ORM, and PostgreSQL
@@ -14,57 +21,13 @@ To see how to clone this specific version of the repo, go to "Getting Started" b
 This project implements a gym management system that supports members, trainers, bookings, sessions, and health metrics.
 It includes full CRUD functionality, relational queries, constraints, and a working UI built in Next.js.
 
+## Getting Started
+
 A live deployment is available here:
 👉 (https://comp-3005-fp.vercel.app/)
 
 YouTube Demo: (https://www.youtube.com/watch?v=6MtT47bV9X0)
 *Since recording this, I made a small change to the trigger migration, moving inline comments outside my delimeter. Was causing syntax errors
-
-## Getting Started
-
-You can either use the deployment (highly recommended) or run the project locally.
-
-If you'd rather compile and run the production version yourself, you can follow the steps below.
-
-1. Clone the repo (remember to use the one from branch 9be8d8f: https://github.com/henrylee746/COMP3005FP/tree/9be8d8f0281fae9f4cdf13230b334567757b7a45),
-  
-To do this, run: 
-```bash
-git clone git@github.com:henrylee746/COMP3005FP.git
-cd COMP3005FP      
-git checkout 9be8d8f0281fae9f4cdf13230b334567757b7a45
-``` 
-or you can just download the zip and extract the root directory from there.
-
-2. Enter the fitness-appc3005 folder and install all dependencies by doing:
-
-```bash
-cd fitness-appc3005
-#followed by
-pnpm i
-#or
-pnpm install
-```
-(or whichever package manager you prefer, I use pnpm). 
-
-Then, an instance of the prisma client will automatically generate, with a message in the shell: 
-
-```bash
-Loaded Prisma config from prisma.config.ts.
-
-Prisma schema loaded from prisma\schema.prisma
-
-✔ Generated Prisma Client (7.0.1) to .\generated\prisma in 29ms
-```
-3. Finally, run the production server:
-
-```bash
-pnpm run build
-#then
-pnpm start
-```
-
-Then open [http://localhost:3000](http://localhost:3000).
 
 ## 🗂️ Project Structure
 
