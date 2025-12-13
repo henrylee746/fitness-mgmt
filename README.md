@@ -1,6 +1,7 @@
 # Important 
 
-[If you're here to grade the assignment, please note some of my newest changes are unrelated to the assignment and that you will have to go to this branch to see the full project code:](https://github.com/henrylee746/COMP3005FP/tree/9be8d8f0281fae9f4cdf13230b334567757b7a45/fitness-appc3005)
+If you're here to grade the assignment, please note some of my newest changes are unrelated to the project and that you will have to go to 
+[this branch to see the actual full project code:](https://github.com/henrylee746/COMP3005FP/tree/9be8d8f0281fae9f4cdf13230b334567757b7a45/fitness-appc3005)
 
 
 # COMP 3005 Final Project — Fall 2025
