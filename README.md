@@ -1,26 +1,7 @@
-# Important 
-
-If you're here to grade the project, please note some of my newest changes (not deployed) are unrelated to the project and that you will have to go to 
-[this branch to see the actual full project code:](https://github.com/henrylee746/COMP3005FP/tree/9be8d8f0281fae9f4cdf13230b334567757b7a45)
-
-If you want to clone the repo to see the codebase in your editor, run:
-
-```bash
-git clone git@github.com:henrylee746/COMP3005FP.git
-cd COMP3005FP      
-git checkout 9be8d8f0281fae9f4cdf13230b334567757b7a45
-``` 
-or you can just download the zip and extract the root directory from there.
-
-Note: Ignore the instructions about running the project locally, it's impossible w/o the .env file. Please use the deployed version to see the webpage
-
-You can access the deployment here (not affected by post-project changes): https://comp-3005-fp.vercel.app/
-
-# COMP 3005 Final Project — Fall 2025
+# Health and Fitness Club Management System 
 ## Built with Next.js, Prisma ORM, and PostgreSQL
 
-<img width="1012" height="709" alt="image" src="https://github.com/user-attachments/assets/8809ed57-5229-4237-b1b7-4990687547f6" />
-
+<img width="968" height="915" alt="image" src="https://github.com/user-attachments/assets/9172d027-4158-40bd-9436-5665cd5d3510" />
 
 This project implements a gym management system that supports members, trainers, bookings, sessions, and health metrics.
 It includes full CRUD functionality, relational queries, constraints, and a working UI built in Next.js.
