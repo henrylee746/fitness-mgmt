@@ -88,17 +88,13 @@ export async function createSession(initialState: any, formData: FormData) {
     };
   }
 
-  /*
   if (capacity > room.capacity) {
     return {
       success: undefined,
       error: `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`,
     };
   }
-  */
 
-  //As proof that data-level validation is working,
-  // we can remove the conditional above
   try {
     await prisma.classSession.create({
       data: {

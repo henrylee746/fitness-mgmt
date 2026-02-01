@@ -19,8 +19,8 @@ const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [
     "views"
   ],
-  "clientVersion": "7.1.0",
-  "engineVersion": "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba",
+  "clientVersion": "7.3.0",
+  "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
   "inlineSchema": "generator client {\n  provider        = \"prisma-client\"\n  output          = \"../generated/prisma\"\n  previewFeatures = [\"views\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Member {\n  id           Int            @id @default(autoincrement())\n  firstName    String\n  lastName     String\n  email        String         @unique\n  registeredAt DateTime       @default(now())\n  bookings     Booking[]\n  metrics      HealthMetric[]\n}\n\nmodel Trainer {\n  id       Int            @id @default(autoincrement())\n  name     String\n  email    String         @unique\n  sessions ClassSession[]\n}\n\nmodel Room {\n  id       Int            @id @default(autoincrement())\n  name     String         @unique\n  capacity Int\n  sessions ClassSession[]\n}\n\n// Fitness app's class/workout sessions\nmodel ClassSession {\n  id        Int       @id @default(autoincrement())\n  trainerId Int\n  roomId    Int\n  name      String\n  dateTime  DateTime\n  capacity  Int\n  bookings  Booking[]\n  room      Room      @relation(fields: [roomId], references: [id])\n  trainer   Trainer   @relation(fields: [trainerId], references: [id])\n\n  //Good for finding sessions for a trainer on a specific date\n  //Sorting sessions by date\n  //Finding sessions by trainer\n\n  @@index([trainerId, dateTime])\n  @@map(\"class_session\")\n}\n\n// Better Auth authentication sessions\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String   @unique\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@map(\"session\")\n}\n\nmodel Booking {\n  id             Int          @id @default(autoincrement())\n  memberId       Int\n  classSessionId Int\n  createdAt      DateTime     @default(now())\n  member         Member       @relation(fields: [memberId], references: [id])\n  classSession   ClassSession @relation(fields: [classSessionId], references: [id])\n\n  //prevents duplicate bookings\n  //Good for finding all members of a session\n  //Or counting the number of bookings for a session\n  @@unique([memberId, classSessionId])\n  @@index([classSessionId])\n}\n\nmodel HealthMetric {\n  id         Int      @id @default(autoincrement())\n  memberId   Int\n  timestamp  DateTime @default(now())\n  weight     Int\n  weightGoal Int\n\n  member Member @relation(fields: [memberId], references: [id])\n  //Would be good for fetching metrics by date\n  //Or a list of ordered historical metrics\n\n  @@index([memberId, timestamp])\n}\n\nview MemberInfo {\n  weight     Int\n  weightGoal Int\n  firstName  String\n  lastName   String\n  email      String\n}\n\nmodel User {\n  id            String    @id\n  name          String\n  email         String\n  emailVerified Boolean   @default(false)\n  image         String?\n  createdAt     DateTime  @default(now())\n  updatedAt     DateTime  @updatedAt\n  sessions      Session[] // Better Auth sessions\n  accounts      Account[]\n\n  @@unique([email])\n  @@map(\"user\")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@index([userId])\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  @@index([identifier])\n  @@map(\"verification\")\n}\n",
   "runtimeDataModel": {
@@ -39,12 +39,14 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_bg.postgresql.mjs"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.mjs"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_bg.postgresql.wasm-base64.mjs")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.mjs")
     return await decodeBase64AsWasm(wasm)
-  }
+  },
+
+  importName: "./query_compiler_fast_bg.js"
 }
 
 
