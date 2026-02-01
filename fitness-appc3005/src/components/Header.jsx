@@ -66,30 +66,6 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      {/*
-      <Link href="/">
-        <Button size="lg" variant="link">
-          <IconHome /> Home
-        </Button>
-      </Link>
-      <Link href="/member">
-        <Button size="lg" variant="link">
-          <IconUser /> Members
-        </Button>
-      </Link>
-
-      <Link href="/trainer">
-        <Button size="lg" variant="link">
-          <IconUserFilled /> Trainers
-        </Button>
-      </Link>
-
-      <Link href="/admin">
-        <Button size="lg" variant="link">
-          <IconUserCog /> Administrative Staff
-        </Button>
-      </Link>
-      */}
     </div>
   );
 };

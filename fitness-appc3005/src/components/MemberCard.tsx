@@ -2,14 +2,14 @@ import {
     AnimatedCard,
     CardVisual,
     CardBody,
-    CardTitle,
-    CardDescription,
 } from "@/components/ui/animated-card";
-import { Visual1 } from "@/components/ui/visual-1";
+import { MemberCard } from "@/components/ui/membercard";
 import {
     Card,
     CardAction,
     CardHeader,
+    CardTitle,
+    CardDescription,
 } from "@/components/ui/card"
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 
@@ -19,7 +19,7 @@ export const MemberCards = () => {
     return (
 
         <div className="flex">
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-full max-w-sm sm:min-w-sm sm:max-w-md mx-4">
+            <Card className="dark:bg-black flex flex-col items-center justify-center w-full mx-4">
                 <FaUserCircle className="w-20 h-20" />
                 <CardHeader className="flex flex-col items-center justify-center min-w-sm">
                     <CardAction>
@@ -30,16 +30,16 @@ export const MemberCards = () => {
                     </CardDescription>
                 </CardHeader>
             </Card>
-            <AnimatedCard className="w-full max-w-sm sm:min-w-sm sm:max-w-md mx-4">
+            <AnimatedCard className="w-full mx-4">
                 <CardVisual>
-                    <Visual1 mainColor="#ff6900" secondaryColor="#f54900" />
+                    <MemberCard mainColor="#ff6900" secondaryColor="#f54900" />
                 </CardVisual>
                 <CardBody>
-                    <CardTitle>Dashboard</CardTitle>
-                    <CardDescription>Check your metrics and upcoming sessions here</CardDescription>
+                    <CardTitle className="text-center">Dashboard</CardTitle>
+                    <CardDescription className="text-center">Check your metrics and upcoming sessions here</CardDescription>
                 </CardBody>
             </AnimatedCard>
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-full max-w-sm sm:min-w-sm sm:max-w-md mx-4">
+            <Card className="dark:bg-black flex flex-col items-center justify-center w-full mx-4">
                 <FaUserFriends className="w-20 h-20" />
                 <CardHeader className="flex flex-col items-center justify-center min-w-sm">
                     <CardAction>

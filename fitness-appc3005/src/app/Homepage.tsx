@@ -132,8 +132,6 @@ export const Homepage = () => {
             <Marquee
               autoFill={true}
               pauseOnHover={true}
-              gradient={true}
-              gradientColor="black"
             >
               {selectedPill === "member" ? <MemberCards /> : selectedPill === "trainer" ? <TrainerCards /> : <AdminCards />}
             </Marquee>

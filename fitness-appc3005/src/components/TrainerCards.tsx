@@ -2,16 +2,18 @@ import {
     AnimatedCard,
     CardVisual,
     CardBody,
-    CardTitle,
-    CardDescription,
 } from "@/components/ui/animated-card";
-import { Visual1 } from "@/components/ui/visual-1";
+import { TrainerCard } from "@/components/ui/trainercard";
 import {
     Card,
     CardAction,
     CardHeader,
+    CardTitle,
+    CardDescription,
 } from "@/components/ui/card"
-import { FaUserCircle, FaUserFriends } from "react-icons/fa";
+import { FaUserFriends } from "react-icons/fa";
+import { RiUserSettingsLine } from "react-icons/ri";
+
 
 
 
@@ -19,37 +21,25 @@ export const TrainerCards = () => {
     return (
 
         <div className="flex">
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-full max-w-sm sm:min-w-sm sm:max-w-md mx-4">
-                <FaUserCircle className="w-20 h-20" />
-                <CardHeader className="flex flex-col items-center justify-center min-w-sm">
-                    <CardAction>
-                    </CardAction>
-                    <CardTitle>Profile Management</CardTitle>
-                    <CardDescription className="text-center">
-                        Update your details/fitness goals
-                    </CardDescription>
-                </CardHeader>
-            </Card>
-            <AnimatedCard className="w-full max-w-sm sm:min-w-sm sm:max-w-md mx-4">
+            <AnimatedCard className="w-full mx-4 max-w-sm">
                 <CardVisual>
-                    <Visual1 mainColor="#ff6900" secondaryColor="#f54900" />
+                    <TrainerCard mainColor="#ff6900" secondaryColor="#f54900" />
                 </CardVisual>
                 <CardBody>
-                    <CardTitle>Dashboard</CardTitle>
-                    <CardDescription>Check your metrics and upcoming sessions here</CardDescription>
+                    <CardTitle className="text-center">Member Search</CardTitle>
+                    <CardDescription className="text-center">Search members by name (case-insensitive) to view their current weight goal and last measured weight.</CardDescription>
                 </CardBody>
             </AnimatedCard>
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-full max-w-sm sm:min-w-sm sm:max-w-md mx-4">
-                <FaUserFriends className="w-20 h-20" />
-                <CardHeader className="flex flex-col items-center justify-center min-w-sm">
+            <Card className="dark:bg-black flex flex-col items-center justify-center w-full mx-4">
+                <RiUserSettingsLine className="w-20 h-20" />
+                <CardHeader className="flex flex-col items-center justify-center min-w-xs">
                     <CardAction>
                     </CardAction>
-                    <CardTitle>Group Class</CardTitle>
+                    <CardTitle>Trainer Management</CardTitle>
                     <CardDescription className="text-center">
-                        Book your next session here such as yoga, pilates, etc.
+                        Manage your sessions and trainers
                     </CardDescription>
                 </CardHeader>
-
             </Card>
         </div>
     );
