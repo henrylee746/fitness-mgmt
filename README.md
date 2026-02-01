@@ -1,8 +1,6 @@
 # Health and Fitness Club Management System 
 ## Built with Next.js, Prisma ORM, and PostgreSQL
 
-<img width="968" height="915" alt="image" src="https://github.com/user-attachments/assets/9172d027-4158-40bd-9436-5665cd5d3510" />
-
 This project implements a gym management system that supports members, trainers, bookings, sessions, and health metrics.
 It includes full CRUD functionality, relational queries, constraints, and a working UI built in Next.js.
 
