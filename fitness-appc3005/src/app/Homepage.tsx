@@ -9,7 +9,8 @@ import Marquee from "react-fast-marquee";
 import { MemberCards } from "@/components/MemberCard";
 import { TrainerCards } from "@/components/TrainerCards";
 import { AdminCards } from "@/components/AdminCards";
-
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 const MemberIcon = () => <FaUser />;
 
@@ -59,6 +60,8 @@ const UserPill = ({ user, text, selected, onClick }: userPillProps) => {
 
 
 export const Homepage = () => {
+  const { data: session, isPending, error } = authClient.useSession();
+
   const [isVisible, setIsVisible] = useState(false);
   const [selectedPill, setSelectedPill] =
     useState<keyof typeof iconMap>("member");
@@ -73,6 +76,19 @@ export const Homepage = () => {
     { id: "trainer", name: "Trainers" },
     { id: "admin", name: "Administrative Staff" },
   ];
+
+  const handleSignOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success(`Signed out successfully`);
+        },
+      },
+    })
+  };
+
+  if (isPending) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="font-sans h-full">
@@ -97,7 +113,7 @@ export const Homepage = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mt-4 sm:mt-6 mb-4 sm:mb-6 leading-tight transition-colors duration-300">
               Hassle-free management system
               <br className="hidden sm:block" />
-              <span className="sm:hidden"> </span> for your fitness club 🏋️‍♂️
+              <span className="hidden sm:block">for your fitness club 🏋️‍♂️</span>
             </h1>
 
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed transition-colors duration-300">
@@ -106,12 +122,20 @@ export const Homepage = () => {
               features for managing members, trainers, bookings, sessions, and
               health metrics.
             </p>
-            <Link href="/signup">
-              <button className="cursor-pointer group inline-flex gap-3 mb-6 items-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium text-base sm:text-lg transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105 hover:shadow-lg">
-                Sign Up
-                <ArrowRight />
-              </button>
-            </Link>
+            {
+              !session && !isPending ? (
+                <Link href="/signup">
+                  <button className="cursor-pointer group inline-flex gap-3 mb-6 items-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium text-base sm:text-lg transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105 hover:shadow-lg">
+                    Sign Up
+                    <ArrowRight />
+                  </button>
+                </Link>
+              ) :
+                <button onClick={handleSignOut} className="cursor-pointer group inline-flex gap-3 mb-6 items-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium text-base sm:text-lg transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105 hover:shadow-lg">
+                  Sign Out
+                  <ArrowRight />
+                </button>
+            }
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-6">
               {users.map((user) => (
                 <UserPill

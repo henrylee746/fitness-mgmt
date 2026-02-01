@@ -1,21 +1,32 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { IconHome } from "@tabler/icons-react";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ToggleTheme } from "./ui/toggle-theme";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
+import { FaUserCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
+  const handleSignOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+        },
+      },
+    });
+  };
+
   const { data: session, isPending, error } = authClient.useSession();
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -40,19 +51,20 @@ const Header = () => {
         {!isPending && session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">Open</Button>
+              <Button variant="outline">
+                <FaUserCircle className="size-6" />
+              </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="start">
+            <DropdownMenuContent className="w-56 mr-2" align="start">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  Profile
-                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                </DropdownMenuItem>
+              <hr />
+              <DropdownMenuGroup className="mt-1">
+                <Link href="/member">
+                  <DropdownMenuItem>Profile </DropdownMenuItem>
+                </Link>
 
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>
                   Log Out
-                  <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
