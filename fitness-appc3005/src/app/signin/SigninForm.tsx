@@ -56,6 +56,7 @@ export default function Login() {
       setError(response.error.message || "Something went wrong");
     } else {
       toast.success(`Welcome back, ${response.data.user.name}`);
+      router.push("/member");
     }
     setLoading(false);
   };
