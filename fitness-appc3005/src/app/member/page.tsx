@@ -35,10 +35,10 @@ export default async function Members() {
         Member's Hub
       </h1>
       <div
-        className={`flex justify-center items-center flex-wrap lg:flex-row flex-col gap-4 lg:gap-8 items-center $font-sans`}
+        className={`flex justify-center items-center flex-wrap gap-6 lg:gap-8  $font-sans`}
       >
         <ProfileManagement userId={user.id} memberId={member.id} />
-        <div className="flex flex-col gap-6 p-4">
+        <div className="flex flex-col gap-6">
           <MemberDashboard member={member} />
           <GroupClass sessions={sessions} member={member} />
         </div>

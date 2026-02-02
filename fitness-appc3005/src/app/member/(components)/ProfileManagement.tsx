@@ -16,7 +16,7 @@ import { updateMember, updateMetrics } from "@/lib/actions";
 
 export default function ProfileManagement({ userId, memberId }: { userId: string, memberId: number }) {
   return (
-    <Card className="w-full xl:max-w-xl lg:max-w-md md:max-w-sm sm:max-w-md max-w-sm">
+    <Card className="w-full xl:max-w-xl lg:max-w-md max-w-sm">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
           Profile Management
