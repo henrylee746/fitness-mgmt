@@ -172,7 +172,6 @@ Implemented throughout the app using Prisma Client:
 - [x] Health metrics tracking
 - [ ] Email verification for new accounts
 - [ ] Advanced filtering (sort sessions by date, trainer availability)
-- [ ] Prisma Accelerate integration for scalability
 - [ ] Notification system for upcoming classes
 - [ ] Payment integration for memberships
 
