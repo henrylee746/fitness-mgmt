@@ -4,8 +4,6 @@
 
 **Built with Next.js, Prisma ORM, PostgreSQL, and Better Auth**
 
-</div>
-
 A modern, full-stack gym management system supporting members, trainers, bookings, sessions, and health metrics with authentication.
 
 [🚀 Live Demo](https://comp-3005-fp.vercel.app/) · [📖 Documentation](./docs)
