@@ -2,6 +2,8 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { EmailTemplate } from "../components/EmailTemplate";
+import { Resend } from "resend";
 
 export async function getMember(userId: string) {
   const member = await prisma.member.findUnique({
@@ -182,27 +184,30 @@ export const updateMember = async (formData: FormData) => {
 
   // Update User fields (email and name)
   if (email) userUpdateData.email = email;
-  if (firstName || lastName) {
-    // Construct full name for User model
-    const member = await prisma.member.findUnique({
+
+  // Ensures both updates are atomic (both succeed or both fail)
+  await prisma.$transaction(async (tx) => {
+    if (firstName || lastName) {
+      // Construct full name for User model using a consistent read
+      const member = await tx.member.findUnique({
+        where: { userId },
+        select: { firstName: true, lastName: true },
+      });
+
+      const updatedFirstName = firstName || member?.firstName || "";
+      const updatedLastName = lastName || member?.lastName || "";
+      userUpdateData.name = `${updatedFirstName} ${updatedLastName}`;
+    }
+
+    await tx.member.update({
       where: { userId },
-      select: { firstName: true, lastName: true },
+      data: memberUpdateData,
     });
 
-    const updatedFirstName = firstName || member?.firstName || "";
-    const updatedLastName = lastName || member?.lastName || "";
-    userUpdateData.name = `${updatedFirstName} ${updatedLastName}`;
-  }
-
-  // Update both Member and User
-  await prisma.member.update({
-    where: { userId },
-    data: memberUpdateData,
-  });
-
-  await prisma.user.update({
-    where: { id: userId },
-    data: userUpdateData,
+    await tx.user.update({
+      where: { id: userId },
+      data: userUpdateData,
+    });
   });
 
   revalidatePath("/member", "page");
