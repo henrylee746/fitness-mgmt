@@ -28,21 +28,24 @@ export const auth = betterAuth({
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
       const name = user.name.split(" ")[0];
-      const { data, error } = await resend.emails.send({
-        from: "onboarding@resend.dev", // Resend's test domain
-        to: user.email,
-        subject: "Verify your email address",
-        react: EmailTemplate({
-          firstName: name,
-          verificationUrl: url,
-        }),
-      });
 
-      if (error) {
-        console.error("Failed to send verification email:", error);
-        throw new Error("Failed to send verification email");
-      }
-      console.log("Verification email sent successfully:", data);
+      // Don't await - prevents timing attacks and allows signup to complete even if email fails
+      // Important: In dev mode, Resend only sends to your registered email address
+      resend.emails
+        .send({
+          from: "FitnessApp <onboarding@resend.dev>", // Resend's test domain - only sends to your Resend account email
+          to: user.email,
+          subject: "Verify your email address",
+          react: EmailTemplate({
+            firstName: name,
+            verificationUrl: url,
+          }),
+        })
+        .then(({ error }) => {
+          if (error) {
+            console.error("Failed to send verification email:", error);
+          }
+        });
     },
     async afterEmailVerification(user, request) {
       console.log(`${user.email} has been successfully verified!`);

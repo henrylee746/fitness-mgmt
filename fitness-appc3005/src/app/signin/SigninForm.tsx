@@ -57,6 +57,7 @@ export default function Login() {
       onError: (error) => {
         console.log("Error details:", error);
         setError(error.error.message || "Something went wrong");
+        setLoading(false);
       },
       onResponse: (response) => {
         console.log("Full login response:", response);
