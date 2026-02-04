@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { SessionGuard } from "@/components/SessionGuard";
 
 export default async function Trainer() {
   const data = await auth.api.getSession({
@@ -29,6 +30,7 @@ export default async function Trainer() {
         Trainers
       </h1>
       <div className="h-full flex flex-col lg:flex-row flex-1 items-center justify-center font-sans gap-8 p-4">
+        <SessionGuard />
         <GroupClass />
         <MemberSearch />
       </div>

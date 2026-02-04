@@ -2,8 +2,6 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { EmailTemplate } from "../components/EmailTemplate";
-import { Resend } from "resend";
 
 export async function getMember(userId: string) {
   const member = await prisma.member.findUnique({

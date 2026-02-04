@@ -6,7 +6,7 @@ import { RiAdminFill } from "react-icons/ri";
 import { FaArrowRight } from "react-icons/fa";
 import Link from "next/link";
 import Marquee from "react-fast-marquee";
-import { MemberCards } from "@/components/MemberCard";
+import { MemberCards } from "@/components/MemberCards";
 import { TrainerCards } from "@/components/TrainerCards";
 import { AdminCards } from "@/components/AdminCards";
 import { authClient } from "@/lib/auth-client";

@@ -7,8 +7,6 @@ import {
 } from "@/components/ui/card"
 import { MdClass, MdMeetingRoom } from "react-icons/md";
 
-
-
 export const AdminCards = () => {
     return (
 

@@ -11,10 +11,7 @@ import {
     CardTitle,
     CardDescription,
 } from "@/components/ui/card"
-import { FaUserFriends } from "react-icons/fa";
 import { RiUserSettingsLine } from "react-icons/ri";
-
-
 
 
 export const TrainerCards = () => {

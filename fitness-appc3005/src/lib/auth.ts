@@ -20,6 +20,22 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  session: {
+    /*
+    Tradeoffs:
+    - Don't need to hit the database everytime for session data
+    - However, no immediate invalidation of sessions
+    
+    cookieCache: {
+      enabled: true,
+      maxAge: 60, //1 minute
+      strategy: "jwt",
+    },
+    */
+    // 1 day
+    expiresIn: 60 * 60 * 24,
+    updateAge: 60 * 60 * 24, // Extend session by 1 day
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,

@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { SessionGuard } from "@/components/SessionGuard";
 
 export default async function Admin() {
   const data = await auth.api.getSession({
@@ -45,6 +46,7 @@ export default async function Admin() {
         Admin Portal
       </h1>
       <div className="h-full flex flex-col lg:flex-row flex-wrap flex-1 items-center justify-center font-sans gap-8 p-4">
+        <SessionGuard />
         <RoomBooking sessions={sessions} />
         <ClassManagement trainers={trainers} />
       </div>
