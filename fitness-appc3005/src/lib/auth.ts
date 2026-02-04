@@ -52,5 +52,6 @@ export const auth = betterAuth({
     },
     autoSignInAfterVerification: true,
     sendOnSignUp: true,
+    expiresIn: 3600, // 1 hour
   },
 });

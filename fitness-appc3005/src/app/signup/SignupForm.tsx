@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { registerMember } from "@/lib/actions";
 import { Loader } from "@/components/ui/loader";
+import Verify from "./Verify";
 
 const UserIcon: React.FC = () => <LuUser size={16} />;
 
@@ -102,7 +103,7 @@ const SignupForm: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [verificationSent, setVerificationSent] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const togglePasswordVisibility = () => {
@@ -134,7 +135,7 @@ const SignupForm: React.FC = () => {
             await registerMember(formData);
             // 3. Redirect to member page after successful signup
             toast.info(`Please check your email for a verification link.`);
-            router.push("/signup/verification");
+            setVerificationSent(true);
           }
           catch (error) {
             setError("Failed to register member");
@@ -165,6 +166,10 @@ const SignupForm: React.FC = () => {
     });
   };
 
+  if (verificationSent) {
+    return <Verify email={userData.email} />;
+  }
+
   return (
     <>
       <div className="flex items-center justify-center p-6">
@@ -186,6 +191,7 @@ const SignupForm: React.FC = () => {
             {error && (
               <p className="text-center mb-6 text-red-500 text-sm">{error}</p>
             )}
+
             <form className="space-y-4" onSubmit={handleSubmit}>
               {/* First Name Input */}
               <div className="space-y-2">

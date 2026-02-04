@@ -1,21 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { LuMail, LuCircleCheck, LuLoader } from "react-icons/lu";
 
-export default function VerificationPage() {
-    const [email, setEmail] = useState("");
+const COOLDOWN_SECONDS = 60 * 10; // 10 minutes in seconds
+
+export default function Verify({ email }: { email: string }) {
     const [loading, setLoading] = useState(false);
     const [sent, setSent] = useState(false);
+    const [secondsLeft, setSecondsLeft] = useState(0);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    const handleResendEmail = async () => {
-        if (!email) {
-            toast.error("Please enter your email address");
-            return;
+    useEffect(() => {
+        // Only start timer when email is sent and there's time remaining
+        if (sent && secondsLeft > 0) {
+            intervalRef.current = setInterval(() => {
+                setSecondsLeft((prev) => {
+                    if (prev <= 1) {
+                        // Timer finished - clear interval and reset state
+                        if (intervalRef.current) {
+                            clearInterval(intervalRef.current);
+                        }
+                        setSent(false);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
         }
 
+        // Cleanup on unmount or when dependencies change
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [sent, secondsLeft > 0]); // Only re-run when sent changes or timer starts/stops
+
+    const handleResendEmail = async () => {
         setLoading(true);
 
         await authClient.sendVerificationEmail({
@@ -24,6 +48,7 @@ export default function VerificationPage() {
         }, {
             onSuccess: () => {
                 setSent(true);
+                setSecondsLeft(COOLDOWN_SECONDS); // Start 10-minute cooldown
                 setLoading(false);
                 toast.success("Verification email sent! Check your inbox.");
             },
@@ -35,6 +60,12 @@ export default function VerificationPage() {
                 setLoading(false);
             },
         });
+    };
+
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, "0")}`;
     };
 
     return (
@@ -62,13 +93,6 @@ export default function VerificationPage() {
                     </p>
 
                     <div className="space-y-3">
-                        <input
-                            type="email"
-                            placeholder="Enter your email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="flex h-10 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-2 text-sm placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300"
-                        />
 
                         <button
                             onClick={handleResendEmail}
@@ -93,6 +117,11 @@ export default function VerificationPage() {
                                 "Resend Verification Email"
                             )}
                         </button>
+                        {secondsLeft > 0 && (
+                            <p className="text-sm text-center text-zinc-500 dark:text-zinc-400">
+                                Can resend in {formatTime(secondsLeft)}
+                            </p>
+                        )}
                     </div>
                 </div>
 
