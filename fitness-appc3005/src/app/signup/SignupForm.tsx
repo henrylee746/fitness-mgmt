@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useRef, useActionState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useRef } from "react";
 import { LuUser, LuMail, LuLock, LuEye, LuEyeOff } from "react-icons/lu";
 import { SiGoogle } from "react-icons/si";
 import { authClient } from "@/lib/auth-client";
@@ -8,6 +7,9 @@ import { toast } from "sonner";
 import { registerMember } from "@/lib/actions";
 import { Loader } from "@/components/ui/loader";
 import Verify from "./Verify";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 const UserIcon: React.FC = () => <LuUser size={16} />;
 
@@ -22,85 +24,101 @@ const EyeOffIcon: React.FC = () => <LuEyeOff size={16} />;
 const GoogleIcon: React.FC = () => <SiGoogle size={16} />;
 
 // Floating Label Input Component
-const FloatingLabelInput: React.FC<{
+interface FloatingLabelInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   type: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   icon: React.ReactNode;
+  inputValue: string;
   rightIcon?: React.ReactNode;
   onRightIconClick?: () => void;
-}> = ({
+  ref?: React.Ref<HTMLInputElement>;
+}
+
+const FloatingLabelInput = ({
   id,
   type,
-  value,
-  onChange,
   placeholder,
   icon,
+  inputValue,
   rightIcon,
   onRightIconClick,
-}) => {
-    const [isFocused, setIsFocused] = useState(false);
+  onBlur,
+  onFocus,
+  ref,
+  ...props
+}: FloatingLabelInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
 
-    return (
-      <div className="relative group">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground transition-colors group-focus-within:text-foreground">
-          {icon}
-        </div>
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={onChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-10 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 peer placeholder-transparent"
-          placeholder={placeholder}
-          style={
-            {
-              "--tw-ring-color": "hsl(var(--ring))",
-            } as React.CSSProperties
-          }
-          required={true}
-        />
-        <label
-          htmlFor={id}
-          className={`absolute left-10 transition-all duration-200 pointer-events-none text-sm font-medium ${isFocused || value
-            ? "-top-2 text-xs bg-white dark:bg-black px-2 text-foreground rounded-sm"
-            : "top-2.5 text-muted-foreground"
-            }`}
-        >
-          {placeholder}
-        </label>
-        {rightIcon && (
-          <button
-            type="button"
-            onClick={onRightIconClick}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:text-foreground"
-          >
-            {rightIcon}
-          </button>
-        )}
+  return (
+    <div className="relative group">
+      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground transition-colors group-focus-within:text-foreground">
+        {icon}
       </div>
-    );
-  };
+      <input
+        ref={ref}
+        id={id}
+        type={type}
+        onFocus={() => {
+          setIsFocused(true);
+        }}
+        onBlur={() => {
+          setIsFocused(false);
+        }}
+        className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-10 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 peer placeholder-transparent"
+        placeholder={placeholder}
+        style={
+          {
+            "--tw-ring-color": "hsl(var(--ring))",
+          } as React.CSSProperties
+        }
+        {...props}
+      />
+      <label
+        htmlFor={id}
+        className={`absolute left-10 transition-all duration-200 pointer-events-none text-sm font-medium ${isFocused || inputValue
+          ? "-top-2 text-xs bg-white dark:bg-black px-2 text-foreground rounded-sm"
+          : "top-2.5 text-muted-foreground"
+          }`}
+      >
+        {placeholder}
+      </label>
+      {rightIcon && (
+        <button
+          type="button"
+          onClick={onRightIconClick}
+          className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:text-foreground"
+        >
+          {rightIcon}
+        </button>
+      )}
+    </div>
+  );
+};
+
+const formSchema = z.object({
+  firstName: z.string().min(1, { message: "First name is required" }),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.email({ message: "Invalid email address" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 // Main Component with shadcn/ui styling
 const SignupForm: React.FC = () => {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [userData, setUserData] = useState<{
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }>({
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
   });
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [verificationSent, setVerificationSent] = useState<boolean>(false);
@@ -110,14 +128,13 @@ const SignupForm: React.FC = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (data: FormData) => {
     try {
       // 1. Sign up with Better Auth
       await authClient.signUp.email({
-        email: userData.email,
-        password: userData.password,
-        name: `${userData.firstName} ${userData.lastName}`,
+        email: data.email,
+        password: data.password,
+        name: `${data.firstName} ${data.lastName}`,
         callbackURL: "/member", // Redirect here after email verification
       }, {
         onRequest: () => {
@@ -128,9 +145,9 @@ const SignupForm: React.FC = () => {
           // 2. Register as a Member in the fitness app
           const formData = new FormData();
           formData.append("userId", response.data?.user.id || ""); // Pass userId from Better Auth
-          formData.append("email", userData.email);
-          formData.append("firstName", userData.firstName);
-          formData.append("lastName", userData.lastName);
+          formData.append("email", data.email);
+          formData.append("firstName", data.firstName);
+          formData.append("lastName", data.lastName);
           try {
             await registerMember(formData);
             // 3. Redirect to member page after successful signup
@@ -167,7 +184,7 @@ const SignupForm: React.FC = () => {
   };
 
   if (verificationSent) {
-    return <Verify email={userData.email} />;
+    return <Verify email={form.getValues("email")} />;
   }
 
   return (
@@ -192,27 +209,33 @@ const SignupForm: React.FC = () => {
               <p className="text-center mb-6 text-red-500 text-sm">{error}</p>
             )}
 
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
               {/* First Name Input */}
               <div className="space-y-2">
                 <FloatingLabelInput
                   id="firstName"
                   type="text"
-                  value={userData.firstName}
-                  onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
+                  {...form.register("firstName")}
+                  inputValue={form.watch("firstName")}
                   placeholder="First Name"
                   icon={<UserIcon />}
                 />
+                {form.formState.errors.firstName && (
+                  <p className="text-xs text-red-500">{form.formState.errors.firstName.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <FloatingLabelInput
                   id="lastName"
                   type="text"
-                  value={userData.lastName}
-                  onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
+                  {...form.register("lastName")}
+                  inputValue={form.watch("lastName")}
                   placeholder="Last Name"
                   icon={<UserIcon />}
                 />
+                {form.formState.errors.lastName && (
+                  <p className="text-xs text-red-500">{form.formState.errors.lastName.message}</p>
+                )}
               </div>
 
               {/* Email Input */}
@@ -220,11 +243,14 @@ const SignupForm: React.FC = () => {
                 <FloatingLabelInput
                   id="email"
                   type="email"
-                  value={userData.email}
-                  onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                  {...form.register("email")}
+                  inputValue={form.watch("email")}
                   placeholder="Email"
                   icon={<MailIcon />}
                 />
+                {form.formState.errors.email && (
+                  <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+                )}
               </div>
 
               {/* Password Input */}
@@ -232,13 +258,16 @@ const SignupForm: React.FC = () => {
                 <FloatingLabelInput
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  value={userData.password}
-                  onChange={(e) => setUserData({ ...userData, password: e.target.value })}
+                  {...form.register("password")}
+                  inputValue={form.watch("password")}
                   placeholder="Password"
                   icon={<LockIcon />}
                   rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
                   onRightIconClick={togglePasswordVisibility}
                 />
+                {form.formState.errors.password && (
+                  <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
+                )}
               </div>
 
               {/* Submit Button */}
