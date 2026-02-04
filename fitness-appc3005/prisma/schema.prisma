@@ -85,7 +85,7 @@ model Booking {
   memberId       Int
   classSessionId Int
   createdAt      DateTime     @default(now())
-  member         Member       @relation(fields: [memberId], references: [id])
+  member         Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
   classSession   ClassSession @relation(fields: [classSessionId], references: [id])
 
   //prevents duplicate bookings
@@ -102,9 +102,8 @@ model HealthMetric {
   weight     Int
   weightGoal Int
 
-  member Member @relation(fields: [memberId], references: [id])
-  //Would be good for fetching metrics by date
-  //Or a list of ordered historical metrics
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  
 
   @@index([memberId, timestamp])
 }

@@ -121,3 +121,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide the password reveal button in Edge and IE */
+/*Not a complete solution to hide 
+the password reveal button in all browsers
+as the button is browser-specific
+*/
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
