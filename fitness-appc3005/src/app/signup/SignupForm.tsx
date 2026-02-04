@@ -116,6 +116,7 @@ const SignupForm: React.FC = () => {
       email: "",
       password: "",
     },
+    mode: "onTouched",
   });
 
   const [showPassword, setShowPassword] = useState<boolean>(false);

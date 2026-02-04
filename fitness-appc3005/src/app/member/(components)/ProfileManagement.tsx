@@ -13,8 +13,50 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { IconUserScan } from "@tabler/icons-react";
 import { updateMember, updateMetrics } from "@/lib/actions";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+// Helper: Transform empty strings to undefined, then validate
+const optionalString = z.string().transform(val => val.trim() === "" ? undefined : val).optional();
+const optionalEmail = z.string().transform(val => val.trim() === "" ? undefined : val)
+  .refine(val => val === undefined || z.email().safeParse(val).success, {
+    message: "Invalid email address",
+  }).optional();
+
+const formSchema = z.object({
+  firstName: optionalString,
+  lastName: optionalString,
+  email: optionalEmail,
+});
+type FormData = z.infer<typeof formSchema>;
 
 export default function ProfileManagement({ userId, memberId }: { userId: string, memberId: number }) {
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: undefined,
+      lastName: undefined,
+      email: undefined,
+    },
+    mode: "onSubmit",
+  });
+
+  const onSubmit = async (data: FormData) => {
+    if (!data.email && !data.firstName && !data.lastName) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("userId", userId);
+    // Only append fields that have values (since they're optional)
+    if (data.email) formData.append("email", data.email);
+    if (data.firstName) formData.append("firstName", data.firstName);
+    if (data.lastName) formData.append("lastName", data.lastName);
+
+    await updateMember(formData);
+  };
+
   return (
     <Card className="w-full xl:max-w-xl lg:max-w-md max-w-sm">
       <CardHeader>
@@ -26,7 +68,7 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
       </CardHeader>
 
       <CardContent>
-        <form action={updateMember}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           {/*Hidden Input to retrieve memberId, so we know each member to update details*/}
           <input type="hidden" name="userId" value={userId} />
           <div className="flex flex-col gap-4">
@@ -35,21 +77,32 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
               <CardDescription>All fields optional.</CardDescription>
             </div>
 
-            <Input id="email" type="email" name="email" placeholder="Email" />
+            <Input {...form.register("email")} id="email" type="email" name="email" placeholder="Email" />
+            {form.formState.errors.email && (
+              <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+            )}
             <Input
+              {...form.register("firstName")}
               id="firstName"
               type="text"
               name="firstName"
               placeholder="First Name"
             />
+            {form.formState.errors.firstName && (
+              <p className="text-xs text-red-500">{form.formState.errors.firstName.message}</p>
+            )}
             <Input
+              {...form.register("lastName")}
               id="lastName"
               type="text"
               name="lastName"
               placeholder="Last Name"
             />
+            {form.formState.errors.lastName && (
+              <p className="text-xs text-red-500">{form.formState.errors.lastName.message}</p>
+            )}
           </div>
-          <Button type="submit" className="w-full mt-4" variant="secondary">
+          <Button type="submit" className="w-full mt-4 cursor-pointer" variant="secondary">
             Update
           </Button>
         </form>
@@ -77,7 +130,7 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
               required={true}
             />
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full cursor-pointer">
             Update
           </Button>
         </form>

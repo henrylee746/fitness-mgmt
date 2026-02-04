@@ -57,7 +57,7 @@ export default function GroupClass({
             <input key={id} type="hidden" name="sessionIds" value={id} />
           ))}
           <input type="hidden" name="memberId" value={String(member?.id)} />
-          <Button className="w-full mt-6">Register</Button>
+          <Button className="w-full mt-6 cursor-pointer">Register</Button>
         </form>
       </CardContent>
     </Card>
