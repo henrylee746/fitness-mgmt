@@ -156,8 +156,36 @@ export const registerMember = async (formData: FormData) => {
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
 
+  // Get or create a default organization for new members
+  // In a full RBAC implementation, this would be passed from the signup form
+  let organization = await prisma.organization.findFirst({
+    where: {
+      slug: "fitnesspro-gym",
+    },
+  });
+
+  if (!organization) {
+    // Create a default organization if none exists
+    organization = await prisma.organization.create({
+      data: {
+        id: `org_${Date.now()}`,
+        name: "Default Organization",
+        slug: "default-org",
+        createdAt: new Date(),
+      },
+    });
+  }
+
   await prisma.member.create({
-    data: { userId, email, firstName, lastName },
+    data: {
+      userId,
+      email,
+      firstName,
+      lastName,
+      organizationId: organization.id,
+      role: "member",
+      createdAt: new Date(),
+    },
   });
   revalidatePath("/member", "page");
 };

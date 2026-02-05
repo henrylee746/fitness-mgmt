@@ -20,14 +20,20 @@ model Member {
   bookings     Booking[]
   metrics      HealthMetric[]
 
-  /*
-  1. PK: id (Int) - Unique identifier for the member (and user)
-  2. FK: userId (String) - Link to Better Auth User
-  3. onDelete: Cascade - If user is deleted, delete the member
-  */
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  //1. PK: id (Int) - Unique identifier for the member (and user)
+  //2. FK: userId (String) - Link to Better Auth User
+  //3. onDelete: Cascade - If user is deleted, delete the member
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId]) //Makes lookup by userId faster
+  //Makes lookup by userId faster
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           String       @default("member")
+  createdAt      DateTime
+
+  @@index([userId])
+  @@index([organizationId])
+  @@map("member")
 }
 
 model Trainer {
@@ -45,6 +51,7 @@ model Room {
 }
 
 // Fitness app's class/workout sessions
+
 model ClassSession {
   id        Int       @id @default(autoincrement())
   trainerId Int
@@ -65,6 +72,7 @@ model ClassSession {
 }
 
 // Better Auth authentication sessions
+
 model Session {
   id        String   @id
   expiresAt DateTime
@@ -75,6 +83,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  activeOrganizationId String?
 
   @@index([userId])
   @@map("session")
@@ -103,7 +113,6 @@ model HealthMetric {
   weightGoal Int
 
   member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  
 
   @@index([memberId, timestamp])
 }
@@ -126,7 +135,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[] // Better Auth sessions
   accounts      Account[]
-  member        Member?   // Optional relation to fitness app Member
+  member        Member? // Optional relation to fitness app Member
+  invitations Invitation[]
 
   @@unique([email])
   @@map("user")
@@ -162,4 +172,35 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Organization {
+  id          String       @id
+  name        String
+  slug        String
+  logo        String?
+  createdAt   DateTime
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
+
+  @@unique([slug])
+  @@map("organization")
+}
+
+model Invitation {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String       @default("pending")
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([email])
+  @@map("invitation")
 }

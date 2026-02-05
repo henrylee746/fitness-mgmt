@@ -13,6 +13,35 @@ const prisma = new PrismaClient({
 async function main() {
   console.log("Seeding database...");
 
+  // Clean up existing data first (in reverse order of dependencies)
+  console.log("Cleaning up existing data...");
+  await prisma.healthMetric.deleteMany();
+  await prisma.booking.deleteMany();
+  await prisma.classSession.deleteMany();
+  await prisma.room.deleteMany();
+  await prisma.trainer.deleteMany();
+  await prisma.member.deleteMany();
+  await prisma.invitation.deleteMany();
+  await prisma.session.deleteMany();
+  await prisma.account.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.organization.deleteMany();
+  console.log("Cleaned up existing data");
+
+  // Create Organization first (required for Members in RBAC schema)
+  const organization = await prisma.organization.create({
+    data: {
+      id: "org_fitness_001",
+      name: "FitnessPro Gym",
+      slug: "fitnesspro-gym",
+      logo: null,
+      createdAt: new Date(),
+      metadata: null,
+    },
+  });
+
+  console.log("Created organization");
+
   // Create Users first (Better Auth users)
   // In production, these would be created via the signup flow
   // For seeding, we'll create them manually with hashed passwords
@@ -43,15 +72,18 @@ async function main() {
     },
   });
 
-  console.log("✓ Created users");
+  console.log("Created users");
 
-  // Now create Members linked to Users
+  // Now create Members linked to Users and Organization
   const member1 = await prisma.member.create({
     data: {
       userId: user1.id,
       firstName: "Henry",
       lastName: "Lee",
       email: "henry@example.com",
+      organizationId: organization.id,
+      role: "member",
+      createdAt: new Date(),
     },
   });
 
@@ -61,6 +93,9 @@ async function main() {
       firstName: "Sarah",
       lastName: "Kim",
       email: "sarah@example.com",
+      organizationId: organization.id,
+      role: "member",
+      createdAt: new Date(),
     },
   });
 
@@ -70,11 +105,14 @@ async function main() {
       firstName: "Michael",
       lastName: "Tran",
       email: "michael@example.com",
+      organizationId: organization.id,
+      role: "admin", // Michael is an admin
+      createdAt: new Date(),
     },
   });
 
   const createdMembers = [member1, member2, member3];
-  console.log("✓ Created members linked to users");
+  console.log("Created members linked to users and organization");
 
   // Trainers
   const trainer1 = await prisma.trainer.create({
@@ -86,7 +124,7 @@ async function main() {
   });
 
   const createdTrainers = [trainer1, trainer2];
-  console.log("✓ Created trainers");
+  console.log("Created trainers");
 
   // Rooms
   const room1 = await prisma.room.create({
@@ -102,15 +140,15 @@ async function main() {
   });
 
   const createdRooms = [room1, room2, room3];
-  console.log("✓ Created rooms");
+  console.log("Created rooms");
 
-  // Class Sessions (fitness classes)
+  // Class Sessions (fitness classes) - using future dates
   const session1 = await prisma.classSession.create({
     data: {
       trainerId: createdTrainers[0].id,
       name: "Lifting with John",
       roomId: createdRooms[0].id,
-      dateTime: new Date("2025-12-25T10:00:00"),
+      dateTime: new Date("2026-03-15T10:00:00"),
       capacity: 20,
     },
   });
@@ -120,7 +158,7 @@ async function main() {
       trainerId: createdTrainers[0].id,
       name: "Yoga with John",
       roomId: createdRooms[1].id,
-      dateTime: new Date("2025-01-11T14:00:00"),
+      dateTime: new Date("2026-03-20T14:00:00"),
       capacity: 15,
     },
   });
@@ -130,7 +168,7 @@ async function main() {
       trainerId: createdTrainers[1].id,
       name: "Calisthenics with Lisa",
       roomId: createdRooms[2].id,
-      dateTime: new Date("2025-11-29T18:00:00"),
+      dateTime: new Date("2026-03-22T18:00:00"),
       capacity: 12,
     },
   });
@@ -140,13 +178,13 @@ async function main() {
       trainerId: createdTrainers[1].id,
       name: "Deep meditation with Lisa",
       roomId: createdRooms[0].id,
-      dateTime: new Date("2025-01-13T09:00:00"),
+      dateTime: new Date("2026-03-25T09:00:00"),
       capacity: 10,
     },
   });
 
   const createdSessions = [session1, session2, session3, session4];
-  console.log("✓ Created class sessions");
+  console.log("Created class sessions");
 
   // Bookings (members booking class sessions)
   await prisma.booking.create({
@@ -177,7 +215,7 @@ async function main() {
     },
   });
 
-  console.log("✓ Created bookings");
+  console.log("Created bookings");
 
   // Health Metrics
   await prisma.healthMetric.create({
@@ -193,7 +231,7 @@ async function main() {
       memberId: createdMembers[0].id,
       weight: 186,
       weightGoal: 176,
-      timestamp: new Date("2025-01-05T12:00:00"),
+      timestamp: new Date("2026-02-01T12:00:00"),
     },
   });
 
@@ -213,11 +251,12 @@ async function main() {
     },
   });
 
-  console.log("✓ Created health metrics");
+  console.log("Created health metrics");
 
-  console.log("\n✅ Database seed completed successfully!");
+  console.log("Database seed completed successfully!");
+  console.log("   - 1 Organization");
   console.log("   - 3 Users");
-  console.log("   - 3 Members");
+  console.log("   - 3 Members (linked to organization)");
   console.log("   - 2 Trainers");
   console.log("   - 3 Rooms");
   console.log("   - 4 Class Sessions");
