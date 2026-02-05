@@ -31,6 +31,13 @@ const formSchema = z.object({
 });
 type FormData = z.infer<typeof formSchema>;
 
+const fitnessFormSchema = z.object({
+  currWeight: z.number().min(1, { message: "Current weight is required" }).max(500, { message: "Current weight must be less than 500" }),
+  weightTarget: z.number().min(1, { message: "Weight target is required" }).max(500, { message: "Weight target must be less than 500" }),
+});
+type FitnessFormData = z.infer<typeof fitnessFormSchema>;
+
+
 export default function ProfileManagement({ userId, memberId }: { userId: string, memberId: number }) {
 
   const form = useForm<FormData>({
@@ -41,6 +48,15 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
       email: undefined,
     },
     mode: "onSubmit",
+  });
+
+  const fitnessForm = useForm<FitnessFormData>({
+    resolver: zodResolver(fitnessFormSchema),
+    defaultValues: {
+      currWeight: 0,
+      weightTarget: 0,
+    },
+    mode: "onTouched",
   });
 
   const onSubmit = async (data: FormData) => {
@@ -54,7 +70,25 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
     if (data.firstName) formData.append("firstName", data.firstName);
     if (data.lastName) formData.append("lastName", data.lastName);
 
-    await updateMember(formData);
+    try {
+      await updateMember(formData);
+    } catch (error) {
+      console.error(error);
+    }
+    form.reset();
+  };
+
+  const onFitnessSubmit = async (data: FitnessFormData) => {
+    const formData = new FormData();
+    formData.append("memberId", String(memberId));
+    formData.append("currWeight", data.currWeight.toString());
+    formData.append("weightTarget", data.weightTarget.toString());
+    try {
+      await updateMetrics(formData);
+    } catch (error) {
+      console.error(error);
+    }
+    fitnessForm.reset();
   };
 
   return (
@@ -106,7 +140,7 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
             Update
           </Button>
         </form>
-        <form action={updateMetrics}>
+        <form onSubmit={fitnessForm.handleSubmit(onFitnessSubmit)}>
           <input type="hidden" name="memberId" value={memberId} />
           <div className="flex flex-col gap-4 my-4">
             <div className="flex flex-col gap-2">
@@ -115,20 +149,28 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
             </div>
             <Label htmlFor="currWeight">Current Weight</Label>
             <Input
+              {...fitnessForm.register("currWeight")}
               id="currWeight"
               type="number"
               name="currWeight"
               placeholder="e.g. 156"
               required={true}
             />
+            {fitnessForm.formState.errors.currWeight && (
+              <p className="text-xs text-red-500">{fitnessForm.formState.errors.currWeight.message}</p>
+            )}
             <Label htmlFor="weightTarget"> Weight Target (lbs)</Label>
             <Input
+              {...fitnessForm.register("weightTarget")}
               id="weightTarget"
               type="number"
               name="weightTarget"
               placeholder="e.g. 150"
               required={true}
             />
+            {fitnessForm.formState.errors.weightTarget && (
+              <p className="text-xs text-red-500">{fitnessForm.formState.errors.weightTarget.message}</p>
+            )}
           </div>
           <Button type="submit" className="w-full cursor-pointer">
             Update
