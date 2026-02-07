@@ -17,7 +17,6 @@ const Header = ({ role }: { role?: string | undefined }) => {
   const router = useRouter();
   const { data: session, isPending, error } = authClient.useSession();
 
-
   const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {

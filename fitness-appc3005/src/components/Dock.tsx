@@ -106,7 +106,7 @@ export function HeaderDock({ role, session }: {
                                 </Tooltip>
                             </DockIcon>
                             {/* Loop through roles and render each role (if role matches) */}
-                            {Object.entries(DATA.pages.roles).map(([name, roles]) => (
+                            {Object.entries(DATA.pages.roles).slice(1).map(([name, roles]) => (
                                 role && name.toLowerCase().includes(role.toLowerCase()) && (
                                     <DockIcon key={name}>
                                         <Tooltip>
