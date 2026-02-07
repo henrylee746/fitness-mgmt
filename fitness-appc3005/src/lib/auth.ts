@@ -17,6 +17,7 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 export const auth = betterAuth({
+  //Needed if accessing organization data server-side
   plugins: [organization(), organizationClient()],
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET!,
@@ -72,5 +73,26 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendOnSignUp: true,
     expiresIn: 3600, // 1 hour
+  },
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          // Look up the user's organization from their Member record
+          const member = await prisma.member.findUnique({
+            where: { userId: session.userId },
+            select: { organizationId: true },
+          });
+
+          // Set the active organization if member exists
+          return {
+            data: {
+              ...session,
+              activeOrganizationId: member?.organizationId || null,
+            },
+          };
+        },
+      },
+    },
   },
 });

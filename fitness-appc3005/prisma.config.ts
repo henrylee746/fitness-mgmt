@@ -7,6 +7,7 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
+    //For dev use only, seed.ts is hidden in prod
     seed: "tsx prisma/seed.ts",
   },
   datasource: {

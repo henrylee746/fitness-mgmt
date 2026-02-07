@@ -21,8 +21,7 @@ export default async function Members() {
       </Button>
     </div>;
   }
-
-  const { user } = data;
+  const { user, session } = data;
   if (!user) {
     return <div className="text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">User not found.</div>;
   }
@@ -33,8 +32,15 @@ export default async function Members() {
       className="text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">Member not found. </div>;
   }
 
-  const sessions = await getSessions();
+  // Use server-side auth to get organization role
+  const roleData = await auth.api.getActiveMemberRole({
+    headers: await headers()
+  })
+  const role = roleData?.role;
+  console.log("Member role:", role);
+  console.log("Active organization ID:", session.activeOrganizationId);
 
+  const sessions = await getSessions();
 
 
   return (
