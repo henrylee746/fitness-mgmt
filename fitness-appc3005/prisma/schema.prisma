@@ -25,13 +25,12 @@ model Member {
   //3. onDelete: Cascade - If user is deleted, delete the member
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  //Makes lookup by userId faster
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   role           String       @default("member")
   createdAt      DateTime
 
-  @@index([userId])
+  @@index([userId])   //Makes lookup by userId faster
   @@index([organizationId])
   @@map("member")
 }
