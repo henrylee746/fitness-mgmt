@@ -167,10 +167,11 @@ Implemented throughout the app using Prisma Client:
 
 ## 🛣️ Roadmap
 
-- [x] OAuth authentication with Better Auth
-- [x] Member, Trainer, and Admin portals
+- [x] Email + Password Signup/Login
+- [x] Email Verification
+- [x] Member, Trainer, and Admin portals (RBAC)
 - [x] Health metrics tracking
-- [ ] Email verification for new accounts
+- [ ] OAuth authentication w/ Google Cloud
 - [ ] Advanced filtering (sort sessions by date, trainer availability)
 - [ ] Notification system for upcoming classes
 - [ ] Payment integration for memberships
