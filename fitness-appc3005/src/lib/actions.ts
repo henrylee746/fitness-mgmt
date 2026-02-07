@@ -1,7 +1,16 @@
 /*Admin Panel Operations*/
 "use server";
 import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
+
+export async function getActiveMemberRole() {
+  const roleData = await auth.api.getActiveMemberRole({
+    headers: await headers(),
+  });
+  return roleData.role;
+}
 
 export async function getMember(userId: string) {
   const member = await prisma.member.findUnique({

@@ -29,21 +29,6 @@ export default async function Members() {
       className="text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">Member not found. </div>;
   }
 
-  // Use server-side auth to get organization role
-  const roleData = await auth.api.getActiveMemberRole({
-    headers: await headers()
-  })
-  const role = roleData?.role
-
-  if (role !== "member" || !role) {
-    return (
-      <div className="text-center text-2xl 
-            font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-        You are not a member yet, please sign up for a membership.
-      </div>
-    )
-  }
-
   const sessions = await getSessions();
   const { user } = data; //Should never be null since we checked for session above
 

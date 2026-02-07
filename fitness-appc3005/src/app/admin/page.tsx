@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SessionGuard } from "@/components/SessionGuard";
+import { getActiveMemberRole } from "@/lib/actions";
 
 export default async function Admin() {
   const data = await auth.api.getSession({
@@ -21,10 +22,7 @@ export default async function Admin() {
   }
 
   // Use server-side auth to get organization role
-  const roleData = await auth.api.getActiveMemberRole({
-    headers: await headers()
-  })
-  const role = roleData?.role
+  const role = await getActiveMemberRole()
 
   if (role !== "admin" || !role) {
     return (

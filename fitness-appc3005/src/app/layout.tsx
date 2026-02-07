@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
+import { getActiveMemberRole } from "@/lib/actions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,11 +22,14 @@ export const metadata: Metadata = {
   description: "Fitness app for C3005 Final Project",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const role = await getActiveMemberRole();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -38,7 +42,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
-            <Header />
+            <Header role={role} />
             <main className="flex-1 flex flex-col overflow-x-hidden">
               {children}
             </main>
