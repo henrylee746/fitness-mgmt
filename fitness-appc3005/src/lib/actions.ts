@@ -1,15 +1,22 @@
-/*Admin Panel Operations*/
+/*Server Actions*/
 "use server";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
+export async function getSession() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  return session;
+}
+
 export async function getActiveMemberRole() {
   const roleData = await auth.api.getActiveMemberRole({
     headers: await headers(),
   });
-  return roleData.role;
+  return roleData?.role;
 }
 
 export async function getMember(userId: string) {

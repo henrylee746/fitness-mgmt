@@ -10,6 +10,7 @@ import Verify from "./Verify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 const UserIcon: React.FC = () => <LuUser size={16} />;
 
@@ -108,6 +109,11 @@ type FormData = z.infer<typeof formSchema>;
 // Main Component with shadcn/ui styling
 const SignupForm: React.FC = () => {
 
+  //Get session from Better Auth in case user is signed in and tries to access signup page
+  const { data: session } = authClient.useSession();
+  const router = useRouter();
+
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -185,7 +191,12 @@ const SignupForm: React.FC = () => {
   };
 
   if (verificationSent) {
+    setVerificationSent(false);
     return <Verify email={form.getValues("email")} />;
+  }
+
+  if (session) {
+    router.push("/member");
   }
 
   return (

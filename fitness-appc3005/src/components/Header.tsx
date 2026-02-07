@@ -12,10 +12,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UserAvatar } from "@daveyplate/better-auth-ui";
 import { HeaderDock } from "./Dock";
-import { useState } from "react";
 
-
-const Header = ({ role }: { role: string }) => {
+const Header = ({ role }: { role?: string | undefined }) => {
   const router = useRouter();
   const { data: session, isPending, error } = authClient.useSession();
 
@@ -38,7 +36,7 @@ const Header = ({ role }: { role: string }) => {
 
   return (
     <div className="flex flex-col sm:flex-row py-6 flex-wrap items-center justify-between gap-4 mr-4 text-base font-medium">
-      <HeaderDock role={role} />
+      <HeaderDock role={role} session={session?.user ?? undefined} />
       <div className="flex flex-col sm:flex-row gap-2 items-center">
         {!isPending && session ? (
           <DropdownMenu>

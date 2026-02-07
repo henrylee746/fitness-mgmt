@@ -1,19 +1,16 @@
 import prisma from "@/lib/prisma";
 import RoomBooking from "./(components)/RoomBooking";
 import ClassManagement from "./(components)/ClassManagement";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole } from "@/lib/actions";
+import { getSession } from "@/lib/actions";
 
 export default async function Admin() {
-  const data = await auth.api.getSession({
-    headers: await headers()
-  })
+  const session = await getSession()
 
-  if (!data?.session) {
+  if (!session) {
     return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">Not Authorized. Please sign in to access your account.
       <Button asChild>
         <Link href="/signin">Sign in</Link>

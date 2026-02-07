@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
-import { getActiveMemberRole } from "@/lib/actions";
+import { getActiveMemberRole, getSession } from "@/lib/actions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +28,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const role = await getActiveMemberRole();
+  const session = await getSession()
+  const role = session ? (await getActiveMemberRole()) ?? undefined : undefined;
 
   return (
     <html lang="en" suppressHydrationWarning>

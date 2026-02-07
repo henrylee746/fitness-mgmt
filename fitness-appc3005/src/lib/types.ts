@@ -54,6 +54,16 @@ export type Member = {
   registeredAt: Date;
 };
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  image?: string | null | undefined;
+  emailVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type MemberInfo = {
   weight: number;
   weightGoal: number;

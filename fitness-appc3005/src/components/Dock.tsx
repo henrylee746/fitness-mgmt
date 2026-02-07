@@ -18,6 +18,8 @@ import { IoMdFitness } from "react-icons/io";
 import { RiAdminFill } from "react-icons/ri";
 import { ToggleTheme } from "./ui/toggle-theme"
 
+import { User } from "@/lib/types";
+
 export type IconProps = React.HTMLAttributes<SVGElement>
 
 const Icons = {
@@ -49,7 +51,9 @@ const DATA = {
     },
 }
 
-export function HeaderDock({ role }: { role: string }) {
+export function HeaderDock({ role, session }: {
+    role?: string, session?: User
+}) {
     return (
         <div className="flex flex-col items-center justify-center">
             <TooltipProvider>
@@ -78,51 +82,55 @@ export function HeaderDock({ role }: { role: string }) {
                             </TooltipContent>
                         </Tooltip>
                     </DockIcon>
-                    <Separator orientation="vertical" className="h-full" />
-                    {/* Member */}
-                    <DockIcon key={DATA.pages.roles.Member.name}>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Link
-                                    href={DATA.pages.roles.Member.url}
-                                    aria-label={DATA.pages.roles.Member.name}
-                                    className={cn(
-                                        buttonVariants({ variant: "ghost", size: "icon" }),
-                                        "size-12 rounded-full"
-                                    )}
-                                >
-                                    <DATA.pages.roles.Member.icon className="size-5" />
-                                </Link>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>{DATA.pages.roles.Member.name}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </DockIcon>
-                    {/* Loop through roles and render each role (if role matches) */}
-                    {Object.entries(DATA.pages.roles).map(([name, roles]) => (
-                        name.toLowerCase().includes(role.toLowerCase()) && (
-                            <DockIcon key={name}>
+                    {session &&
+                        (<>
+                            <Separator orientation="vertical" className="h-full" />
+                            {/* Member */}
+                            <DockIcon key={DATA.pages.roles.Member.name}>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Link
-                                            href={roles.url}
-                                            aria-label={roles.name}
+                                            href={DATA.pages.roles.Member.url}
+                                            aria-label={DATA.pages.roles.Member.name}
                                             className={cn(
                                                 buttonVariants({ variant: "ghost", size: "icon" }),
                                                 "size-12 rounded-full"
                                             )}
                                         >
-                                            <roles.icon className="size-5" />
+                                            <DATA.pages.roles.Member.icon className="size-5" />
                                         </Link>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>{name}</p>
+                                        <p>{DATA.pages.roles.Member.name}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </DockIcon>
-                        )
-                    ))}
+                            {/* Loop through roles and render each role (if role matches) */}
+                            {Object.entries(DATA.pages.roles).map(([name, roles]) => (
+                                role && name.toLowerCase().includes(role.toLowerCase()) && (
+                                    <DockIcon key={name}>
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Link
+                                                    href={roles.url}
+                                                    aria-label={roles.name}
+                                                    className={cn(
+                                                        buttonVariants({ variant: "ghost", size: "icon" }),
+                                                        "size-12 rounded-full"
+                                                    )}
+                                                >
+                                                    <roles.icon className="size-5" />
+                                                </Link>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>{name}</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </DockIcon>
+                                )
+                            ))}
+                        </>)}
+
                 </Dock>
             </TooltipProvider>
         </div>
