@@ -6,6 +6,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Resend } from "resend";
 import { EmailTemplate } from "../components/EmailTemplate";
 import { organization } from "better-auth/plugins";
+import { ac, member, trainer, admin } from "./permissions";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -17,7 +18,16 @@ const prisma = new PrismaClient({ adapter });
 
 export const auth = betterAuth({
   //Needed if accessing organization data server-side
-  plugins: [organization()],
+  plugins: [
+    organization({
+      ac,
+      roles: {
+        member,
+        trainer,
+        admin,
+      },
+    }),
+  ],
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET!,
   database: prismaAdapter(prisma, {

@@ -20,9 +20,19 @@ export default async function Admin() {
     </div>;
   }
 
-  const { user } = data;
-  if (!user) {
-    return <div className="text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">User not found.</div>;
+  // Use server-side auth to get organization role
+  const roleData = await auth.api.getActiveMemberRole({
+    headers: await headers()
+  })
+  const role = roleData?.role
+
+  if (role !== "admin" || !role) {
+    return (
+      <div className="text-center text-2xl 
+            font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+        You do not have the role of admin.
+      </div>
+    )
   }
 
   const sessions = await prisma.classSession.findMany({
