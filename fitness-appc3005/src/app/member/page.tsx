@@ -1,29 +1,26 @@
-import { getMember, getSessions } from "@/lib/actions";
+import { getSessions, getMember } from "@/lib/actions";
 import ProfileManagement from "./(components)/ProfileManagement";
 import MemberDashboard from "./(components)/MemberDashboard";
 import GroupClass from "./(components)/GroupClass";
+import { SessionGuard } from "@/components/SessionGuard";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SessionGuard } from "@/components/SessionGuard";
 
 export default async function Members() {
+
   const data = await auth.api.getSession({
     headers: await headers()
   })
 
-
   if (!data?.session) {
-    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">Not Authorized. Please sign in to access your account.
+    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+      Not Authorized. Please sign in to access your account.
       <Button asChild>
         <Link href="/signin">Sign in</Link>
       </Button>
     </div>;
-  }
-  const { user, session } = data;
-  if (!user) {
-    return <div className="text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">User not found.</div>;
   }
 
   const member = await getMember(data.user.id);
@@ -36,11 +33,19 @@ export default async function Members() {
   const roleData = await auth.api.getActiveMemberRole({
     headers: await headers()
   })
-  const role = roleData?.role;
+  const role = roleData?.role
 
+  if (role !== "member" || !role) {
+    return (
+      <div className="text-center text-2xl 
+            font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+        You are not a member yet, please sign up for a membership.
+      </div>
+    )
+  }
 
   const sessions = await getSessions();
-
+  const { user } = data; //Should never be null since we checked for session above
 
   return (
     <>

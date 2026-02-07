@@ -72,6 +72,15 @@ async function main() {
     },
   });
 
+  const user4 = await prisma.user.create({
+    data: {
+      id: "user_john_004",
+      name: "John Peterson",
+      email: "johnp@example.com",
+      emailVerified: true,
+    },
+  });
+
   console.log("Created users");
 
   // Now create Members linked to Users and Organization
@@ -111,7 +120,19 @@ async function main() {
     },
   });
 
-  const createdMembers = [member1, member2, member3];
+  const member4 = await prisma.member.create({
+    data: {
+      userId: user4.id,
+      firstName: "John",
+      lastName: "Peterson",
+      email: "johnp@example.com",
+      organizationId: organization.id,
+      role: "trainer",
+      createdAt: new Date(),
+    },
+  });
+
+  const createdMembers = [member1, member2, member3, member4];
   console.log("Created members linked to users and organization");
 
   // Trainers
@@ -255,8 +276,8 @@ async function main() {
 
   console.log("Database seed completed successfully!");
   console.log("   - 1 Organization");
-  console.log("   - 3 Users");
-  console.log("   - 3 Members (linked to organization)");
+  console.log("   - 4 Users");
+  console.log("   - 4 Members (linked to organization)");
   console.log("   - 2 Trainers");
   console.log("   - 3 Rooms");
   console.log("   - 4 Class Sessions");
