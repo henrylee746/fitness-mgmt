@@ -37,8 +37,7 @@ export default async function Members() {
     headers: await headers()
   })
   const role = roleData?.role;
-  console.log("Member role:", role);
-  console.log("Active organization ID:", session.activeOrganizationId);
+
 
   const sessions = await getSessions();
 

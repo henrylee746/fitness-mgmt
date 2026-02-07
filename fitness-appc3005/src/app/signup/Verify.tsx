@@ -44,6 +44,7 @@ export default function Verify({ email }: { email: string }) {
 
         await authClient.sendVerificationEmail({
             email,
+            callbackURL: "/member",
         }, {
             onSuccess: () => {
                 setSent(true);
