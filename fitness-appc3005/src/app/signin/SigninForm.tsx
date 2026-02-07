@@ -45,6 +45,7 @@ type FormData = z.infer<typeof formSchema>;
 
 // --- Main App Component ---
 export default function Login() {
+  const { data: session } = authClient.useSession();
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -81,6 +82,10 @@ export default function Login() {
       },
     });
   };
+
+  if (session) {
+    router.push("/member");
+  }
 
   return (
     // Main container with a custom background pattern and flexbox for centering. This setup is inherently responsive.
