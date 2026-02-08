@@ -171,7 +171,7 @@ export const registerMember = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
-  const requestedRole = formData.get("role") as string;
+  const requestedRole = (formData.get("role") as string)?.trim() ?? "";
   const allowedRoles = (
     process.env.ALLOWED_SIGNUP_ROLES ?? "member,trainer,admin"
   )
@@ -181,9 +181,8 @@ export const registerMember = async (formData: FormData) => {
   const safeAllowedRoles = allowedRoles.length > 0 ? allowedRoles : ["member"];
 
   // Intentional: signup allows user-selected roles, constrained by allowlist.
-  const normalizedRole = requestedRole ?? "";
-  const role = safeAllowedRoles.includes(normalizedRole)
-    ? (normalizedRole as string)
+  const role = safeAllowedRoles.includes(requestedRole)
+    ? requestedRole
     : safeAllowedRoles[0];
 
   // Get or create a default organization for new members
