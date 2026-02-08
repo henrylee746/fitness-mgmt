@@ -102,7 +102,7 @@ const formSchema = z.object({
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.email({ message: "Invalid email address" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
-  role: z.enum(["member", "trainer", "admin"]), //Must match one of the values in here
+  role: z.enum(["member", "trainer", "admin"], { message: "Invalid role" }), //Must match one of the values in here
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -296,25 +296,27 @@ const SignupForm: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  <RoleRadioGroup register={form.register("role")} />
+                  <RoleRadioGroup control={form.control} />
 
                 </div>
                 {/* Submit Button */}
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="cursor-pointer inline-flex gap-4 items-center justify-center
+              <div className="flex items-center justify-center w-full mt-8">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="cursor-pointer inline-flex gap-4 items-center justify-center
                  whitespace-nowrap rounded-md text-sm font-medium 
                  ring-offset-background transition-colors focus-visible:outline-none 
                  focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
                  disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground 
-                 hover:bg-primary/90 h-10 px-4 py-2 w-full"
-              >
-                Create Account
-                {loading ? <Loader /> : null}
-              </button>
+                 hover:bg-primary/90 h-10 px-4 py-2 w-[75%]"
+                >
+                  Create Account
+                  {loading ? <Loader /> : null}
+                </button>
+              </div>
             </form>
             {/* Divider */}
             <div className="relative my-6">
@@ -336,7 +338,7 @@ const SignupForm: React.FC = () => {
                 onClick={handleGoogleSubmit}
               >
                 <GoogleIcon />
-                <span className="ml-2">Google</span>
+                <span className="ml-2 p-2">Google</span>
               </button>
             </div>
 
