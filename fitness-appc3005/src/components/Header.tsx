@@ -31,7 +31,6 @@ const Header = ({ role }: { role?: string | undefined }) => {
     });
   };
 
-  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="flex flex-col sm:flex-row py-6 flex-wrap items-center justify-between gap-4 mr-4 text-base font-medium">

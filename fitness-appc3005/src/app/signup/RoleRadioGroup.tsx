@@ -9,6 +9,8 @@ import { Control, Controller } from "react-hook-form"
 
 export function RoleRadioGroup({ control }: { control: Control<any> }) {
     return (
+        // Control is the form control from react-hook-form
+        // Necessary for third-party controlled components
         <Controller
             name="role"
             control={control}
