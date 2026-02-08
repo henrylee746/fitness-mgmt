@@ -11,7 +11,7 @@ export function AnimatedCard({ className, ...props }: CardProps) {
       aria-labelledby="card-title"
       aria-describedby="card-description"
       className={cn(
-        "group/animated-card relative w-[356px] overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm",
+        "group/animated-card relative w-[280px] sm:w-[320px] md:w-[356px] overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm",
         className
       )}
       {...props}
@@ -64,7 +64,7 @@ export function CardDescription({ className, ...props }: CardDescriptionProps) {
 export function CardVisual({ className, ...props }: CardProps) {
   return (
     <div
-      className={cn("h-[180px] w-[356px] overflow-hidden", className)}
+      className={cn("h-[150px] w-[280px] sm:h-[165px] sm:w-[320px] md:h-[180px] md:w-[356px] overflow-hidden", className)}
       {...props}
     />
   )

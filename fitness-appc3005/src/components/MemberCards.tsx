@@ -27,34 +27,34 @@ export const MemberCards = () => {
 
     return (
 
-        <div className="flex">
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-full mx-4">
-                <FaUserCircle className="w-20 h-20" />
-                <CardHeader className="flex flex-col items-center justify-center min-w-sm">
+        <div className="flex gap-2 sm:gap-3 md:gap-4">
+            <Card className="dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] mx-2 sm:mx-3 md:mx-4">
+                <FaUserCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" />
+                <CardHeader className="flex flex-col items-center justify-center w-full">
                     <CardAction>
                     </CardAction>
-                    <CardTitle>Profile Management</CardTitle>
-                    <CardDescription className="text-center">
+                    <CardTitle className="text-base sm:text-lg text-center">Profile Management</CardTitle>
+                    <CardDescription className="text-center text-xs sm:text-sm">
                         Update your details/fitness goals
                     </CardDescription>
                 </CardHeader>
             </Card>
-            <AnimatedCard className="w-full mx-4 dark:bg-black">
+            <AnimatedCard className="dark:bg-black">
                 <CardVisual>
                     <MemberCard mainColor={mainColor} secondaryColor={secondaryColor} />
                 </CardVisual>
                 <CardBody>
-                    <CardTitle className="text-center">Dashboard</CardTitle>
-                    <CardDescription className="text-center">Check your metrics and upcoming sessions here</CardDescription>
+                    <CardTitle className="text-center text-base sm:text-lg">Dashboard</CardTitle>
+                    <CardDescription className="text-center text-xs sm:text-sm">Check your metrics and upcoming sessions here</CardDescription>
                 </CardBody>
             </AnimatedCard>
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-full mx-4">
-                <FaUserFriends className="w-20 h-20" />
-                <CardHeader className="flex flex-col items-center justify-center min-w-sm">
+            <Card className="dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] mx-2 sm:mx-3 md:mx-4">
+                <FaUserFriends className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" />
+                <CardHeader className="flex flex-col items-center justify-center w-full">
                     <CardAction>
                     </CardAction>
-                    <CardTitle>Group Class</CardTitle>
-                    <CardDescription className="text-center">
+                    <CardTitle className="text-base sm:text-lg text-center">Group Class</CardTitle>
+                    <CardDescription className="text-center text-xs sm:text-sm">
                         Book your next session here such as yoga, pilates, etc.
                     </CardDescription>
                 </CardHeader>
