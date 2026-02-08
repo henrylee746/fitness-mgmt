@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function AnimatedCard({ className, ...props }: CardProps) {
   return (
@@ -11,7 +11,7 @@ export function AnimatedCard({ className, ...props }: CardProps) {
       aria-labelledby="card-title"
       aria-describedby="card-description"
       className={cn(
-        "group/animated-card relative w-[356px] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-900 dark:bg-black",
+        "group/animated-card relative w-[356px] overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm",
         className
       )}
       {...props}
@@ -24,7 +24,7 @@ export function CardBody({ className, ...props }: CardProps) {
     <div
       role="group"
       className={cn(
-        "flex flex-col space-y-1.5 border-t border-zinc-200 p-4 dark:border-zinc-900",
+        "flex flex-col space-y-1.5 border-t p-4",
         className
       )}
       {...props}
@@ -32,7 +32,7 @@ export function CardBody({ className, ...props }: CardProps) {
   )
 }
 
-interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
+interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> { }
 
 export function CardTitle({ className, ...props }: CardTitleProps) {
   return (
@@ -47,7 +47,7 @@ export function CardTitle({ className, ...props }: CardTitleProps) {
 }
 
 interface CardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {}
+  extends React.HTMLAttributes<HTMLParagraphElement> { }
 
 export function CardDescription({ className, ...props }: CardDescriptionProps) {
   return (

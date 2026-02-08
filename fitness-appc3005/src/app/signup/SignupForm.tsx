@@ -10,7 +10,7 @@ import Verify from "./Verify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { RoleRadioGroup } from "./RoleRadioGroup";
 
 const UserIcon: React.FC = () => <LuUser size={16} />;
 
@@ -102,6 +102,7 @@ const formSchema = z.object({
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.email({ message: "Invalid email address" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+  role: z.enum(["member", "trainer", "admin"]), //Must match one of the values in here
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -111,8 +112,6 @@ const SignupForm: React.FC = () => {
 
   //Get session from Better Auth in case user is signed in and tries to access signup page
   const { data: session } = authClient.useSession();
-  const router = useRouter();
-
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -121,6 +120,7 @@ const SignupForm: React.FC = () => {
       lastName: "",
       email: "",
       password: "",
+      role: "member",
     },
     mode: "onTouched",
   });
@@ -155,6 +155,7 @@ const SignupForm: React.FC = () => {
           formData.append("email", data.email);
           formData.append("firstName", data.firstName);
           formData.append("lastName", data.lastName);
+          formData.append("role", data.role);
           try {
             await registerMember(formData);
             // 3. Redirect to member page after successful signup
@@ -201,7 +202,7 @@ const SignupForm: React.FC = () => {
   return (
     <>
       <div className="flex items-center justify-center p-6">
-        <div className="w-full max-w-sm relative">
+        <div className="w-full relative">
           {/* Main Card with shadcn/ui styling */}
           <div
             ref={cardRef}
@@ -220,78 +221,101 @@ const SignupForm: React.FC = () => {
               <p className="text-center mb-6 text-red-500 text-sm">{error}</p>
             )}
 
-            <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
+            <form className="space-y-4 " onSubmit={form.handleSubmit(handleSubmit)}>
               {/* First Name Input */}
-              <div className="space-y-2">
-                <FloatingLabelInput
-                  id="firstName"
-                  type="text"
-                  {...form.register("firstName")}
-                  inputValue={form.watch("firstName")}
-                  placeholder="First Name"
-                  icon={<UserIcon />}
-                />
-                {form.formState.errors.firstName && (
-                  <p className="text-xs text-red-500">{form.formState.errors.firstName.message}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <FloatingLabelInput
-                  id="lastName"
-                  type="text"
-                  {...form.register("lastName")}
-                  inputValue={form.watch("lastName")}
-                  placeholder="Last Name"
-                  icon={<UserIcon />}
-                />
-                {form.formState.errors.lastName && (
-                  <p className="text-xs text-red-500">{form.formState.errors.lastName.message}</p>
-                )}
+              <div className="flex items-center justify-center gap-4">
+                <div className="flex flex-col gap-4">
+                  <div className="space-y-2">
+                    <FloatingLabelInput
+                      id="firstName"
+                      type="text"
+                      {...form.register("firstName")}
+                      inputValue={form.watch("firstName")}
+                      placeholder="First Name"
+                      icon={<UserIcon />}
+                    />
+                    {form.formState.errors.firstName && (
+                      <p className="text-xs text-red-500">{form.formState.errors.firstName.message}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <FloatingLabelInput
+                      id="lastName"
+                      type="text"
+                      {...form.register("lastName")}
+                      inputValue={form.watch("lastName")}
+                      placeholder="Last Name"
+                      icon={<UserIcon />}
+                    />
+                    {form.formState.errors.lastName && (
+                      <p className="text-xs text-red-500">{form.formState.errors.lastName.message}</p>
+                    )}
+                  </div>
+
+                  {/* Email Input */}
+                  <div className="space-y-2">
+                    <FloatingLabelInput
+                      id="email"
+                      type="email"
+                      {...form.register("email")}
+                      inputValue={form.watch("email")}
+                      placeholder="Email"
+                      icon={<MailIcon />}
+                    />
+                    {form.formState.errors.email && (
+                      <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+                    )}
+                  </div>
+
+                  {/* Password Input */}
+                  <div className="space-y-2">
+                    <FloatingLabelInput
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      {...form.register("password")}
+                      inputValue={form.watch("password")}
+                      placeholder="Password"
+                      icon={<LockIcon />}
+                      rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                      onRightIconClick={togglePasswordVisibility}
+                    />
+                    {form.formState.errors.password && (
+                      <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-4">
+                  {/* Divider */}
+                  <div className="relative my-2">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t border-border" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="text-center bg-zinc-100 dark:bg-zinc-900 px-2 text-muted-foreground">
+                        Choose your role (Everyone is a member by default)
+                      </span>
+                    </div>
+                  </div>
+                  <RoleRadioGroup register={form.register("role")} />
+
+                </div>
+                {/* Submit Button */}
               </div>
 
-              {/* Email Input */}
-              <div className="space-y-2">
-                <FloatingLabelInput
-                  id="email"
-                  type="email"
-                  {...form.register("email")}
-                  inputValue={form.watch("email")}
-                  placeholder="Email"
-                  icon={<MailIcon />}
-                />
-                {form.formState.errors.email && (
-                  <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
-                )}
-              </div>
-
-              {/* Password Input */}
-              <div className="space-y-2">
-                <FloatingLabelInput
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  {...form.register("password")}
-                  inputValue={form.watch("password")}
-                  placeholder="Password"
-                  icon={<LockIcon />}
-                  rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
-                  onRightIconClick={togglePasswordVisibility}
-                />
-                {form.formState.errors.password && (
-                  <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
-                )}
-              </div>
-
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="cursor-pointer inline-flex gap-4 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+                className="cursor-pointer inline-flex gap-4 items-center justify-center
+                 whitespace-nowrap rounded-md text-sm font-medium 
+                 ring-offset-background transition-colors focus-visible:outline-none 
+                 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
+                 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground 
+                 hover:bg-primary/90 h-10 px-4 py-2 w-full"
               >
                 Create Account
                 {loading ? <Loader /> : null}
               </button>
             </form>
-
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">

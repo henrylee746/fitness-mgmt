@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { flushSync } from "react-dom";
+import { useTheme } from "next-themes"
+
 
 import { cn } from "@/lib/utils";
 
@@ -38,35 +40,24 @@ export const ToggleTheme = ({
   animationType = "circle-spread",
   ...props
 }: ToggleThemeProps) => {
+  const { setTheme, resolvedTheme } = useTheme()
   const [isDark, setIsDark] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
+  // Sync local state with resolvedTheme
   useEffect(() => {
-    const updateTheme = () => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    };
-
-    updateTheme();
-
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
+    setIsDark(resolvedTheme === "dark");
+  }, [resolvedTheme]);
 
   const toggleTheme = useCallback(async () => {
     if (!buttonRef.current) return;
 
+    const newTheme = isDark ? "light" : "dark";
+
     // Wait for the DOM update to complete within the View Transition
     await document.startViewTransition(() => {
       flushSync(() => {
-        const newTheme = !isDark;
-        setIsDark(newTheme);
-        document.documentElement.classList.toggle("dark");
-        localStorage.setItem("theme", newTheme ? "dark" : "light");
+        setTheme(newTheme);
       });
     }).ready;
 
@@ -280,7 +271,7 @@ export const ToggleTheme = ({
         // No custom animation runs
         break;
     }
-  }, [isDark, duration, animationType]);
+  }, [isDark, setTheme, duration, animationType]);
 
   return (
     <>
