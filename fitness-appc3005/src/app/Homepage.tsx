@@ -12,6 +12,7 @@ import { AdminCards } from "@/components/AdminCards";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import Loading from "./loading";
+import { useTheme } from "next-themes";
 
 const MemberIcon = () => <FaUser />;
 
@@ -61,6 +62,8 @@ const UserPill = ({ user, text, selected, onClick }: userPillProps) => {
 
 
 export const Homepage = () => {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const { data: session, isPending, error } = authClient.useSession();
   const [isVisible, setIsVisible] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -132,12 +135,12 @@ export const Homepage = () => {
                 <div className="flex flex-col">
                   <Link href="/signup">
                     <button className=" cursor-pointer group inline-flex gap-3 mb-2 items-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium text-base sm:text-lg transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105 hover:shadow-lg">
-                      Sign Up
+                      Register
                       <ArrowRight />
                     </button>
                   </Link>
                   <Link href="/signin" className="mb-4">
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400 underline underline-offset-4 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">Or sign in</span>
+                    <span className="text-sm text-zinc-600 dark:text-zinc-400 underline underline-offset-4 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">Returning user? Sign in</span>
                   </Link>
                 </div>
               ) :
@@ -166,6 +169,10 @@ export const Homepage = () => {
             <Marquee
               autoFill={true}
               pauseOnHover={true}
+              gradient={true}
+              gradientWidth={50}
+              gradientColor={isDark ? "black" : "white"}
+              speed={70}
             >
               {selectedPill === "member" ? <MemberCards /> : selectedPill === "trainer" ? <TrainerCards /> : <AdminCards />}
             </Marquee>

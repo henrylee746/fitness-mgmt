@@ -12,19 +12,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 const UserIcon = () => (
-  <span className="h-5 w-5 text-zinc-600 dark:text-zinc-400 inline-flex items-center">
+  <span className="h-5 w-5 text-muted-foreground inline-flex items-center">
     <LuUser size={20} />
   </span>
 );
 
 const EyeIcon = () => (
-  <span className="h-4 w-4 text-zinc-500 dark:text-zinc-400 inline-flex items-center">
+  <span className="h-4 w-4 text-muted-foreground inline-flex items-center">
     <LuEye size={16} />
   </span>
 );
 
 const EyeOffIcon = () => (
-  <span className="h-4 w-4 text-zinc-500 dark:text-zinc-400 inline-flex items-center">
+  <span className="h-4 w-4 text-muted-foreground inline-flex items-center">
     <LuEyeOff size={16} />
   </span>
 );
@@ -91,27 +91,27 @@ export default function Login() {
     // Main container with a custom background pattern and flexbox for centering. This setup is inherently responsive.
     <div className="p-6 relative w-full flex items-center justify-center font-sans overflow-hidden">
       {/* Login Card - More compact and shadcn-like */}
-      <div className="relative w-full max-w-sm p-6 space-y-6 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-lg dark:shadow-zinc-900/50">
+      <div className="relative w-full max-w-sm p-6 space-y-6 bg-card text-card-foreground rounded-lg border shadow-lg">
         {/* Header section with icon and title - More compact */}
         <div className="text-center space-y-3">
-          <div className="inline-flex p-2 bg-zinc-100 dark:bg-zinc-900 rounded-md border border-zinc-200 dark:border-zinc-800">
+          <div className="inline-flex p-2 bg-muted rounded-md border">
             <UserIcon />
           </div>
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+            <h1 className="text-2xl font-semibold tracking-tight">
               Welcome back
             </h1>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Enter your credentials to sign in
             </p>
           </div>
         </div>
         {error && (
-          <p className="text-center my-6 text-red-500 text-sm">{error}</p>
+          <p className="text-center my-6 text-destructive text-sm">{error}</p>
         )}
         {/* Social login buttons - More compact shadcn style */}
         <div className="flex justify-center items-center">
-          <button className="cursor-pointer flex items-center justify-center h-9 px-3 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black hover:bg-zinc-50 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300">
+          <button className="cursor-pointer flex items-center justify-center h-9 px-3 rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
             <span className="flex items-center gap-2">
               <GoogleIcon />
               Google
@@ -122,10 +122,10 @@ export default function Login() {
         {/* OR Divider - More subtle */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-zinc-200 dark:border-zinc-800" />
+            <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white dark:bg-zinc-900 px-2 text-zinc-500 dark:text-zinc-400">
+            <span className="bg-card px-2 text-muted-foreground">
               Or continue with
             </span>
           </div>
@@ -136,7 +136,7 @@ export default function Login() {
           <div className="flex flex-col gap-0.3 space-y-2">
             <label
               htmlFor="email"
-              className="ml-1  text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-zinc-900 dark:text-zinc-50"
+              className="ml-1 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Email
             </label>
@@ -145,16 +145,16 @@ export default function Login() {
               id="email"
               {...register("email")}
               placeholder="name@example.com"
-              className="flex h-9 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-5 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-5 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             />
             {errors.email && (
-              <p className="text-xs text-red-500">{errors.email.message}</p>
+              <p className="text-xs text-destructive">{errors.email.message}</p>
             )}
           </div>
           <div className="flex flex-col gap-0.3 space-y-2">
             <label
               htmlFor="password"
-              className="ml-1 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-zinc-900 dark:text-zinc-50"
+              className="ml-1 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Password
             </label>
@@ -164,24 +164,24 @@ export default function Login() {
                 id="password"
                 {...register("password")}
                 placeholder="Enter your password"
-                className="flex h-9 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 py-5 pr-10 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 dark:placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-5 pr-10 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
             </div>
             {errors.password && (
-              <p className="text-xs text-red-500">{errors.password.message}</p>
+              <p className="text-xs text-destructive">{errors.password.message}</p>
             )}
           </div>
           <button
             disabled={loading}
             type="submit"
-            className="cursor-pointer inline-flex gap-4 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 h-9 px-4 py-2 w-full"
+            className="cursor-pointer inline-flex gap-4 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full"
           >
             Sign In
             {loading ? <Loader /> : null}
@@ -190,11 +190,11 @@ export default function Login() {
 
         {/* Footer links - More compact */}
         <div className="text-center space-y-2">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
               href="/signup"
-              className="font-medium text-zinc-900 dark:text-zinc-50 underline underline-offset-4 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+              className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80 transition-colors"
             >
               Sign up
             </Link>

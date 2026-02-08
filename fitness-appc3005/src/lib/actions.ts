@@ -171,9 +171,10 @@ export const registerMember = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
+  const role = formData.get("role") as string;
 
   // Get or create a default organization for new members
-  // In a full RBAC implementation, this would be passed from the signup form
+  // In a full RBAC implementation with multiple gyms, this would be passed from the signup form
   let organization = await prisma.organization.findFirst({
     where: {
       slug: "fitnesspro-gym",
@@ -199,7 +200,7 @@ export const registerMember = async (formData: FormData) => {
       firstName,
       lastName,
       organizationId: organization.id,
-      role: "member",
+      role,
       createdAt: new Date(),
     },
   });

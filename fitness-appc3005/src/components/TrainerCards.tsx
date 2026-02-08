@@ -1,3 +1,4 @@
+"use client"
 import {
     AnimatedCard,
     CardVisual,
@@ -12,15 +13,23 @@ import {
     CardDescription,
 } from "@/components/ui/card"
 import { RiUserSettingsLine } from "react-icons/ri";
+import { useTheme } from "next-themes";
 
 
 export const TrainerCards = () => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
+
+    // Define colors based on theme
+    const mainColor = isDark ? "#60a5fa" : "#3b82f6"; // Blue - lighter in dark mode
+    const secondaryColor = isDark ? "#34d399" : "#10b981"; // Green - lighter in dark mode
+
     return (
 
         <div className="flex">
-            <AnimatedCard className="w-full mx-4 max-w-sm">
+            <AnimatedCard className="w-full mx-4 max-w-sm dark:bg-black">
                 <CardVisual>
-                    <TrainerCard mainColor="#ff6900" secondaryColor="#f54900" />
+                    <TrainerCard mainColor={mainColor} secondaryColor={secondaryColor} />
                 </CardVisual>
                 <CardBody>
                     <CardTitle className="text-center">Member Search</CardTitle>

@@ -1,3 +1,4 @@
+"use client"
 import {
     AnimatedCard,
     CardVisual,
@@ -12,10 +13,18 @@ import {
     CardDescription,
 } from "@/components/ui/card"
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
+import { useTheme } from "next-themes";
 
 
 
 export const MemberCards = () => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
+
+    // Define colors based on theme
+    const mainColor = isDark ? "#a78bfa" : "#8b5cf6"; // Purple - lighter in dark mode
+    const secondaryColor = isDark ? "#fcd34d" : "#fbbf24"; // Amber/Yellow - lighter in dark mode
+
     return (
 
         <div className="flex">
@@ -30,9 +39,9 @@ export const MemberCards = () => {
                     </CardDescription>
                 </CardHeader>
             </Card>
-            <AnimatedCard className="w-full mx-4">
+            <AnimatedCard className="w-full mx-4 dark:bg-black">
                 <CardVisual>
-                    <MemberCard mainColor="#ff6900" secondaryColor="#f54900" />
+                    <MemberCard mainColor={mainColor} secondaryColor={secondaryColor} />
                 </CardVisual>
                 <CardBody>
                     <CardTitle className="text-center">Dashboard</CardTitle>
