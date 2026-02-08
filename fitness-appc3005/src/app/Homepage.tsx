@@ -20,8 +20,7 @@ const TrainerIcon = () => <IoMdFitness />;
 
 const AdminIcon = () => <RiAdminFill />;
 
-const ArrowRight = () => <FaArrowRight />;
-
+const ArrowRight = () => <FaArrowRight className="transition-transform group-hover:translate-x-1" />;
 
 const iconMap = {
   member: MemberIcon,
@@ -42,17 +41,17 @@ const UserPill = ({ user, text, selected, onClick }: userPillProps) => {
     <button
       onClick={onClick}
       className={`
-        
-        inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-200 hover:scale-105 hover:shadow-md
+        inline-flex items-center px-4 py-2 sm:px-5 sm:py-2.5 rounded-full border-2 
+        transition-all duration-300 cursor-pointer
         ${selected
-          ? "bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-white dark:hover:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-600"
-          : "bg-transparent border-transparent hover:bg-transparent hover:border-transparent hover:scale-100 hover:shadow-none"
+          ? "bg-primary/10 dark:bg-primary/20 border-primary text-primary shadow-md shadow-primary/20"
+          : "bg-card/50 dark:bg-card/30 border-border/50 text-muted-foreground hover:border-primary/50 hover:text-foreground hover:bg-card"
         }
       `}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 sm:gap-2.5">
         <Icon />
-        <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span className="text-xs sm:text-sm font-semibold whitespace-nowrap">
           {text}
         </span>
       </div>
@@ -60,11 +59,10 @@ const UserPill = ({ user, text, selected, onClick }: userPillProps) => {
   );
 };
 
-
 export const Homepage = () => {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
-  const { data: session, isPending, error } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const [isVisible, setIsVisible] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [selectedPill, setSelectedPill] =
@@ -79,14 +77,13 @@ export const Homepage = () => {
   const users: Array<{ id: keyof typeof iconMap; name: string }> = [
     { id: "member", name: "Members" },
     { id: "trainer", name: "Trainers" },
-    { id: "admin", name: "Administrative Staff" },
+    { id: "admin", name: "Admin" },
   ];
 
   const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          //No need to redirect as this is the homepage
           toast.success(`Signed out successfully`);
         },
         onError: (error) => {
@@ -99,57 +96,66 @@ export const Homepage = () => {
   if (!isMounted) return <Loading />;
 
   return (
-    <div className="font-sans h-full">
-      <style>{`
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-slide-up { animation: slide-up 0.5s ease-out forwards; }
-        .animation-delay-200 { animation-delay: 200ms; }
-        .animation-delay-400 { animation-delay: 400ms; }
-      `}</style>
-
-      <div className="px-4 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto">
+    <div className="relative w-full">
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="max-w-5xl mx-auto">
+          {/* Hero section */}
           <div
-            className={`text-center mb-4 sm:mb-8 transition-all duration-500 ease-out ${isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-5"
+            className={`text-center transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
           >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mt-4 sm:mt-6 mb-4 sm:mb-6 leading-tight transition-colors duration-300">
-              Hassle-free management system
-              <br className="hidden sm:block" />
-              <span className="hidden sm:block">for your fitness club 🏋️‍♂️</span>
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 mt-8 rounded-full bg-primary/10 dark:bg-primary/20 border border-primary/20 text-primary text-xs sm:text-sm font-medium">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              Fitness Management Platform
+            </div>
+
+            {/* Main heading */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-foreground mt-4">
+              <span className="block">Hassle-free management</span>
+              <span className="block mt-1 sm:mt-2 text-primary">
+                for your fitness club
+              </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-4 sm:mb-6 leading-relaxed transition-colors duration-300">
-              Welcome! This application is
-              designed to help you manage your fitness club. It includes
-              features for managing members, trainers, bookings, sessions, and
-              health metrics.
+            {/* Description */}
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl sm:max-w-2xl mx-auto mb-6 sm:mb-8 mt-4 leading-relaxed px-2">
+              Manage your gym operations with powerful tools for managing members,
+              trainers, bookings, and health metrics - all in one place.
             </p>
-            {
-              !session && !isPending && isMounted ? ( //Prevent flickering
-                <div className="flex flex-col">
-                  <Link href="/signup">
-                    <button className=" cursor-pointer group inline-flex gap-3 mb-2 items-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium text-base sm:text-lg transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105 hover:shadow-lg">
-                      Register
+
+            {/* CTA buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-10">
+              {!session && !isPending && isMounted ? (
+                <>
+                  <Link href="/signup" className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto group cursor-pointer inline-flex gap-3 items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/25">
+                      Get Started
                       <ArrowRight />
                     </button>
                   </Link>
-                  <Link href="/signin" className="mb-4">
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400 underline underline-offset-4 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">Returning user? Sign in</span>
+                  <Link href="/signin" className="w-full sm:w-auto">
+                    <button className="w-full sm:w-auto cursor-pointer inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-card hover:bg-accent border border-border rounded-full font-semibold text-sm sm:text-base text-foreground transition-all duration-300 hover:border-primary/50">
+                      Sign In
+                    </button>
                   </Link>
-                </div>
-              ) :
-                <button onClick={handleSignOut} className="cursor-pointer group inline-flex gap-3 mb-6 items-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-medium text-base sm:text-lg transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105 hover:shadow-lg">
+                </>
+              ) : (
+                <button
+                  onClick={handleSignOut}
+                  className="group cursor-pointer inline-flex gap-3 items-center px-6 sm:px-8 py-3 sm:py-4 bg-card hover:bg-accent border border-border rounded-full font-semibold text-sm sm:text-base text-foreground transition-all duration-300 hover:border-destructive/50 hover:text-destructive"
+                >
                   Sign Out
                   <ArrowRight />
                 </button>
-            }
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-6">
+              )}
+            </div>
+
+            {/* Role pills */}
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 sm:mb-14">
               {users.map((user) => (
                 <UserPill
                   key={user.id}
@@ -162,24 +168,37 @@ export const Homepage = () => {
             </div>
           </div>
 
+          {/* Marquee section */}
           <div
-            className={`mb-8 sm:mb-12 ${isVisible ? "animate-slide-up animation-delay-200" : "opacity-0"
+            className={`transition-all duration-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
+            style={{ transitionDelay: '200ms' }}
           >
-            <Marquee
-              autoFill={true}
-              pauseOnHover={true}
-              gradient={true}
-              gradientWidth={50}
-              gradientColor={isDark ? "black" : "white"}
-              speed={70}
-            >
-              {selectedPill === "member" ? <MemberCards /> : selectedPill === "trainer" ? <TrainerCards /> : <AdminCards />}
-            </Marquee>
+            <div className="relative">
+              {/* Subtle card container */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-card/30 to-transparent rounded-3xl -z-10" />
+
+              <Marquee
+                autoFill={true}
+                pauseOnHover={true}
+                gradient={true}
+                gradientWidth={30}
+                gradientColor={isDark ? "black" : "#fbf9fc"}
+
+              >
+                {selectedPill === "member" ? (
+                  <MemberCards />
+                ) : selectedPill === "trainer" ? (
+                  <TrainerCards />
+                ) : (
+                  <AdminCards />
+                )}
+              </Marquee>
+            </div>
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 

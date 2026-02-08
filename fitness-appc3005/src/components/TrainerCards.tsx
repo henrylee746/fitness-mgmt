@@ -26,23 +26,23 @@ export const TrainerCards = () => {
 
     return (
 
-        <div className="flex">
-            <AnimatedCard className="w-full mx-4 max-w-sm dark:bg-black">
+        <div className="flex gap-2 sm:gap-3 md:gap-4">
+            <AnimatedCard className="mx-2 sm:mx-3 md:mx-4 dark:bg-black">
                 <CardVisual>
                     <TrainerCard mainColor={mainColor} secondaryColor={secondaryColor} />
                 </CardVisual>
                 <CardBody>
-                    <CardTitle className="text-center">Member Search</CardTitle>
-                    <CardDescription className="text-center">Search members by name (case-insensitive) to view their current weight goal and last measured weight.</CardDescription>
+                    <CardTitle className="text-center text-base sm:text-lg">Member Search</CardTitle>
+                    <CardDescription className="text-center text-xs sm:text-sm">Search members by name to view their current weight goal and last measured weight.</CardDescription>
                 </CardBody>
             </AnimatedCard>
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-full mx-4">
-                <RiUserSettingsLine className="w-20 h-20" />
-                <CardHeader className="flex flex-col items-center justify-center min-w-xs">
+            <Card className="dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] mx-2 sm:mx-3 md:mx-4">
+                <RiUserSettingsLine className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" />
+                <CardHeader className="flex flex-col items-center justify-center w-full">
                     <CardAction>
                     </CardAction>
-                    <CardTitle>Trainer Management</CardTitle>
-                    <CardDescription className="text-center">
+                    <CardTitle className="text-base sm:text-lg">Trainer Management</CardTitle>
+                    <CardDescription className="text-center text-xs sm:text-sm">
                         Manage your sessions and trainers
                     </CardDescription>
                 </CardHeader>
