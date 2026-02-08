@@ -39,7 +39,7 @@ export const MemberCards = () => {
                     </CardDescription>
                 </CardHeader>
             </Card>
-            <AnimatedCard className="dark:bg-black">
+            <AnimatedCard className="mx-2 sm:mx-3 md:mx-4 dark:bg-black">
                 <CardVisual>
                     <MemberCard mainColor={mainColor} secondaryColor={secondaryColor} />
                 </CardVisual>
