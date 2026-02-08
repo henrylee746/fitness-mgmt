@@ -123,7 +123,7 @@ export function HeaderDock({ role, session }: {
                                                 </Link>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                <p>{name}</p>
+                                                <p>{roles.name}</p>
                                             </TooltipContent>
                                         </Tooltip>
                                     </DockIcon>

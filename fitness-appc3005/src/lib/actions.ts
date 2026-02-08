@@ -1,4 +1,4 @@
-/*Server Actions*/
+﻿/*Server Actions*/
 "use server";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -171,7 +171,20 @@ export const registerMember = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
-  const role = formData.get("role") as string;
+  const requestedRole = formData.get("role") as string;
+  const allowedRoles = (
+    process.env.ALLOWED_SIGNUP_ROLES ?? "member,trainer,admin"
+  )
+    .split(",")
+    .map((role) => role.trim())
+    .filter(Boolean);
+  const safeAllowedRoles = allowedRoles.length > 0 ? allowedRoles : ["member"];
+
+  // Intentional: signup allows user-selected roles, constrained by allowlist.
+  const normalizedRole = requestedRole ?? "";
+  const role = safeAllowedRoles.includes(normalizedRole)
+    ? (normalizedRole as string)
+    : safeAllowedRoles[0];
 
   // Get or create a default organization for new members
   // In a full RBAC implementation with multiple gyms, this would be passed from the signup form
