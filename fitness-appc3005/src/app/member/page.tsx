@@ -32,14 +32,14 @@ export default async function Members() {
   return (
     <>
       <SessionGuard />
-      <h1 className="mb-4 max-w-s text-center text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+      <h1 className="my-4 max-w-s text-center text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
         Member's Hub
       </h1>
       <div
-        className={`flex justify-center items-center flex-wrap gap-6 lg:gap-8  $font-sans`}
+        className={`flex justify-center items-center flex-wrap gap-6 lg:gap-8 $font-sans`}
       >
         <ProfileManagement userId={user.id} memberId={member.id} />
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col items-center justify-center gap-6">
           <MemberDashboard member={member} />
           <GroupClass sessions={sessions} member={member} />
         </div>

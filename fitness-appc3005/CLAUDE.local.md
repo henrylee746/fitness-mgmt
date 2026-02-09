@@ -6,7 +6,7 @@
 - `src/components` contains shared UI components (Radix, shadcn-style, etc.).
 - `src/lib` contains helpers, server actions, and shared utilities.
 - `public` stores static assets.
-- `prisma` contains `schema.prisma`, migrations, and seed data.
+- `prisma` contains `@prisma/schema.prisma`, migrations, and seed data.
 - `docs` and `generated` contain project documentation and generated outputs.
 - `.env` holds local configuration (never commit secrets).
 
@@ -21,7 +21,7 @@
 
 ## Coding Style & Naming Conventions
 
-- TypeScript + React (Next.js). Use 2-space indentation and semicolons, matching existing files like `src/app/page.tsx`.
+- TypeScript + React (Next.js). Use 4-space indentation and semicolons, matching existing files like `@src/app/page.tsx`.
 - Path alias: import from `@/*` for `src/*` (configured in `tsconfig.json`).
 - Prefer PascalCase for components and `camelCase` for functions/variables.
 
@@ -47,6 +47,3 @@
 ## Repository expectations
 
 - Document public utilities in `docs/` when you change behavior.
-
-
-

@@ -22,33 +22,33 @@ export default async function MemberDashboard({
   const weightGoal = member?.metrics[member.metrics.length - 1]?.weightGoal;
   const pastClasses = member
     ? member?.bookings.filter(
-        (booking: Booking) => booking.classSession.dateTime < new Date()
-      ).length > 0
+      (booking: Booking) => booking.classSession.dateTime < new Date()
+    ).length > 0
       ? member?.bookings.map((booking: Booking) => (
-          <div key={booking.classSessionId}>
-            {booking.classSession.dateTime < new Date() ? (
-              <li className="list-disc">{booking.classSession.name}</li>
-            ) : null}
-          </div>
-        ))
+        <div key={booking.classSessionId}>
+          {booking.classSession.dateTime < new Date() ? (
+            <li className="list-disc">{booking.classSession.name}</li>
+          ) : null}
+        </div>
+      ))
       : "N/A"
     : null;
   const upcomingClasses = member
     ? member?.bookings.filter(
-        (booking: Booking) => booking.classSession.dateTime > new Date()
-      ).length > 0
+      (booking: Booking) => booking.classSession.dateTime > new Date()
+    ).length > 0
       ? member?.bookings.map((booking: Booking) => (
-          <div key={booking.classSessionId}>
-            {booking.classSession.dateTime > new Date() ? (
-              <li className="list-disc">{booking.classSession.name}</li>
-            ) : null}
-          </div>
-        ))
+        <div key={booking.classSessionId}>
+          {booking.classSession.dateTime > new Date() ? (
+            <li className="list-disc">{booking.classSession.name}</li>
+          ) : null}
+        </div>
+      ))
       : "N/A"
     : null;
 
   return (
-    <Card className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-md max-w-sm">
+    <Card className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-sm max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
           Dashboard
