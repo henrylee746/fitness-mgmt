@@ -23,9 +23,8 @@ export default async function Admin() {
 
   if (role !== "admin" || !role) {
     return (
-      <div className="text-center text-2xl 
-            font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-        You do not have the role of admin.
+      <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+        You do not have the role of admin to access this page.
       </div>
     )
   }
@@ -47,10 +46,10 @@ export default async function Admin() {
 
   return (
     <>
-      <h1 className="max-w-s mb-4 text-center text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+      <h1 className="max-w-s my-4 text-center text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
         Admin Portal
       </h1>
-      <div className="h-full flex flex-col lg:flex-row flex-wrap flex-1 items-center justify-center font-sans gap-8 p-4">
+      <div className="min-h-[80vh] flex flex-wrap items-center justify-center font-sans gap-8 p-4">
         <SessionGuard />
         <RoomBooking sessions={sessions} />
         <ClassManagement trainers={trainers} />

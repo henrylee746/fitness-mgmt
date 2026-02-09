@@ -92,7 +92,7 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
   };
 
   return (
-    <Card className="w-full xl:max-w-xl lg:max-w-md max-w-sm">
+    <Card className="w-full xl:max-w-xl lg:max-w-md sm:max-w-sm max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
           Profile Management

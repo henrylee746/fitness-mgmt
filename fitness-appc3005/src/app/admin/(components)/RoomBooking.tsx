@@ -20,7 +20,7 @@ export default function RoomBooking({
   sessions: ClassSessionExtended[];
 }) {
   return (
-    <Card className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-sm max-w-sm">
+    <Card className="w-full xl:max-w-xl lg:max-w-md md:max-w-sm max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
           Room Booking
