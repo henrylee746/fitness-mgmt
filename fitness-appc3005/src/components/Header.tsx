@@ -12,10 +12,22 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UserAvatar } from "@daveyplate/better-auth-ui";
 import { HeaderDock } from "./Dock";
+import { getActiveMemberRole } from "@/lib/actions";
+import { useState, useEffect, useMemo } from "react";
 
-const Header = ({ role }: { role?: string | undefined }) => {
+const Header = ({ initialRole }: { initialRole?: string | undefined }) => {
   const router = useRouter();
   const { data: session, isPending, error } = authClient.useSession();
+  const [role, setRole] = useState<string | undefined>(initialRole);
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      const role = await getActiveMemberRole();
+      setRole(role);
+    };
+    if (session) fetchRole();
+  }, [session]);
+
 
   const handleSignOut = async () => {
     await authClient.signOut({

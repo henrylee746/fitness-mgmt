@@ -43,3 +43,6 @@ next-env.d.ts
 # prisma
 /generated
 /prisma/seed.ts
+
+#Claude Local Files
+CLAUDE.local.md
