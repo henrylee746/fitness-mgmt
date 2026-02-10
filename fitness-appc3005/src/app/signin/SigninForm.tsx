@@ -89,7 +89,7 @@ export default function Login() {
 
   return (
     // Main container with a custom background pattern and flexbox for centering. This setup is inherently responsive.
-    <div className="p-6 relative w-full flex items-center justify-center font-sans overflow-hidden">
+    <div className="min-h-[80vh] p-6 relative w-full flex items-center justify-center font-sans overflow-hidden">
       {/* Login Card - More compact and shadcn-like */}
       <div className="relative w-full max-w-sm p-6 space-y-6 bg-card text-card-foreground rounded-lg border shadow-lg">
         {/* Header section with icon and title - More compact */}
