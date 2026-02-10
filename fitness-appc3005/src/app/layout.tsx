@@ -45,7 +45,7 @@ export default async function RootLayout({
           <Providers>
 
 
-            <Header role={role} />
+            <Header initialRole={role} />
             <main className="flex-1 flex flex-col overflow-x-hidden">
               {children}
             </main>
