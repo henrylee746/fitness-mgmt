@@ -33,7 +33,7 @@ const Header = ({ role }: { role?: string | undefined }) => {
 
 
   return (
-    <div className="bg-background/50 backdrop-blur-sm border-b border-border/50 flex flex-col sm:flex-row py-6 flex-wrap items-center justify-between gap-4 mr-4 text-base font-medium">
+    <div className="bg-background/50 backdrop-blur-sm border-b border-border/50 flex flex-col sm:flex-row py-6 flex-wrap items-center justify-between gap-4 text-base font-medium">
       <HeaderDock role={role} session={session?.user ?? undefined} />
       <div className="flex flex-col sm:flex-row gap-2 items-center">
         {!isPending && session ? (

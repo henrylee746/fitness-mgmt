@@ -201,7 +201,7 @@ const SignupForm: React.FC = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center p-6">
+      <div className="min-h-[80vh] flex items-center justify-center p-6">
         <div className="w-full relative">
           {/* Main Card with shadcn/ui styling */}
           <div
@@ -223,8 +223,8 @@ const SignupForm: React.FC = () => {
 
             <form className="space-y-4 " onSubmit={form.handleSubmit(handleSubmit)}>
               {/* First Name Input */}
-              <div className="flex items-center justify-center gap-4">
-                <div className="flex flex-col gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <div className="flex flex-col gap-4 w-full max-w-sm">
                   <div className="space-y-2">
                     <FloatingLabelInput
                       id="firstName"
