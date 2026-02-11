@@ -6,50 +6,79 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 export async function getSession() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  return session;
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    return session;
+  } catch (error) {
+    throw new Error("Failed to get session");
+  }
 }
 
+export async function getRooms() {
+  try {
+    const rooms = await prisma.room.findMany({
+      orderBy: {
+        id: "asc"
+      }
+    })
+    return rooms;
+  } catch (error) {
+    throw new Error("Failed to get rooms");
+  }
+};
+
 export async function getActiveMemberRole() {
-  const roleData = await auth.api.getActiveMemberRole({
-    headers: await headers(),
-  });
-  return roleData?.role;
+  try {
+    const roleData = await auth.api.getActiveMemberRole({
+      headers: await headers(),
+    });
+    return roleData?.role;
+  } catch (error) {
+    throw new Error("Failed to get active member role");
+  }
 }
 
 export async function getMember(userId: string) {
-  const member = await prisma.member.findUnique({
-    where: { userId },
-    include: {
-      metrics: true,
-      bookings: {
-        include: {
-          classSession: true,
+  try {
+    const member = await prisma.member.findUnique({
+      where: { userId },
+      include: {
+        metrics: true,
+        bookings: {
+          include: {
+            classSession: true,
+          },
         },
       },
-    },
-  });
-  return member;
+    });
+    return member;
+  } catch (error) {
+    throw new Error("Failed to get member");
+  }
 }
 
 export async function getSessions() {
-  const sessions = await prisma.classSession.findMany({
-    where: {
-      dateTime: {
-        gte: new Date(),
+  try {
+    const sessions = await prisma.classSession.findMany({
+      where: {
+        dateTime: {
+          gte: new Date(),
+        },
       },
-    },
-    include: {
-      room: true,
-      trainer: true,
-    },
-  });
-  return sessions;
+      include: {
+        room: true,
+        trainer: true,
+      },
+    });
+    return sessions;
+  } catch (error) {
+    throw new Error("Failed to get sessions");
+  }
 }
 
-export async function updateSessionRoom(initialState: any, formData: FormData) {
+export async function updateSessionRoom(formData: FormData) {
   const sessionId = formData.get("sessionId");
   const roomId = formData.get("roomId");
 
@@ -64,84 +93,81 @@ export async function updateSessionRoom(initialState: any, formData: FormData) {
   });
 
   if (!classSession) {
-    return {
-      success: undefined,
-      error: "Session not found",
-    };
+    throw new Error("Session not found");
   }
 
-  // Validate that session capacity does not exceed new room capacity
-  const room = await prisma.room.findUnique({
-    where: { id: Number(roomId) },
-    select: { capacity: true },
-  });
+  try {
+    // Validate that session capacity does not exceed new room capacity
+    const room = await prisma.room.findUnique({
+      where: { id: Number(roomId) },
+      select: { capacity: true },
+    });
 
-  if (!room) {
-    return {
-      success: undefined,
-      error: "Room not found",
-    };
-  }
+    if (!room) {
+      throw new Error("Room not found");
+    }
 
-  /*Application-level validation,
-  but database-level validation would 
-  throw same error even if this conditional is removed
+    /*Client-side validation
+  but there is also a trigger in the database that will throw an error 
+  if the session capacity exceeds the room capacity
   */
+    if (classSession.capacity > room.capacity) {
+      throw new Error(
+        `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`
+      );
+    }
 
-  if (classSession.capacity > room.capacity) {
-    return {
-      success: undefined,
-      error: `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`,
-    };
+    await prisma.classSession.update({
+      where: { id: Number(sessionId) },
+      data: { roomId: Number(roomId) },
+    });
+    // Re-fetch the table data after updating
+    revalidatePath("/admin");
+  } catch (error: unknown) {
+    //If the error is an instance of Error, throw the error message
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error(
+      "An unknown error occurred while updating the session room"
+    );
+    //If the error is not an instance of Error, throw a generic error
   }
-
-  await prisma.classSession.update({
-    where: { id: Number(sessionId) },
-    data: { roomId: Number(roomId) },
-  });
-
-  // Re-fetch the table data after updating
-  revalidatePath("/admin");
-
-  return {
-    success: "Session room updated successfully",
-    error: undefined,
-  };
 }
 
-export async function createSession(initialState: any, formData: FormData) {
+export async function createSession(formData: FormData) {
   const sessionName = formData.get("sessionName") as string;
   const capacity = Number(formData.get("capacity"));
   const trainerId = formData.get("trainer") as string;
   const roomId = formData.get("roomId") as string;
 
-  const date = formData.get("date") as string; // in format e.g. "2025-03-05"
-  const time = formData.get("time") as string; // in format e.g. "10:30:00"
+  const date = formData.get("date") as string;
+  const time = formData.get("time") as string;
 
   // Combine into 1 ISO datetime if needed:
   const datetime = new Date(`${date}T${time}`);
 
-  // Validate that session capacity does not exceed room capacity
-  const room = await prisma.room.findUnique({
-    where: { id: Number(roomId) },
-    select: { capacity: true },
-  });
-
-  if (!room) {
-    return {
-      success: undefined,
-      error: "Room not found",
-    };
-  }
-
-  if (capacity > room.capacity) {
-    return {
-      success: undefined,
-      error: `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`,
-    };
-  }
-
   try {
+    // Validate that session capacity does not exceed room capacity
+    const room = await prisma.room.findUnique({
+      where: { id: Number(roomId) },
+      select: { capacity: true },
+    });
+
+    if (!room) {
+      throw new Error("Room not found");
+    }
+
+    /*Client-side validation
+  but there is also a trigger in the database that will throw an error 
+  if the session capacity exceeds the room capacity
+  */
+    if (capacity > room.capacity) {
+      throw new Error(
+        `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`
+      );
+    }
+
     await prisma.classSession.create({
       data: {
         name: sessionName,
@@ -152,16 +178,11 @@ export async function createSession(initialState: any, formData: FormData) {
       },
     });
     revalidatePath("/admin");
-
-    return {
-      success: "Session created successfully",
-      error: undefined,
-    };
-  } catch (error: any) {
-    return {
-      success: undefined,
-      error: error.message,
-    };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unknown error occurred while creating the session");
   }
 }
 
@@ -185,38 +206,45 @@ export const registerMember = async (formData: FormData) => {
     ? requestedRole
     : safeAllowedRoles[0];
 
-  // Get or create a default organization for new members
-  // In a full RBAC implementation with multiple gyms, this would be passed from the signup form
-  let organization = await prisma.organization.findFirst({
-    where: {
-      slug: "fitnesspro-gym",
-    },
-  });
+  try {
+    // Get or create a default organization for new members
+    // In a full RBAC implementation with multiple gyms, this would be passed from the signup form
+    let organization = await prisma.organization.findFirst({
+      where: {
+        slug: "fitnesspro-gym",
+      },
+    });
 
-  if (!organization) {
-    // Create a default organization if none exists
-    organization = await prisma.organization.create({
+    if (!organization) {
+      // Create a default organization if none exists
+      organization = await prisma.organization.create({
+        data: {
+          id: `org_${Date.now()}`,
+          name: "Default Organization",
+          slug: "default-org",
+          createdAt: new Date(),
+        },
+      });
+    }
+
+    await prisma.member.create({
       data: {
-        id: `org_${Date.now()}`,
-        name: "Default Organization",
-        slug: "default-org",
+        userId,
+        email,
+        firstName,
+        lastName,
+        organizationId: organization.id,
+        role,
         createdAt: new Date(),
       },
     });
+    revalidatePath("/member", "page");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("An unknown error occurred while creating the member");
   }
-
-  await prisma.member.create({
-    data: {
-      userId,
-      email,
-      firstName,
-      lastName,
-      organizationId: organization.id,
-      role,
-      createdAt: new Date(),
-    },
-  });
-  revalidatePath("/member", "page");
 };
 
 /*Update Profile Details, including making/updating weight metric & target*/
@@ -239,38 +267,44 @@ export const updateMember = async (formData: FormData) => {
 
   // Update User fields (email and name)
   if (email) userUpdateData.email = email;
+  try {
+    // Ensures both updates are atomic (both succeed or both fail)
+    await prisma.$transaction(async (tx) => {
+      if (firstName || lastName) {
+        // Construct full name for User model using a consistent read
+        const member = await tx.member.findUnique({
+          where: { userId },
+          select: { firstName: true, lastName: true },
+        });
 
-  // Ensures both updates are atomic (both succeed or both fail)
-  await prisma.$transaction(async (tx) => {
-    if (firstName || lastName) {
-      // Construct full name for User model using a consistent read
-      const member = await tx.member.findUnique({
+        const updatedFirstName = firstName || member?.firstName || "";
+        const updatedLastName = lastName || member?.lastName || "";
+        userUpdateData.name = `${updatedFirstName} ${updatedLastName}`;
+      }
+
+      await tx.member.update({
         where: { userId },
-        select: { firstName: true, lastName: true },
+        data: memberUpdateData,
       });
 
-      const updatedFirstName = firstName || member?.firstName || "";
-      const updatedLastName = lastName || member?.lastName || "";
-      userUpdateData.name = `${updatedFirstName} ${updatedLastName}`;
+      await tx.user.update({
+        where: { id: userId },
+        data: userUpdateData,
+      });
+    });
+    revalidatePath("/member", "page");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
     }
-
-    await tx.member.update({
-      where: { userId },
-      data: memberUpdateData,
-    });
-
-    await tx.user.update({
-      where: { id: userId },
-      data: userUpdateData,
-    });
-  });
-
-  revalidatePath("/member", "page");
+    throw new Error(
+      "An unknown error occurred while updating the member profile"
+    );
+  }
 };
 
 export const updateMetrics = async (formData: FormData) => {
   const memberId = formData.get("memberId");
-
   const weight = formData.get("currWeight");
   const weightGoal = formData.get("weightTarget");
   const metricUpdateData: any = {};
@@ -283,10 +317,19 @@ export const updateMetrics = async (formData: FormData) => {
     metricUpdateData.memberId = Number(memberId);
   }
 
-  await prisma.healthMetric.create({
-    data: metricUpdateData,
-  });
-  revalidatePath("/member", "page");
+  try {
+    await prisma.healthMetric.create({
+      data: metricUpdateData,
+    });
+    revalidatePath("/member", "page");
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error(
+      "An unknown error occurred while creating the health metric"
+    );
+  }
 };
 
 export const registerSessions = async (formData: FormData) => {
@@ -294,13 +337,21 @@ export const registerSessions = async (formData: FormData) => {
   const memberId = formData.get("memberId") as string;
 
   if (ids.length === 0) return;
-  ids.map(async (id) => {
-    await prisma.booking.create({
-      data: {
-        memberId: Number(memberId),
-        classSessionId: Number(id),
-      },
+  try {
+    ids.map(async (id) => {
+      await prisma.booking.create({
+        data: {
+          memberId: Number(memberId),
+          classSessionId: Number(id),
+        },
+      });
     });
-  });
-  revalidatePath("/member", "page");
+    revalidatePath("/member", "page");
+  }
+  catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("An unknown error occurred while creating the booking");
+    }
 };

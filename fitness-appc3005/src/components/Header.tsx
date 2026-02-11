@@ -51,7 +51,7 @@ const Header = ({ initialRole }: { initialRole?: string | undefined }) => {
         {!isPending && session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="cursor-pointer">
-              <UserAvatar user={session.user} className="p-5" />
+              <UserAvatar user={session.user} className="p-5 mr-5" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuLabel>{session.user?.name}</DropdownMenuLabel>

@@ -46,19 +46,17 @@ type FormData = z.infer<typeof formSchema>;
 // --- Main App Component ---
 export default function Login() {
   const { data: session } = authClient.useSession();
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
     },
-    mode: "onTouched",
+    mode: "onBlur",
   });
 
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async (data: FormData) => {
     await authClient.signIn.email({
@@ -66,25 +64,21 @@ export default function Login() {
       password: data.password,
     }, {
       onRequest: () => {
-        setError(null);
-        setLoading(true);
+        form.clearErrors();
       },
       onSuccess: (response) => {
         toast.success(`Welcome back, ${response.data?.user.name}`);
         router.push("/member");
+        form.reset();
       },
       onError: (error) => {
-        setError(error.error.message || "Something went wrong");
-        setLoading(false);
-      },
-      onFinish: () => {
-        setLoading(false); // Always runs - good for cleanup
+        form.setError("root.serverError", { message: error.error.message || "Something went wrong" });
       },
     });
   };
 
   if (session) {
-    return <div className="font-bold text-center mb-6 text-red-500 text-sm">You are already logged in as {session.user?.name}</div>;
+    return <div className="min-h-[80vh] flex items-center justify-center p-6 font-bold text-center mb-6 text-red-500 text-sm">You are already logged in as {session.user?.name}</div>;
   }
 
   return (
@@ -106,8 +100,8 @@ export default function Login() {
             </p>
           </div>
         </div>
-        {error && (
-          <p className="text-center my-6 text-destructive text-sm">{error}</p>
+        {form.formState.errors.root?.serverError && (
+          <p className="text-center my-6 text-destructive text-sm">{form.formState.errors.root.serverError.message}</p>
         )}
         {/* Social login buttons - More compact shadcn style */}
         <div className="flex justify-center items-center">
@@ -132,7 +126,7 @@ export default function Login() {
         </div>
 
         {/* Form - Shadcn style */}
-        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)} noValidate>
           <div className="flex flex-col gap-0.3 space-y-2">
             <label
               htmlFor="email"
@@ -143,12 +137,12 @@ export default function Login() {
             <input
               type="email"
               id="email"
-              {...register("email")}
+              {...form.register("email")}
               placeholder="name@example.com"
               className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-5 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
             />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
+            {form.formState.errors.email && (
+              <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
             )}
           </div>
           <div className="flex flex-col gap-0.3 space-y-2">
@@ -162,7 +156,7 @@ export default function Login() {
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
-                {...register("password")}
+                {...form.register("password")}
                 placeholder="Enter your password"
                 className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-5 pr-10 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               />
@@ -174,17 +168,17 @@ export default function Login() {
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
             </div>
-            {errors.password && (
-              <p className="text-xs text-destructive">{errors.password.message}</p>
+            {form.formState.errors.password && (
+              <p className="text-xs text-destructive">{form.formState.errors.password.message}</p>
             )}
           </div>
           <button
-            disabled={loading}
+            disabled={form.formState.isSubmitting}
             type="submit"
             className="cursor-pointer inline-flex gap-4 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full"
           >
             Sign In
-            {loading ? <Loader /> : null}
+            {form.formState.isSubmitting ? <Loader /> : null}
           </button>
         </form>
 

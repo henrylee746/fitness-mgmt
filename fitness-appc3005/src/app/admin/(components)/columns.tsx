@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { Loader, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,39 +23,67 @@ import {
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { ClassSessionExtended, Room } from "@/lib/types";
 import { updateSessionRoom } from "@/lib/actions";
-import { ClassSessionExtended } from "@/lib/types";
-import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { getRooms } from "@/lib/actions";
+
+const formSchema = z.object({
+  sessionId: z.string().min(1, { message: "Session is required" }),
+  roomId: z.string().min(1, { message: "Room is required" }),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
 
 export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const session = row.original;
-      const [showNotification, setShowNotification] = useState(false);
+      const [rooms, setRooms] = useState<Room[]>([]);
 
-      type State = {
-        success: string | undefined;
-        error: string | undefined;
-      };
-      const [state, formAction, isPending] = useActionState(
-        updateSessionRoom,
-        {} as State
-      );
       useEffect(() => {
-        if (state.success || state.error) {
-          setShowNotification(true);
-          const timer = setTimeout(() => {
-            setShowNotification(false);
-          }, 5000);
-          return () => clearTimeout(timer);
-          //Resets the timer when the state changes
-          //Component unmounts and has to re-render
+        const getSessionRooms = async () => {
+          const sessionRooms = await getRooms();
+          setRooms(sessionRooms);
+        };
+        getSessionRooms();
+      }, []);
+
+      const form = useForm<FormData>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+          sessionId: row.original.id.toString(),
+          roomId: "",
+        },
+      });
+
+      const onSubmit = async (data: FormData) => {
+        form.clearErrors();
+        try {
+          const formData = new FormData();
+          formData.append("sessionId", data.sessionId);
+          formData.append("roomId", data.roomId);
+          await updateSessionRoom(formData);
+          toast.success("Session room updated successfully");
+          form.reset();
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            form.setError("root.serverError", { message: error.message });
+            toast.error(error.message);
+          } else {
+            form.setError("root.serverError", { message: "Failed to update session room" });
+            toast.error("Failed to update session room");
+          }
         }
-      }, [state.success, state.error]);
+      };
+
       return (
-        /*onOpenChange is used to reset the notification when the dialog is closed*/
-        <Dialog onOpenChange={() => setShowNotification(false)}>
+        <Dialog>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -74,37 +102,39 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
               <DialogTitle>Edit Room</DialogTitle>
             </DialogHeader>
             <DialogDescription>Choose your new room here.</DialogDescription>
-            {showNotification && state.success && (
-              <p className="text-green-800 bg-green-50 p-4 rounded-md">
-                {state.success}
-              </p>
+            {form.formState.errors.roomId && (
+              <p className="text-xs text-red-500">{form.formState.errors.roomId.message}</p>
             )}
-            {showNotification && state.error && (
-              <p className="text-red-500 bg-destructive/10 p-4 rounded-md">
-                {state.error}
-              </p>
+            {form.formState.errors.sessionId && (
+              <p className="text-xs text-red-500">{form.formState.errors.sessionId.message}</p>
             )}
-            <form action={formAction}>
-              {/* Hidden inputs so we have a reference of session ID*/}
-              <input type="hidden" name="sessionId" value={session.id} />
-
-              <RadioGroup name="roomId" defaultValue="1">
-                <div className="flex items-center gap-3 mt-4">
-                  <RadioGroupItem value="1" id="1" />
-                  <Label htmlFor="1">Studio A (Capacity: 20)</Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="2" id="2" />
-                  <Label htmlFor="2">Studio B (Capacity: 15)</Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="3" id="3" />
-                  <Label htmlFor="3">Cycling Room (Capacity: 12)</Label>
-                </div>
-              </RadioGroup>
-
+            {form.formState.errors.root?.serverError && (
+              <p className="text-xs text-red-500">{form.formState.errors.root.serverError.message}</p>
+            )}
+            <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
+              {rooms.length > 0 && (<Controller
+                control={form.control}
+                name="roomId"
+                render={({ field }) => (
+                  <RadioGroup onValueChange={field.onChange} value={field.value} name="roomId" defaultValue="7" required={true}>
+                    <div className="flex items-center gap-3 mt-4">
+                      <RadioGroupItem value={rooms[0].id.toString()} id={rooms[0].id.toString()} />
+                      <Label htmlFor={rooms[0].id.toString()}>{rooms[0].name} (Capacity: {rooms[0].capacity})</Label>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value={rooms[1].id.toString()} id={rooms[1].id.toString()} />
+                      <Label htmlFor={rooms[1].id.toString()}>{rooms[1].name} (Capacity: {rooms[1].capacity})</Label>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value={rooms[2].id.toString()} id={rooms[2].id.toString()} />
+                      <Label htmlFor={rooms[2].id.toString()}>{rooms[2].name} (Capacity: {rooms[2].capacity})</Label>
+                    </div>
+                  </RadioGroup>
+                )}
+              />)}
               <DialogFooter>
-                <Button type="submit" disabled={isPending}>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? <Loader /> : null}
                   Save changes
                 </Button>
               </DialogFooter>
@@ -124,7 +154,7 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
   },
   {
     accessorKey: "capacity",
-    header: "Space",
+    header: "Spots",
   },
   {
     accessorKey: "trainer.name",
