@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 //User gets redirected if their session from the DB gets invalidated/deleted
 export function SessionGuard() {
     const router = useRouter();
-    const { data: session, isPending } = authClient.useSession();
+    const { data: session, isPending, } = authClient.useSession();
 
     useEffect(() => {
         // Only redirect after session check is complete
