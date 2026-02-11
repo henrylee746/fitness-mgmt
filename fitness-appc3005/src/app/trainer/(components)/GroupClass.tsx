@@ -32,7 +32,7 @@ export default async function GroupClass() {
   const trainers = await prisma.trainer.findMany();
 
   return (
-    <Card className="w-full xl:max-w-xl lg:max-w-md md:max-w-sm max-w-xs">
+    <Card className="w-full xl:max-w-xl lg:max-w-md md:max-w-sm sm:max-w-sm max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
           Upcoming Group Classes

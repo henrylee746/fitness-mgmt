@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Fitness",
-  description: "Fitness app for C3005 Final Project",
+  description: "Fitness Application Management Tool",
 };
 
 export default async function RootLayout({
@@ -49,7 +49,7 @@ export default async function RootLayout({
             <main className="flex-1 flex flex-col overflow-x-hidden">
               {children}
             </main>
-            <Toaster />
+            <Toaster richColors expand position="top-center" closeButton />
           </Providers>
         </ThemeProvider>
       </body>

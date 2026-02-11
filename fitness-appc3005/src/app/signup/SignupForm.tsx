@@ -60,11 +60,15 @@ const FloatingLabelInput = ({
         ref={ref}
         id={id}
         type={type}
-        onFocus={() => {
+        onFocus={(e) => {
           setIsFocused(true);
+          onFocus?.(e);
+          //Call the onFocus prop if it exists (other onFocus overrides this)
         }}
-        onBlur={() => {
+        onBlur={(e) => {
           setIsFocused(false);
+          onBlur?.(e);
+          //Call the onBlur prop if it exists (other onBlur overrides this)
         }}
         className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-10 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 peer placeholder-transparent"
         placeholder={placeholder}
@@ -122,12 +126,10 @@ const SignupForm: React.FC = () => {
       password: "",
       role: "member",
     },
-    mode: "onTouched",
+    mode: "onBlur",
   });
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [verificationSent, setVerificationSent] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -145,8 +147,7 @@ const SignupForm: React.FC = () => {
         callbackURL: "/member", // Redirect here after email verification
       }, {
         onRequest: () => {
-          setError(null);
-          setLoading(true);
+          form.clearErrors();
         },
         onSuccess: async (response) => {
           // 2. Register as a Member in the fitness app
@@ -161,25 +162,28 @@ const SignupForm: React.FC = () => {
             // 3. Redirect to member page after successful signup
             toast.info(`Please check your email for a verification link.`);
             setVerificationSent(true);
+            form.reset();
           }
-          catch (error) {
-            setError("Failed to register member");
-            setLoading(false);
+          catch (error: unknown) {
+            if (error instanceof Error) {
+              form.setError("root.serverError", { message: error.message });
+            } else {
+              form.setError("root.serverError", { message: "Failed to register member" });
+            }
           }
 
         },
         onError: (ctx) => {
-          setError(ctx.error.message || "Something went wrong");
-          setLoading(false);
-        },
-        onFinish: () => {
-          setLoading(false);
+          form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
         },
       });
     }
-    catch (error) {
-      setError("Failed to register member");
-      setLoading(false);
+    catch (error: unknown) {
+      if (error instanceof Error) {
+        form.setError("root.serverError", { message: error.message });
+      } else {
+        form.setError("root.serverError", { message: "Failed to register member" });
+      }
       return;
     }
   };
@@ -217,11 +221,11 @@ const SignupForm: React.FC = () => {
                 Enter your details below to create your account
               </p>
             </div>
-            {error && (
-              <p className="text-center mb-6 text-red-500 text-sm">{error}</p>
+            {form.formState.errors.root?.serverError && (
+              <p className="text-center mb-6 text-red-500 text-sm">{form.formState.errors.root.serverError.message}</p>
             )}
 
-            <form className="space-y-4 " onSubmit={form.handleSubmit(handleSubmit)}>
+            <form className="space-y-4 " onSubmit={form.handleSubmit(handleSubmit)} noValidate>
               {/* First Name Input */}
               <div className="flex flex-wrap items-center justify-center gap-4">
                 <div className="flex flex-col gap-4 w-full max-w-sm">
@@ -305,7 +309,7 @@ const SignupForm: React.FC = () => {
               <div className="flex items-center justify-center w-full mt-8">
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={form.formState.isSubmitting}
                   className="cursor-pointer inline-flex gap-4 items-center justify-center
                  whitespace-nowrap rounded-md text-sm font-medium 
                  ring-offset-background transition-colors focus-visible:outline-none 
@@ -314,7 +318,7 @@ const SignupForm: React.FC = () => {
                  hover:bg-primary/90 h-10 px-4 py-2 w-[75%]"
                 >
                   Create Account
-                  {loading ? <Loader /> : null}
+                  {form.formState.isSubmitting ? <Loader /> : null}
                 </button>
               </div>
             </form>

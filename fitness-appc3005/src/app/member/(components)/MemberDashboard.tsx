@@ -76,7 +76,7 @@ export default async function MemberDashboard({
             {pastClasses}
           </ul>
           <Separator orientation="vertical" />
-          <div>
+          <div className="mt-4">
             <p className="font-bold leading-5 ">Upcoming Classes:</p>
             {upcomingClasses}
           </div>

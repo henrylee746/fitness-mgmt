@@ -12,20 +12,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function Calendar24() {
+interface ClassManagementCalendarProps {
+  onDateChange: (date: string) => void;
+  onTimeChange: (time: string) => void;
+}
+
+export function ClassManagementCalendar({ onDateChange, onTimeChange }: ClassManagementCalendarProps) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>();
 
   return (
     <>
-      {/* Hidden input for form submission 
-      (date picker doesn't have a name property to access its value)*/}
-      <input
-        type="hidden"
-        name="date"
-        value={date ? date.toISOString().split("T")[0] : ""}
-      />
-
       <div className="flex gap-4">
         <div className="flex flex-col gap-3">
           <Label htmlFor="date-picker" className="px-1">
@@ -53,6 +50,7 @@ export function Calendar24() {
                 onSelect={(value: Date) => {
                   setDate(value);
                   setOpen(false);
+                  onDateChange(value?.toISOString().split("T")[0] || "");
                 }}
                 required={true}
               />
@@ -71,6 +69,7 @@ export function Calendar24() {
             step="1"
             required={true}
             className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
+            onChange={(e) => onTimeChange(e.target.value)}
           />
         </div>
       </div>
