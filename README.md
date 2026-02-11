@@ -171,7 +171,7 @@ Implemented throughout the app using Prisma Client:
 - [x] Email Verification
 - [x] Member, Trainer, and Admin portals (RBAC)
 - [x] Health metrics tracking
-- [ ] UI Renovation
+- [x] UI Renovation
 - [ ] OAuth authentication w/ Google Cloud
 - [ ] Advanced filtering (sort sessions by date, trainer availability)
 - [ ] Notification system for upcoming classes
