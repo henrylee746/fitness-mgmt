@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { getSessions, getMember } from "@/lib/actions";
 import ProfileManagement from "./(components)/ProfileManagement";
 import MemberDashboard from "./(components)/MemberDashboard";
