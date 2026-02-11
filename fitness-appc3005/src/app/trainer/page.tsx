@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import GroupClass from "./(components)/GroupClass";
 import MemberSearch from "./(components)/MemberSearch";
 import { Button } from "@/components/ui/button";
