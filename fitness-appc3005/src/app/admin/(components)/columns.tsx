@@ -23,12 +23,14 @@ import {
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { ClassSessionExtended } from "@/lib/types";
+import { ClassSessionExtended, Room } from "@/lib/types";
 import { updateSessionRoom } from "@/lib/actions";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { getRooms } from "@/lib/actions";
 
 const formSchema = z.object({
   sessionId: z.string().min(1, { message: "Session is required" }),
@@ -42,11 +44,21 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const [rooms, setRooms] = useState<Room[]>([]);
+
+      useEffect(() => {
+        const getSessionRooms = async () => {
+          const sessionRooms = await getRooms();
+          setRooms(sessionRooms);
+        };
+        getSessionRooms();
+      }, []);
+
       const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
           sessionId: row.original.id.toString(),
-          roomId: "7",
+          roomId: "",
         },
       });
 
@@ -99,27 +111,27 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
             {form.formState.errors.root?.serverError && (
               <p className="text-xs text-red-500">{form.formState.errors.root.serverError.message}</p>
             )}
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <Controller
+            <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
+              {rooms.length > 0 && (<Controller
                 control={form.control}
                 name="roomId"
                 render={({ field }) => (
                   <RadioGroup onValueChange={field.onChange} value={field.value} name="roomId" defaultValue="7" required={true}>
                     <div className="flex items-center gap-3 mt-4">
-                      <RadioGroupItem value="7" id="7" />
-                      <Label htmlFor="7">Studio A (Capacity: 20)</Label>
+                      <RadioGroupItem value={rooms[0].id.toString()} id={rooms[0].id.toString()} />
+                      <Label htmlFor={rooms[0].id.toString()}>{rooms[0].name} (Capacity: {rooms[0].capacity})</Label>
                     </div>
                     <div className="flex items-center gap-3">
-                      <RadioGroupItem value="8" id="8" />
-                      <Label htmlFor="8">Studio B (Capacity: 15)</Label>
+                      <RadioGroupItem value={rooms[1].id.toString()} id={rooms[1].id.toString()} />
+                      <Label htmlFor={rooms[1].id.toString()}>{rooms[1].name} (Capacity: {rooms[1].capacity})</Label>
                     </div>
                     <div className="flex items-center gap-3">
-                      <RadioGroupItem value="9" id="9" />
-                      <Label htmlFor="9">Cycling Room (Capacity: 12)</Label>
+                      <RadioGroupItem value={rooms[2].id.toString()} id={rooms[2].id.toString()} />
+                      <Label htmlFor={rooms[2].id.toString()}>{rooms[2].name} (Capacity: {rooms[2].capacity})</Label>
                     </div>
                   </RadioGroup>
                 )}
-              />
+              />)}
               <DialogFooter>
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? <Loader /> : null}
@@ -142,7 +154,7 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
   },
   {
     accessorKey: "capacity",
-    header: "Space",
+    header: "Spots",
   },
   {
     accessorKey: "trainer.name",

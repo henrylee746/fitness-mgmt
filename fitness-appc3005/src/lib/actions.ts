@@ -16,6 +16,19 @@ export async function getSession() {
   }
 }
 
+export async function getRooms() {
+  try {
+    const rooms = await prisma.room.findMany({
+      orderBy: {
+        id: "asc"
+      }
+    })
+    return rooms;
+  } catch (error) {
+    throw new Error("Failed to get rooms");
+  }
+};
+
 export async function getActiveMemberRole() {
   try {
     const roleData = await auth.api.getActiveMemberRole({
@@ -324,20 +337,21 @@ export const registerSessions = async (formData: FormData) => {
   const memberId = formData.get("memberId") as string;
 
   if (ids.length === 0) return;
-  ids.map(async (id) => {
-    try {
+  try {
+    ids.map(async (id) => {
       await prisma.booking.create({
         data: {
           memberId: Number(memberId),
           classSessionId: Number(id),
         },
       });
-      revalidatePath("/member", "page");
-    } catch (error: unknown) {
+    });
+    revalidatePath("/member", "page");
+  }
+  catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(error.message);
       }
       throw new Error("An unknown error occurred while creating the booking");
     }
-  });
 };

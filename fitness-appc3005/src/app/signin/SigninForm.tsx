@@ -78,7 +78,7 @@ export default function Login() {
   };
 
   if (session) {
-    return <div className="font-bold text-center mb-6 text-red-500 text-sm">You are already logged in as {session.user?.name}</div>;
+    return <div className="min-h-[80vh] flex items-center justify-center p-6 font-bold text-center mb-6 text-red-500 text-sm">You are already logged in as {session.user?.name}</div>;
   }
 
   return (
