@@ -31,20 +31,21 @@ export default async function Admin() {
     )
   }
 
-  const sessions = await prisma.classSession.findMany({
-    where: {
-      dateTime: {
-        gte: new Date(),
+  const [sessions, trainers] = await Promise.all([
+    prisma.classSession.findMany({
+      where: {
+        dateTime: {
+          gte: new Date(),
+        },
       },
-    },
-    include: {
-      //Joins with room and trainer tables
-      room: true,
-      trainer: true,
-    },
-  });
-
-  const trainers = await prisma.trainer.findMany();
+      include: {
+        //Joins with room and trainer tables
+        room: true,
+        trainer: true,
+      },
+    }),
+    prisma.trainer.findMany(),
+  ]);
 
   return (
     <>

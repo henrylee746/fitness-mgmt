@@ -11,25 +11,25 @@ import { DataTable } from "./data-table";
 import prisma from "@/lib/prisma";
 
 export default async function GroupClass() {
-  /*Querying so that all list of sessions are displayed before 
+  /*Querying so that all list of sessions are displayed before
   filtering by trainer
   Filters sessions with dates only greater than or equal to (gte) today
   */
-  const sessions = await prisma.classSession.findMany({
-    where: {
-      dateTime: {
-        gte: new Date(),
+  const [sessions, trainers] = await Promise.all([
+    prisma.classSession.findMany({
+      where: {
+        dateTime: {
+          gte: new Date(),
+        },
       },
-    },
-    include: {
-      //Joins with room and trainer tables
-      room: true,
-      trainer: true,
-    },
-  });
-
-  //Querying so that select dropdown has all list of trainers
-  const trainers = await prisma.trainer.findMany();
+      include: {
+        //Joins with room and trainer tables
+        room: true,
+        trainer: true,
+      },
+    }),
+    prisma.trainer.findMany(),
+  ]);
 
   return (
     <Card className="w-full xl:max-w-xl lg:max-w-md md:max-w-sm sm:max-w-sm max-w-xs">
