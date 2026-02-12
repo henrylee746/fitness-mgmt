@@ -13,7 +13,7 @@ export function SessionGuard() {
 
     useEffect(() => {
         if (error) {
-            toast.error(`Failed to get session: ${error}`);
+            toast.error(`Failed to get session: ${error.message}`);
         }
         // Only redirect after session check is complete
         if (!isPending && !session) {

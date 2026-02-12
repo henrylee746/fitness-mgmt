@@ -52,7 +52,7 @@ const DATA = {
 }
 
 export function HeaderDock({ role, session }: {
-    role?: string, session?: User
+    role?: string | null, session?: User
 }) {
     return (
         <div className="flex flex-col items-center justify-center">

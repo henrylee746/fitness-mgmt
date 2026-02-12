@@ -18,7 +18,7 @@ import { useState, useEffect, useMemo } from "react";
 const Header = ({ initialRole }: { initialRole?: string | undefined }) => {
   const router = useRouter();
   const { data: session, isPending, error } = authClient.useSession();
-  const [role, setRole] = useState<string | undefined>(initialRole);
+  const [role, setRole] = useState<string | undefined | null>(initialRole);
 
   useEffect(() => {
     const fetchRole = async () => {
@@ -33,7 +33,7 @@ const Header = ({ initialRole }: { initialRole?: string | undefined }) => {
     if (session) {
       fetchRole();
     }
-  }, [session]);
+  }, [initialRole, role, session]);
 
 
   const handleSignOut = async () => {

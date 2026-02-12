@@ -4,13 +4,11 @@ import { LuUser, LuMail, LuLock, LuEye, LuEyeOff } from "react-icons/lu";
 import { SiGoogle } from "react-icons/si";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { registerMember } from "@/lib/actions";
 import { Loader } from "@/components/ui/loader";
 import Verify from "./Verify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { RoleRadioGroup } from "./RoleRadioGroup";
 
 const UserIcon: React.FC = () => <LuUser size={16} />;
 
@@ -106,7 +104,6 @@ const formSchema = z.object({
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.email({ message: "Invalid email address" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
-  role: z.enum(["member", "trainer", "admin"], { message: "Invalid role" }), //Must match one of the values in here
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -124,7 +121,6 @@ const SignupForm: React.FC = () => {
       lastName: "",
       email: "",
       password: "",
-      role: "member",
     },
     mode: "onBlur",
   });
@@ -142,29 +138,14 @@ const SignupForm: React.FC = () => {
       email: data.email,
       password: data.password,
       name: `${data.firstName} ${data.lastName}`,
-      callbackURL: "/member", // Redirect here after email verification
+      callbackURL: "/onboarding", // Redirect here after email verification
     }, {
       onRequest: () => {
         form.clearErrors();
       },
       onSuccess: async (response) => {
-        // 2. Register as a Member in the fitness app
-        const formData = new FormData();
-        formData.append("userId", response.data?.user.id || ""); // Pass userId from Better Auth
-        formData.append("email", data.email);
-        formData.append("firstName", data.firstName);
-        formData.append("lastName", data.lastName);
-        formData.append("role", data.role);
-        try {
-          await registerMember(formData);
-          // 3. Redirect to member page after successful signup
-          toast.info(`Please check your email for a verification link.`);
-          setVerificationSent(true);
-        } catch (error: unknown) {
-          form.setError("root.serverError", {
-            message: error instanceof Error ? error.message : "Failed to register member",
-          });
-        }
+        toast.info(`Please check your email for a verification link.`);
+        setVerificationSent(true);
       },
       onError: (ctx) => {
         form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
@@ -175,7 +156,14 @@ const SignupForm: React.FC = () => {
   const handleGoogleSubmit = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/member",
+      callbackURL: "/onboarding",
+    }, {
+      onRequest: () => {
+        form.clearErrors();
+      },
+      onError: (ctx) => {
+        form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
+      },
     });
   };
 
@@ -284,8 +272,6 @@ const SignupForm: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  <RoleRadioGroup control={form.control} />
-
                 </div>
                 {/* Submit Button */}
               </div>

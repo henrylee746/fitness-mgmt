@@ -34,9 +34,9 @@ export async function getActiveMemberRole() {
     const roleData = await auth.api.getActiveMemberRole({
       headers: await headers(),
     });
-    return roleData?.role;
-  } catch (error) {
-    throw new Error("Failed to get active member role");
+    return roleData?.role ?? null;
+  } catch {
+    return null;
   }
 }
 
