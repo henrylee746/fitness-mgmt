@@ -60,25 +60,27 @@ export default async function MemberDashboard({
       </CardHeader>
 
       <CardContent>
-        <p className="text-sm">Weight (lbs): {currWeight ?? "N/A"} </p>
-        <p className="text-muted-foreground text-sm">
-          Last submitted: {lastSubmitted?.toLocaleDateString("en-CA") ?? "N/A"}
-        </p>
-        <Separator className="my-4 mb-6" />
-        <div className="flex h-16 items-center justify-center space-x-6 text-xs lg:text-sm">
-          <div className="text-center">
-            Weight Target:{" "}
-            <p className="font-bold leading-5"> {weightGoal ?? "N/A"} </p>
+        <div className="flex items-end justify-between mb-1">
+          <div>
+            <p className="text-3xl font-bold">{currWeight ?? "N/A"} <span className="text-sm font-normal text-muted-foreground">lbs</span></p>
+            <p className="text-muted-foreground text-xs mt-1">
+              Last updated: {lastSubmitted?.toLocaleDateString("en-CA") ?? "N/A"}
+            </p>
           </div>
-          <Separator orientation="vertical" />
-          <ul className="px-2 leading-5">
-            <p className="font-bold">Past classes:</p>
-            {pastClasses}
-          </ul>
-          <Separator orientation="vertical" />
-          <div className="mt-4">
-            <p className="font-bold leading-5 ">Upcoming Classes:</p>
-            {upcomingClasses}
+        </div>
+        <Separator className="my-4" />
+        <div className="grid grid-cols-3 gap-3 text-sm">
+          <div className="flex flex-col gap-1 rounded-lg  p-3">
+            <p className="text-xs text-muted-foreground">Weight Target</p>
+            <p className="font-semibold">{weightGoal ?? "N/A"} <span className="text-xs font-normal">lbs</span></p>
+          </div>
+          <div className="flex flex-col gap-1 rounded-lg  p-3">
+            <p className="text-xs text-muted-foreground font-semibold">Past Classes</p>
+            <ul>{pastClasses}</ul>
+          </div>
+          <div className="flex flex-col gap-1 rounded-lg  p-3">
+            <p className="text-xs text-muted-foreground font-semibold">Upcoming</p>
+            <ul>{upcomingClasses}</ul>
           </div>
         </div>
       </CardContent>

@@ -37,7 +37,7 @@ export default async function Members() {
           Member's Hub
         </h1>
         <div
-          className={`flex justify-center items-center flex-wrap gap-6 lg:gap-8 $font-sans`}
+          className="flex justify-center items-start flex-wrap gap-6 lg:gap-8 font-sans py-6 px-4"
         >
           <ProfileManagement userId={user.id} memberId={member.id} />
           <div className="flex flex-col items-center justify-center gap-6">
