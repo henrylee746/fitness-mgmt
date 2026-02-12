@@ -31,7 +31,7 @@ export default async function Trainer() {
     }
   } catch (error) {
     return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-      Failed to get session: ${error instanceof Error ? error.message : "Unknown error"} Please contact if the issue persists.
+      {error instanceof Error ? error.message : "Something went wrong."} Please contact support if the issue persists.
     </div>
 
   }
@@ -41,7 +41,7 @@ export default async function Trainer() {
       <h1 className="max-w-s my-4 text-center text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
         Trainers
       </h1>
-      <div className="min-h-[80vh] flex flex-wrap items-center justify-center font-sans gap-8 p-4">
+      <div className="flex flex-wrap items-start justify-center font-sans gap-8 py-6 px-4">
         <SessionGuard />
         <GroupClass />
         <MemberSearch />
