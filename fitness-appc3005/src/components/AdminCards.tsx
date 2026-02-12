@@ -11,7 +11,7 @@ export const AdminCards = () => {
     return (
 
         <div className="flex gap-2 sm:gap-3 md:gap-4">
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] mx-2 sm:mx-3 md:mx-4">
+            <Card className="hover:scale-103 transition-all duration-300 dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] m-2 sm:m-3 md:m-4">
                 <MdMeetingRoom className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20" />
                 <CardHeader className="flex flex-col items-center justify-center w-full">
                     <CardAction>
@@ -22,7 +22,7 @@ export const AdminCards = () => {
                     </CardDescription>
                 </CardHeader>
             </Card>
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] mx-2 sm:mx-3 md:mx-4">
+            <Card className="hover:scale-103 transition-all duration-300 dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] m-2 sm:m-3 md:m-4">
                 <MdClass className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20" />
                 <CardHeader className="flex flex-col items-center justify-center w-full">
                     <CardAction>

@@ -28,7 +28,7 @@ export const MemberCards = () => {
     return (
 
         <div className="flex gap-2 sm:gap-3 md:gap-4">
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] mx-2 sm:mx-3 md:mx-4">
+            <Card className="hover:scale-103 transition-all duration-300 dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] m-2 sm:m-3 md:m-4">
                 <FaUserCircle className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" />
                 <CardHeader className="flex flex-col items-center justify-center w-full">
                     <CardAction>
@@ -39,7 +39,7 @@ export const MemberCards = () => {
                     </CardDescription>
                 </CardHeader>
             </Card>
-            <AnimatedCard className="mx-2 sm:mx-3 md:mx-4 dark:bg-black">
+            <AnimatedCard className="hover:scale-103 transition-all duration-300 m-2 sm:m-3 md:m-4 dark:bg-black">
                 <CardVisual>
                     <MemberCard mainColor={mainColor} secondaryColor={secondaryColor} />
                 </CardVisual>
@@ -48,7 +48,7 @@ export const MemberCards = () => {
                     <CardDescription className="text-center text-xs sm:text-sm">Check your metrics and upcoming sessions here</CardDescription>
                 </CardBody>
             </AnimatedCard>
-            <Card className="dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] mx-2 sm:mx-3 md:mx-4">
+            <Card className="hover:scale-103 transition-all duration-300 dark:bg-black flex flex-col items-center justify-center w-[280px] sm:w-[320px] md:w-[356px] m-2 sm:m-3 md:m-4">
                 <FaUserFriends className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20" />
                 <CardHeader className="flex flex-col items-center justify-center w-full">
                     <CardAction>

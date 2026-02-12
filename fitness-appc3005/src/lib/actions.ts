@@ -236,6 +236,7 @@ export const registerMember = async (formData: FormData) => {
         createdAt: new Date(),
       },
     });
+
     revalidatePath("/member", "page");
     return organization.id;
   } catch (error) {

@@ -17,6 +17,7 @@ import { useState, useEffect, useMemo } from "react";
 
 const Header = () => {
   const router = useRouter();
+  //useSession triggers on window focus (or page refresh)
   const { data: session, isPending, error } = authClient.useSession();
   const [role, setRole] = useState<string | undefined | null>(undefined);
 
