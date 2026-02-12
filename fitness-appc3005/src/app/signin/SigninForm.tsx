@@ -77,6 +77,13 @@ export default function Login() {
     });
   };
 
+  const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/member",
+    });
+  };
+
   if (session) {
     return <div className="min-h-[80vh] flex items-center justify-center p-6 font-bold text-center mb-6 text-red-500 text-sm">You are already logged in as {session.user?.name}</div>;
   }
@@ -105,7 +112,7 @@ export default function Login() {
         )}
         {/* Social login buttons - More compact shadcn style */}
         <div className="flex justify-center items-center">
-          <button className="cursor-pointer flex items-center justify-center h-9 px-3 rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+          <button onClick={handleGoogleSignIn} className="cursor-pointer flex items-center justify-center h-9 px-3 rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
             <span className="flex items-center gap-2">
               <GoogleIcon />
               Google

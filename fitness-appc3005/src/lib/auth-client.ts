@@ -8,7 +8,6 @@ export const authClient = createAuthClient({
   //When in prod
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
   plugins: [
-    nextCookies(),
     organizationClient({
       ac,
       roles: {
@@ -17,5 +16,6 @@ export const authClient = createAuthClient({
         admin,
       },
     }),
+     nextCookies(),
   ],
 });
