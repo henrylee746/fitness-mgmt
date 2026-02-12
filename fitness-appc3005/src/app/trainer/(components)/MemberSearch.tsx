@@ -12,11 +12,14 @@ import { Button } from "@/components/ui/button";
 import { IconZoomCheck } from "@tabler/icons-react";
 import React, { useState } from "react";
 import { MemberInfo } from "@/lib/types";
+import { toast } from "sonner";
+import { Loader } from "@/components/ui/loader";
 
 export default function MemberSearch() {
   const [results, setResults] = useState<MemberInfo[]>([]);
   const [query, setQuery] = useState("");
   const [notFound, setNotFound] = useState("");
+  const [loading, setLoading] = useState(false);
 
   //async function for looking up member by name (calls /api/member/search)
   /*would normally use this as a server action 
@@ -24,26 +27,34 @@ export default function MemberSearch() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!query) return;
-    const res = await fetch("/api/member/search", {
-      method: "POST",
-      body: JSON.stringify({ name: query }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      setLoading(true);
+      const res = await fetch("/api/member/search", {
+        method: "POST",
+        body: JSON.stringify({ name: query }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.length === 0) {
-      setNotFound("No results found.");
-    } else {
-      setResults(data);
-      setNotFound("");
+      if (data.length === 0) {
+        setNotFound("No results found.");
+      } else {
+        setResults(data);
+        setNotFound("");
+      }
+    } catch (error) {
+      toast.error(`Failed to search members: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Card className="w-full xl:max-w-2xl lg:max-w-xl md:max-w-lg sm:max-w-md max-w-sm">
+    <Card className="w-full xl:max-w-xl lg:max-w-md md:max-w-sm max-w-xs">
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="flex gap-2 items-center">
@@ -63,8 +74,8 @@ export default function MemberSearch() {
               onChange={(e) => setQuery(e.target.value)}
             />
 
-            <Button type="submit" variant="outline">
-              Search
+            <Button type="submit" variant="outline" disabled={loading}>
+              {loading ? <Loader /> : "Search"}
             </Button>
           </div>
 

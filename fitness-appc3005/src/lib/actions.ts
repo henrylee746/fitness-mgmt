@@ -96,42 +96,39 @@ export async function updateSessionRoom(formData: FormData) {
     throw new Error("Session not found");
   }
 
+  let room;
   try {
-    // Validate that session capacity does not exceed new room capacity
-    const room = await prisma.room.findUnique({
+    room = await prisma.room.findUnique({
       where: { id: Number(roomId) },
       select: { capacity: true },
     });
+  } catch (error) {
+    throw new Error("Failed to update session room");
+  }
 
-    if (!room) {
-      throw new Error("Room not found");
-    }
+  if (!room) {
+    throw new Error("Room not found");
+  }
 
-    /*Client-side validation
-  but there is also a trigger in the database that will throw an error 
+  /*Client-side validation
+  but there is also a trigger in the database that will throw an error
   if the session capacity exceeds the room capacity
   */
-    if (classSession.capacity > room.capacity) {
-      throw new Error(
-        `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`
-      );
-    }
+  if (classSession.capacity > room.capacity) {
+    throw new Error(
+      `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`
+    );
+  }
 
+  try {
     await prisma.classSession.update({
       where: { id: Number(sessionId) },
       data: { roomId: Number(roomId) },
     });
     // Re-fetch the table data after updating
     revalidatePath("/admin");
-  } catch (error: unknown) {
-    //If the error is an instance of Error, throw the error message
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error(
-      "An unknown error occurred while updating the session room"
-    );
-    //If the error is not an instance of Error, throw a generic error
+  } catch (error) {
+    throw new Error("Failed to update session room");
   }
 }
 
@@ -147,27 +144,31 @@ export async function createSession(formData: FormData) {
   // Combine into 1 ISO datetime if needed:
   const datetime = new Date(`${date}T${time}`);
 
+  let room;
   try {
-    // Validate that session capacity does not exceed room capacity
-    const room = await prisma.room.findUnique({
+    room = await prisma.room.findUnique({
       where: { id: Number(roomId) },
       select: { capacity: true },
     });
+  } catch (error) {
+    throw new Error("Failed to create session");
+  }
 
-    if (!room) {
-      throw new Error("Room not found");
-    }
+  if (!room) {
+    throw new Error("Room not found");
+  }
 
-    /*Client-side validation
-  but there is also a trigger in the database that will throw an error 
+  /*Client-side validation
+  but there is also a trigger in the database that will throw an error
   if the session capacity exceeds the room capacity
   */
-    if (capacity > room.capacity) {
-      throw new Error(
-        `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`
-      );
-    }
+  if (capacity > room.capacity) {
+    throw new Error(
+      `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`
+    );
+  }
 
+  try {
     await prisma.classSession.create({
       data: {
         name: sessionName,
@@ -178,11 +179,8 @@ export async function createSession(formData: FormData) {
       },
     });
     revalidatePath("/admin");
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error("An unknown error occurred while creating the session");
+  } catch (error) {
+    throw new Error("Failed to create session");
   }
 }
 
@@ -239,11 +237,8 @@ export const registerMember = async (formData: FormData) => {
       },
     });
     revalidatePath("/member", "page");
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error("An unknown error occurred while creating the member");
+  } catch (error) {
+    throw new Error("Failed to register member");
   }
 };
 
@@ -293,13 +288,8 @@ export const updateMember = async (formData: FormData) => {
       });
     });
     revalidatePath("/member", "page");
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error(
-      "An unknown error occurred while updating the member profile"
-    );
+  } catch (error) {
+    throw new Error("Failed to update member profile");
   }
 };
 
@@ -322,13 +312,8 @@ export const updateMetrics = async (formData: FormData) => {
       data: metricUpdateData,
     });
     revalidatePath("/member", "page");
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error(
-      "An unknown error occurred while creating the health metric"
-    );
+  } catch (error) {
+    throw new Error("Failed to create health metric");
   }
 };
 
@@ -348,10 +333,7 @@ export const registerSessions = async (formData: FormData) => {
     });
     revalidatePath("/member", "page");
   }
-  catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error(error.message);
-      }
-      throw new Error("An unknown error occurred while creating the booking");
+  catch (error) {
+    throw new Error("Failed to create booking");
     }
 };

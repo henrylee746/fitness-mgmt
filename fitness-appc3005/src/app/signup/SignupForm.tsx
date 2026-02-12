@@ -138,53 +138,38 @@ const SignupForm: React.FC = () => {
   };
 
   const handleSubmit = async (data: FormData) => {
-    try {
-      // 1. Sign up with Better Auth
-      await authClient.signUp.email({
-        email: data.email,
-        password: data.password,
-        name: `${data.firstName} ${data.lastName}`,
-        callbackURL: "/member", // Redirect here after email verification
-      }, {
-        onRequest: () => {
-          form.clearErrors();
-        },
-        onSuccess: async (response) => {
-          // 2. Register as a Member in the fitness app
-          const formData = new FormData();
-          formData.append("userId", response.data?.user.id || ""); // Pass userId from Better Auth
-          formData.append("email", data.email);
-          formData.append("firstName", data.firstName);
-          formData.append("lastName", data.lastName);
-          formData.append("role", data.role);
-          try {
-            await registerMember(formData);
-            // 3. Redirect to member page after successful signup
-            toast.info(`Please check your email for a verification link.`);
-            setVerificationSent(true);
-          }
-          catch (error: unknown) {
-            if (error instanceof Error) {
-              form.setError("root.serverError", { message: error.message });
-            } else {
-              form.setError("root.serverError", { message: "Failed to register member" });
-            }
-          }
-
-        },
-        onError: (ctx) => {
-          form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
-        },
-      });
-    }
-    catch (error: unknown) {
-      if (error instanceof Error) {
-        form.setError("root.serverError", { message: error.message });
-      } else {
-        form.setError("root.serverError", { message: "Failed to register member" });
-      }
-      return;
-    }
+    await authClient.signUp.email({
+      email: data.email,
+      password: data.password,
+      name: `${data.firstName} ${data.lastName}`,
+      callbackURL: "/member", // Redirect here after email verification
+    }, {
+      onRequest: () => {
+        form.clearErrors();
+      },
+      onSuccess: async (response) => {
+        // 2. Register as a Member in the fitness app
+        const formData = new FormData();
+        formData.append("userId", response.data?.user.id || ""); // Pass userId from Better Auth
+        formData.append("email", data.email);
+        formData.append("firstName", data.firstName);
+        formData.append("lastName", data.lastName);
+        formData.append("role", data.role);
+        try {
+          await registerMember(formData);
+          // 3. Redirect to member page after successful signup
+          toast.info(`Please check your email for a verification link.`);
+          setVerificationSent(true);
+        } catch (error: unknown) {
+          form.setError("root.serverError", {
+            message: error instanceof Error ? error.message : "Failed to register member",
+          });
+        }
+      },
+      onError: (ctx) => {
+        form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
+      },
+    });
   };
 
   const handleGoogleSubmit = async () => {

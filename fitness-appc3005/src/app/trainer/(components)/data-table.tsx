@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/select";
 import { Trainer } from "@/lib/types";
 import React from "react";
+import { toast } from "sonner";
+import { Loader } from "@/components/ui/loader";
 
 interface WithTrainer {
   trainer: { name: string };
@@ -55,17 +57,25 @@ export function DataTable<TData extends WithTrainer, TValue>({
     []
   );
   const [filteredData, setFilteredData] = React.useState(data);
-
+  const [loading, setLoading] = React.useState(false);
   const handleFilter = async (value: string) => {
-    const res = await fetch("/api/trainer/search", {
-      method: "POST",
-      body: JSON.stringify(value === "All" ? { id: "" } : { id: value }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    setFilteredData(data);
+    try {
+      setLoading(true);
+      const res = await fetch("/api/trainer/search", {
+        method: "POST",
+        body: JSON.stringify(value === "All" ? { id: "" } : { id: value }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setFilteredData(data);
+    } catch (error) {
+      toast.error(`Failed to filter sessions: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const table = useReactTable({
@@ -84,9 +94,10 @@ export function DataTable<TData extends WithTrainer, TValue>({
   return (
     <div>
       <div className="flex items-center py-2">
-        <Select onValueChange={handleFilter}>
+        <Select onValueChange={handleFilter} disabled={loading}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select a trainer" />
+            {loading ? <Loader /> : null}
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -112,9 +123,9 @@ export function DataTable<TData extends WithTrainer, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}

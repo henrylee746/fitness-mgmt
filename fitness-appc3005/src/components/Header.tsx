@@ -22,10 +22,17 @@ const Header = ({ initialRole }: { initialRole?: string | undefined }) => {
 
   useEffect(() => {
     const fetchRole = async () => {
-      const role = await getActiveMemberRole();
-      setRole(role);
+      try {
+        const role = await getActiveMemberRole();
+        setRole(role);
+      } catch (error) {
+        toast.error(`Failed to fetch role: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
+      }
     };
-    if (session) fetchRole();
+    if (session) {
+      fetchRole();
+    }
   }, [session]);
 
 
