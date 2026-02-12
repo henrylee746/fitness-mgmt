@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { registerMember } from "@/lib/actions";
+import { authClient } from "@/lib/auth-client";
 import { RoleRadioGroup } from "../signup/RoleRadioGroup";
 import { Loader } from "@/components/ui/loader";
 import { toast } from "sonner";
@@ -38,7 +39,10 @@ export default function OnboardingForm({ userId, email, firstName, lastName }: O
     formData.append("role", data.role);
 
     try {
-      await registerMember(formData);
+      const organizationId = await registerMember(formData);
+      if (organizationId) {
+        await authClient.organization.setActive({ organizationId });
+      }
       router.push("/member");
     } catch (error) {
       form.setError("root.serverError", {

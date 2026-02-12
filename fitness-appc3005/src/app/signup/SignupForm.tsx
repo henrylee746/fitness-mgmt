@@ -177,7 +177,7 @@ const SignupForm: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-[80vh] flex items-center justify-center p-6">
+      <div className="min-h-[80vh] flex items-center justify-center p-6 md:min-w-lg">
         <div className="w-full relative">
           {/* Main Card with shadcn/ui styling */}
           <div
@@ -266,11 +266,6 @@ const SignupForm: React.FC = () => {
                     <div className="absolute inset-0 flex items-center">
                       <span className="w-full border-t border-border" />
                     </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="text-center bg-zinc-100 dark:bg-zinc-900 px-2 text-muted-foreground">
-                        Choose your role (Everyone is a member by default)
-                      </span>
-                    </div>
                   </div>
                 </div>
                 {/* Submit Button */}
@@ -285,7 +280,7 @@ const SignupForm: React.FC = () => {
                  ring-offset-background transition-colors focus-visible:outline-none 
                  focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
                  disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground 
-                 hover:bg-primary/90 h-10 px-4 py-2 w-[75%]"
+                 hover:bg-primary/90 h-10 px-4 py-2 w-full"
                 >
                   Create Account
                   {form.formState.isSubmitting ? <Loader /> : null}

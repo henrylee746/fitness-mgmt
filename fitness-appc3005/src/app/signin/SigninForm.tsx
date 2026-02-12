@@ -81,6 +81,13 @@ export default function Login() {
     await authClient.signIn.social({
       provider: "google",
       callbackURL: "/member",
+    }, {
+      onRequest: () => {
+        form.clearErrors();
+      },
+      onError: (ctx) => {
+        form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
+      },
     });
   };
 

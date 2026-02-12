@@ -237,6 +237,7 @@ export const registerMember = async (formData: FormData) => {
       },
     });
     revalidatePath("/member", "page");
+    return organization.id;
   } catch (error) {
     throw new Error("Failed to register member");
   }

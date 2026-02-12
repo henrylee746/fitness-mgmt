@@ -33,7 +33,7 @@ const Header = ({ initialRole }: { initialRole?: string | undefined }) => {
     if (session) {
       fetchRole();
     }
-  }, [initialRole, session]);
+  }, [session]);
 
 
   const handleSignOut = async () => {

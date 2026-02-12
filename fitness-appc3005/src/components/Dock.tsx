@@ -84,7 +84,29 @@ export function HeaderDock({ role, session }: {
                     </DockIcon>
                     {session &&
                         (<>
-                            {role ? <Separator orientation="vertical" className="h-full" />
+                            {role ?
+                                <>
+                                    <Separator orientation="vertical" className="h-full" />
+                                    <DockIcon key="member">
+                                        <Tooltip>
+                                            <TooltipTrigger asChild>
+                                                <Link
+                                                    href={DATA.pages.roles.Member.url}
+                                                    aria-label={DATA.pages.roles.Member.name}
+                                                    className={cn(
+                                                        buttonVariants({ variant: "ghost", size: "icon" }),
+                                                        "size-12 rounded-full"
+                                                    )}
+                                                >
+                                                    <DATA.pages.roles.Member.icon className="size-5" />
+                                                </Link>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>{DATA.pages.roles.Member.name}</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    </DockIcon>
+                                </>
                                 : null}
                             {/* Loop through roles and render each role (if role matches) */}
                             {Object.entries(DATA.pages.roles).slice(1).map(([name, roles]) => (
