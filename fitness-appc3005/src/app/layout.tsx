@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -30,8 +28,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const session = await getSession()
-  const role = session ? (await getActiveMemberRole()) ?? undefined : undefined;
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -47,7 +43,7 @@ export default async function RootLayout({
           <Providers>
 
 
-            <Header initialRole={role} />
+            <Header />
             <main className="flex-1 flex flex-col overflow-x-hidden">
               {children}
             </main>

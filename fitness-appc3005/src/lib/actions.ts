@@ -20,14 +20,14 @@ export async function getRooms() {
   try {
     const rooms = await prisma.room.findMany({
       orderBy: {
-        id: "asc"
-      }
-    })
+        id: "asc",
+      },
+    });
     return rooms;
   } catch (error) {
     throw new Error("Failed to get rooms");
   }
-};
+}
 
 export async function getActiveMemberRole() {
   try {
@@ -116,7 +116,7 @@ export async function updateSessionRoom(formData: FormData) {
   */
   if (classSession.capacity > room.capacity) {
     throw new Error(
-      `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`
+      `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`,
     );
   }
 
@@ -164,7 +164,7 @@ export async function createSession(formData: FormData) {
   */
   if (capacity > room.capacity) {
     throw new Error(
-      `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`
+      `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`,
     );
   }
 
@@ -206,7 +206,7 @@ export const registerMember = async (formData: FormData) => {
 
   try {
     // Get or create a default organization for new members
-    // In a full RBAC implementation with multiple gyms, this would be passed from the signup form
+    // In a multi-tenant application with multiple gyms, this would be passed from the signup form
     let organization = await prisma.organization.findFirst({
       where: {
         slug: "fitnesspro-gym",
@@ -333,8 +333,7 @@ export const registerSessions = async (formData: FormData) => {
       });
     });
     revalidatePath("/member", "page");
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error("Failed to create booking");
-    }
+  }
 };

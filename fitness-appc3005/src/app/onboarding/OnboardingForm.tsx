@@ -41,6 +41,7 @@ export default function OnboardingForm({ userId, email, firstName, lastName }: O
     try {
       const organizationId = await registerMember(formData);
       if (organizationId) {
+        //Invalidates session cache
         await authClient.organization.setActive({ organizationId });
       }
       router.push("/member");
