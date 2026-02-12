@@ -1,4 +1,5 @@
-import { betterAuth, email } from "better-auth";
+import { betterAuth } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // If your Prisma file is located elsewhere, you can change the path
 import { PrismaClient } from "../../generated/prisma/client";
@@ -29,12 +30,12 @@ export const auth = betterAuth({
     }),
   ],
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
-   socialProviders: {
-     google: { 
-        prompt: "select_account", 
-        clientId: process.env.GOOGLE_CLIENT_ID as string, 
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string, 
-        }, 
+  socialProviders: {
+    google: {
+      prompt: "select_account",
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
   },
   account: {
     accountLinking: {
@@ -43,7 +44,7 @@ export const auth = betterAuth({
     },
   },
   secret: process.env.BETTER_AUTH_SECRET!,
-  
+
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -96,6 +97,26 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendOnSignUp: true,
     expiresIn: 3600, // 1 hour
+  },
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path === "/sign-up/email") {
+        const body = ctx.body as { email?: string } | undefined;
+        const email = body?.email;
+        if (email) {
+          // If a previous unverified signup exists for this email, remove it
+          // so the real owner can always sign up. Verified accounts are left
+          // untouched so "email already in use" still fires for them.
+          const existing = await prisma.user.findUnique({
+            where: { email },
+            select: { id: true, emailVerified: true },
+          });
+          if (existing && !existing.emailVerified) {
+            await prisma.user.delete({ where: { id: existing.id } });
+          }
+        }
+      }
+    }),
   },
   databaseHooks: {
     session: {

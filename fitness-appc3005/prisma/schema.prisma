@@ -127,7 +127,7 @@ view MemberInfo {
 model User {
   id            String    @id //This would be a UUID 
   name          String
-  email         String
+  email         String    @unique
   emailVerified Boolean   @default(false)
   image         String?
   createdAt     DateTime  @default(now())
@@ -137,7 +137,6 @@ model User {
   member        Member? // Optional relation to fitness app Member
   invitations Invitation[]
 
-  @@unique([email])
   @@map("user")
 }
 
