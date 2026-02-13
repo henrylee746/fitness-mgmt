@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { redirect } from "next/navigation";
 import { getMember, getSession } from "@/lib/actions";
 import OnboardingForm from "./OnboardingForm";

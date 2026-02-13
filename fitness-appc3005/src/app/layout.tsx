@@ -5,7 +5,6 @@ import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
-import { getActiveMemberRole, getSession } from "@/lib/actions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

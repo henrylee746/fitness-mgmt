@@ -201,7 +201,6 @@ export const Homepage = () => {
 
               <Marquee
                 autoFill={true}
-                pauseOnHover={true}
                 gradient={true}
                 gradientWidth={30}
                 gradientColor={isDark ? "black" : "#fbf9fc"}
