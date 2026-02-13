@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { UserAvatar } from "@daveyplate/better-auth-ui";
 import { HeaderDock } from "./Dock";
 import { getActiveMemberRole } from "@/lib/actions";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 const Header = () => {
   const router = useRouter();
