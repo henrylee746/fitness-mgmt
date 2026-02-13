@@ -29,7 +29,7 @@ export const auth = betterAuth({
       },
     }),
   ],
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
+  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   socialProviders: {
     google: {
       prompt: "select_account",
@@ -37,6 +37,7 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+  //This links Google accounts to those who originally signed up with email and password
   account: {
     accountLinking: {
       enabled: true,
@@ -90,9 +91,6 @@ export const auth = betterAuth({
             console.error("Failed to send verification email:", error);
           }
         });
-    },
-    async afterEmailVerification(user, request) {
-      console.log(`${user.email} has been successfully verified!`);
     },
     autoSignInAfterVerification: true,
     sendOnSignUp: true,
