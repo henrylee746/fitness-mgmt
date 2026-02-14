@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { createAuthMiddleware } from "better-auth/api";
+import { createAuthMiddleware, APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // If your Prisma file is located elsewhere, you can change the path
 import { PrismaClient } from "../../generated/prisma/client";
@@ -112,6 +112,26 @@ export const auth = betterAuth({
           });
           if (existing && !existing.emailVerified) {
             await prisma.user.delete({ where: { id: existing.id } });
+          } else if (existing?.emailVerified) {
+            throw new APIError("BAD_REQUEST", {
+              message:
+                "Email already registered. Please use a different email or sign in with Google if you already signed in with Google.",
+            });
+          }
+        }
+      }
+      if (ctx.path === "/sign-in/email") {
+        const body = ctx.body as { email?: string } | undefined;
+        const email = body?.email;
+        if (email) {
+          const existing = await prisma.user.findUnique({
+            where: { email },
+          });
+          if (existing?.emailVerified) {
+            throw new APIError("BAD_REQUEST", {
+              message:
+                "Email already registered. Please sign up using a different email or sign in with Google if you already signed in with Google.",
+            });
           }
         }
       }
