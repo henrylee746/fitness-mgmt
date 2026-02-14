@@ -194,7 +194,7 @@ const SignupForm: React.FC = () => {
               </p>
             </div>
             {form.formState.errors.root?.serverError && (
-              <p className="text-center mb-6 text-red-500 text-sm">{form.formState.errors.root.serverError.message}</p>
+              <p className="text-center mb-6 text-red-500 text-sm max-w-sm">{form.formState.errors.root.serverError.message}</p>
             )}
 
             <form className="space-y-4 " onSubmit={form.handleSubmit(handleSubmit)} noValidate>

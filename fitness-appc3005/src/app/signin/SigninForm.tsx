@@ -117,7 +117,7 @@ export default function Login() {
           </div>
         </div>
         {form.formState.errors.root?.serverError && (
-          <p className="text-center my-6 text-destructive text-sm">{form.formState.errors.root.serverError.message}</p>
+          <p className="text-center my-6 text-destructive text-sm max-w-sm">{form.formState.errors.root.serverError.message}</p>
         )}
         {/* Social login buttons - More compact shadcn style */}
         <div className="flex justify-center items-center">
