@@ -100,24 +100,19 @@ export const Homepage = () => {
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
 
         <div className="max-w-5xl mx-auto">
-          {/* Animated gradient background - applies to entire homepage */}
-          {/* Base gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5 dark:to-primary/10" />
-
-          {/* Floating orbs - decorative elements */}
-          <div className="absolute top-10 left-[10%] w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-primary/20 dark:bg-primary/30 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-[5%] w-40 h-40 sm:w-64 sm:h-64 lg:w-80 lg:h-80 bg-accent/30 dark:bg-accent/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-secondary/20 dark:bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-
-          {/* Grid pattern overlay */}
+          {/* Grain texture background */}
           <div
-            className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03]"
+            className="absolute inset-0 pointer-events-none"
             style={{
-              backgroundImage: `
-                    linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)
-                  `,
-              backgroundSize: '60px 60px',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
+              opacity: isDark ? 0.07 : 0.04,
+            }}
+          />
+          {/* Subtle top color bloom */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse 70% 40% at 50% 0%, rgba(139, 92, 246, 0.07) 0%, transparent 100%)',
             }}
           />
           {/* Hero section */}
