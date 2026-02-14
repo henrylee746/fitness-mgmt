@@ -18,7 +18,7 @@ import {
   ClassSessionExtended,
 } from "@/lib/types";
 import { registerSessions } from "@/lib/actions";
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import { Booking } from "@/lib/types";
 
 export default function GroupClass({
@@ -36,6 +36,7 @@ export default function GroupClass({
     (session) => !sessionIds.includes(session.id)
   );
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [state, formAction] = useActionState(registerSessions, { success: true });
   return (
     <Card className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-md sm:max-w-sm max-w-xs">
       <CardHeader>
@@ -52,11 +53,14 @@ export default function GroupClass({
           data={filteredSessions}
           onSelectionChange={(selected: string[]) => setSelectedIds(selected)}
         />
-        <form action={registerSessions}>
+        <form action={formAction}>
           {selectedIds.map((id) => (
             <input key={id} type="hidden" name="sessionIds" value={id} />
           ))}
           <input type="hidden" name="memberId" value={String(member?.id)} />
+          {!state.success && state.error && (
+            <p className="text-xs text-red-500 mt-2">{state.error}</p>
+          )}
           <Button className="w-full mt-6 cursor-pointer">Register</Button>
         </form>
       </CardContent>

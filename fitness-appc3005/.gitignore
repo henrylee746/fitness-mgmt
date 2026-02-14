@@ -44,5 +44,7 @@ next-env.d.ts
 /generated
 /prisma/seed.ts
 
-#Claude Local Files
+#Claude/Cursor  
+.claude
+.cursor
 CLAUDE.local.md

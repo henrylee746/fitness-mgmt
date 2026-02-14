@@ -84,18 +84,18 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
     formData.append("roomId", data.roomId);
 
     try {
-      await createSession(formData);
+      const result = await createSession(formData);
+      if (!result.success && result.error) {
+        form.setError("root.serverError", { message: result.error });
+        toast.error(result.error);
+        return;
+      }
       toast.success("Session created successfully");
       form.reset();
       setCalendarKey(prev => prev + 1);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        form.setError("root.serverError", { message: error.message });
-        toast.error(error.message);
-      } else {
-        form.setError("root.serverError", { message: "Failed to create session" });
-        toast.error("Failed to create session");
-      }
+      form.setError("root.serverError", { message: "Failed to create session" });
+      toast.error("Failed to create session");
     }
   };
 

@@ -78,12 +78,14 @@ export async function getSessions() {
   }
 }
 
-export async function updateSessionRoom(formData: FormData) {
+export async function updateSessionRoom(
+  formData: FormData,
+): Promise<{ success: boolean; error?: string }> {
   const sessionId = formData.get("sessionId");
   const roomId = formData.get("roomId");
 
   if (!sessionId || !roomId) {
-    throw new Error("Missing sessionId or room");
+    return { success: false, error: "Missing sessionId or room" };
   }
 
   // Get current class session to check its capacity
@@ -93,7 +95,7 @@ export async function updateSessionRoom(formData: FormData) {
   });
 
   if (!classSession) {
-    throw new Error("Session not found");
+    return { success: false, error: "Session not found" };
   }
 
   let room;
@@ -107,7 +109,7 @@ export async function updateSessionRoom(formData: FormData) {
   }
 
   if (!room) {
-    throw new Error("Room not found");
+    return { success: false, error: "Room not found" };
   }
 
   /*Client-side validation
@@ -115,9 +117,10 @@ export async function updateSessionRoom(formData: FormData) {
   if the session capacity exceeds the room capacity
   */
   if (classSession.capacity > room.capacity) {
-    throw new Error(
-      `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`,
-    );
+    return {
+      success: false,
+      error: `Session capacity (${classSession.capacity}) cannot exceed room capacity (${room.capacity})`,
+    };
   }
 
   try {
@@ -130,9 +133,13 @@ export async function updateSessionRoom(formData: FormData) {
   } catch (error) {
     throw new Error("Failed to update session room");
   }
+
+  return { success: true };
 }
 
-export async function createSession(formData: FormData) {
+export async function createSession(
+  formData: FormData,
+): Promise<{ success: boolean; error?: string }> {
   const sessionName = formData.get("sessionName") as string;
   const capacity = Number(formData.get("capacity"));
   const trainerId = formData.get("trainer") as string;
@@ -155,7 +162,7 @@ export async function createSession(formData: FormData) {
   }
 
   if (!room) {
-    throw new Error("Room not found");
+    return { success: false, error: "Room not found" };
   }
 
   /*Client-side validation
@@ -163,9 +170,10 @@ export async function createSession(formData: FormData) {
   if the session capacity exceeds the room capacity
   */
   if (capacity > room.capacity) {
-    throw new Error(
-      `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`,
-    );
+    return {
+      success: false,
+      error: `Session capacity (${capacity}) cannot exceed room capacity (${room.capacity})`,
+    };
   }
 
   try {
@@ -182,6 +190,8 @@ export async function createSession(formData: FormData) {
   } catch (error) {
     throw new Error("Failed to create session");
   }
+
+  return { success: true };
 }
 
 /*Register New Member*/
@@ -319,22 +329,37 @@ export const updateMetrics = async (formData: FormData) => {
   }
 };
 
-export const registerSessions = async (formData: FormData) => {
+export const registerSessions = async (
+  _prevState: { success: boolean; error?: string },
+  formData: FormData,
+): Promise<{ success: boolean; error?: string }> => {
   const ids = formData.getAll("sessionIds") as string[];
   const memberId = formData.get("memberId") as string;
 
-  if (ids.length === 0) return;
+  if (ids.length === 0) return { success: true };
   try {
-    ids.map(async (id) => {
-      await prisma.booking.create({
-        data: {
-          memberId: Number(memberId),
-          classSessionId: Number(id),
-        },
-      });
-    });
+    await Promise.all(
+      ids.map((id) =>
+        prisma.booking.create({
+          data: {
+            memberId: Number(memberId),
+            classSessionId: Number(id),
+          },
+        }),
+      ),
+    );
     revalidatePath("/member", "page");
-  } catch (error) {
+    return { success: true };
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      error.message.toLowerCase().includes("unique constraint")
+    ) {
+      return {
+        success: false,
+        error: "You are already registered for one or more of these sessions",
+      };
+    }
     throw new Error("Failed to create booking");
   }
 };

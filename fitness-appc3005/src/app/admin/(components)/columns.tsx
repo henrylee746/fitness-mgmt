@@ -68,17 +68,17 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
           const formData = new FormData();
           formData.append("sessionId", data.sessionId);
           formData.append("roomId", data.roomId);
-          await updateSessionRoom(formData);
+          const result = await updateSessionRoom(formData);
+          if (!result.success && result.error) {
+            form.setError("root.serverError", { message: result.error });
+            toast.error(result.error);
+            return;
+          }
           toast.success("Session room updated successfully");
           form.reset();
         } catch (error: unknown) {
-          if (error instanceof Error) {
-            form.setError("root.serverError", { message: error.message });
-            toast.error(error.message);
-          } else {
-            form.setError("root.serverError", { message: "Failed to update session room" });
-            toast.error("Failed to update session room");
-          }
+          form.setError("root.serverError", { message: "Failed to update session room" });
+          toast.error("Failed to update session room");
         }
       };
 
@@ -133,7 +133,7 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
                 )}
               />)}
               <DialogFooter>
-                <Button type="submit" disabled={form.formState.isSubmitting}>
+                <Button className="mt-4" type="submit" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? <Loader /> : null}
                   Save changes
                 </Button>
