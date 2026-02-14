@@ -81,6 +81,8 @@ export default function Login() {
     await authClient.signIn.social({
       provider: "google",
       callbackURL: "/member",
+      //Redirect to onboarding page if user is new
+      newUserCallbackURL: "/onboarding",
     }, {
       onRequest: () => {
         form.clearErrors();

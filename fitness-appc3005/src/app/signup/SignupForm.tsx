@@ -143,7 +143,7 @@ const SignupForm: React.FC = () => {
       onRequest: () => {
         form.clearErrors();
       },
-      onSuccess: async (response) => {
+      onSuccess: () => {
         toast.info(`Please check your email for a verification link.`);
         setVerificationSent(true);
       },
