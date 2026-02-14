@@ -6,7 +6,7 @@
 
 A modern, full-stack gym management system supporting members, trainers, bookings, sessions, and health metrics with authentication.
 
-[🚀 Live Demo](https://comp-3005-fp.vercel.app/) · [📖 Documentation](./docs)
+[🚀 Live Demo](https://comp-3005-fp.vercel.app/)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
@@ -42,6 +42,7 @@ fitness-appc3005/
 │   │   ├── admin/             # Admin portal
 │   │   ├── member/            # Member dashboard
 │   │   ├── trainer/           # Trainer portal
+|   |   |── onboarding/        # User selects role(s) here to register as a member
 │   │   ├── signin/            # Authentication pages
 │   │   └── signup/
 │   ├── components/            # Reusable UI components
@@ -161,7 +162,7 @@ Implemented throughout the app using Prisma Client:
 
 ## 📚 Documentation
 
-- **ER Diagram** - See `docs/ER Final Project (9).pdf`
+- **ER Diagram** - See `docs/flow.md`
 
 ---
 
