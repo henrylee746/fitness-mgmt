@@ -172,7 +172,7 @@ const SignupForm: React.FC = () => {
   }
 
   if (session) {
-    return <div className="min-h-[80vh] flex items-center justify-center p-6 font-bold text-center mb-6 text-red-500 text-sm">You are already logged in as {session.user?.name}</div>;
+    return <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">You are already logged in as {session.user?.name}</div>;
   }
 
   return (

@@ -57,7 +57,7 @@ export function HeaderDock({ role, session }: {
     return (
         <div className="flex flex-col items-center justify-center">
             <TooltipProvider>
-                <Dock direction="middle" disableMagnification className="ml-4">
+                <Dock direction="middle" disableMagnification>
                     <ToggleTheme
                         duration={600}
                         animationType="swipe-up"

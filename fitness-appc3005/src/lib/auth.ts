@@ -97,6 +97,7 @@ export const auth = betterAuth({
     expiresIn: 3600, // 1 hour
   },
   hooks: {
+    //Before BetterAuth processes the request (like signup or signin), we check if a previous unverified signup exists for this email
     before: createAuthMiddleware(async (ctx) => {
       if (ctx.path === "/sign-up/email") {
         const body = ctx.body as { email?: string } | undefined;
@@ -117,6 +118,14 @@ export const auth = betterAuth({
     }),
   },
   databaseHooks: {
+    /*Before BetterAuth creates a session, we look up the user's organization from their Member record
+    and set the activeOrganizationId on the session
+    */
+
+    /*databaseHooks differ from hooks.before in that they are executed
+    after the request is processed by BetterAuth and before/after something
+    gets inserted into the database (can access the obj about to be inserted)
+    */
     session: {
       create: {
         before: async (session) => {
