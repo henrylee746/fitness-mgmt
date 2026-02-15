@@ -13,6 +13,7 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import Loading from "./loading";
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 const MemberIcon = () => <FaUser />;
 
@@ -96,7 +97,20 @@ export const Homepage = () => {
   if (!isMounted) return <Loading />;
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full group overflow-hidden">
+      {/* Fitness background image with layered opacity effects */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/fitness.jpg"
+          alt="Background"
+          className="w-full h-full object-cover opacity-20 scale-110 group-hover:scale-100 transition-transform duration-1000"
+          width={1000}
+          height={1000}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/20 rounded-full blur-[100px]" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/30 rounded-full blur-[100px]" />
+      </div>
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
 
         <div className="max-w-5xl mx-auto">
