@@ -46,13 +46,13 @@ const UserPill = ({ user, text, selected, onClick }: userPillProps) => {
         transition-all duration-300 cursor-pointer
         ${selected
           ? "bg-primary/10 dark:bg-primary/20 border-primary text-primary shadow-md shadow-primary/20"
-          : "bg-card/50 dark:bg-card/30 border-border/50 text-muted-foreground hover:border-primary/50 hover:text-foreground hover:bg-card"
+          : "bg-card/30 dark:bg-card/50 border-border/50 text-muted-foreground hover:border-primary/50 hover:text-foreground hover:bg-primary/50"
         }
       `}
     >
       <div className="flex items-center gap-2 sm:gap-2.5">
         <Icon />
-        <span className="text-xs sm:text-sm font-semibold whitespace-nowrap">
+        <span className="text-purple-200 dark:text-muted-foreground text-xs sm:text-sm font-semibold whitespace-nowrap">
           {text}
         </span>
       </div>
@@ -146,13 +146,13 @@ export const Homepage = () => {
             {/* Main heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight text-foreground mt-4">
               <span className="block">Hassle-free management</span>
-              <span className="block mt-1 sm:mt-2 text-primary">
+              <span className="block mt-1 sm:mt-2 dark:text-primary text-accent">
                 for your fitness club
               </span>
             </h1>
 
             {/* Description */}
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-xl sm:max-w-2xl mx-auto mb-6 sm:mb-8 mt-4 leading-relaxed px-2">
+            <p className="text-purple-200 dark:text-muted-foreground text-sm sm:text-base md:text-lg max-w-xl sm:max-w-2xl mx-auto mb-6 sm:mb-8 mt-4 leading-relaxed px-2">
               Manage your gym operations with powerful tools for managing members,
               trainers, bookings, and health metrics - all in one place.
             </p>
