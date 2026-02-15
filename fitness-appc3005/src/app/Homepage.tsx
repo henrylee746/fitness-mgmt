@@ -111,8 +111,8 @@ export const Homepage = () => {
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/20 rounded-full blur-[100px]" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/30 rounded-full blur-[100px]" />
       </div>
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-
+      
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-5xl mx-auto">
           {/* Grain texture background */}
           <div
@@ -135,7 +135,7 @@ export const Homepage = () => {
               }`}
           >
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 mt-8 rounded-full bg-primary/10 dark:bg-primary/20 border border-primary/20 text-primary text-xs sm:text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 mt-8 rounded-full bg-primary/[0.12] dark:bg-primary/10 border border-primary/50 dark:border-primary/30 text-primary text-xs sm:text-sm font-semibold">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
