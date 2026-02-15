@@ -210,8 +210,6 @@ export const Homepage = () => {
 
               <Marquee
                 autoFill={true}
-                gradient={true}
-                gradientWidth={30}
                 gradientColor={isDark ? "black" : "#fbf9fc"}
 
               >
