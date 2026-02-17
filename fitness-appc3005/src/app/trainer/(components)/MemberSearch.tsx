@@ -58,11 +58,13 @@ export default function MemberSearch() {
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="flex gap-2 items-center">
-            Member Search <IconZoomCheck />
+            <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+              Member Search
+            </span>
+            <IconZoomCheck className="text-primary" />
           </CardTitle>
-          <CardDescription>
-            Search members by name (case-insensitive) to view their current
-            weight goal and last measured weight.
+          <CardDescription className="text-xs tracking-wider uppercase">
+            Search members by name to view their current weight goal and last measured weight.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 p-4">
@@ -74,22 +76,21 @@ export default function MemberSearch() {
               onChange={(e) => setQuery(e.target.value)}
             />
 
-            <Button type="submit" variant="outline" disabled={loading}>
+            <Button type="submit" variant="outline" disabled={loading} className="rounded-none font-bold tracking-widest uppercase">
               {loading ? <Loader /> : "Search"}
             </Button>
           </div>
 
           {/* Render results */}
           {results.length > 0 ? (
-            <ul className="p-4">
+            <ul className="flex flex-col gap-2">
               {results.map((member) => (
-                <li key={member.email} className="list-disc py-2">
+                <li key={member.email} className="py-2 border-l-2 border-primary/50 pl-3">
                   {member.firstName} {member.lastName} - {member.email}
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-sm font-mono">
                     Weight: {member?.weight ?? "N/A"}
                   </p>
-                  <p className="text-muted-foreground text-sm">
-                    {" "}
+                  <p className="text-muted-foreground text-sm font-mono">
                     Weight Target: {member?.weightGoal ?? "N/A"}
                   </p>
                 </li>

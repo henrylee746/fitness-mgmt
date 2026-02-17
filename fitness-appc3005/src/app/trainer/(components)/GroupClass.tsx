@@ -36,10 +36,12 @@ export default async function GroupClass() {
       <Card className="w-full xl:max-w-xl md:max-w-lg max-w-xs">
         <CardHeader>
           <CardTitle className="flex gap-2 items-center">
-            Upcoming Group Classes
-            <IconCalendarUser />
+            <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+              Upcoming Group Classes
+            </span>
+            <IconCalendarUser className="text-primary" />
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-xs tracking-wider uppercase">
             Filter by trainer using the dropdown below
           </CardDescription>
         </CardHeader>
@@ -53,7 +55,7 @@ export default async function GroupClass() {
       </Card>
     );
   } catch (error) {
-    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
       Failed to get sessions: ${error instanceof Error ? error.message : "Unknown error"} Please contact if the issue persists.
     </div>
   }

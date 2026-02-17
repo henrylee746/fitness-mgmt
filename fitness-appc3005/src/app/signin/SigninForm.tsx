@@ -94,26 +94,32 @@ export default function Login() {
   };
 
   if (session) {
-    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">You are already logged in as {session.user?.name}</div>;
+    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">You are already logged in as {session.user?.name}</div>;
   }
 
   return (
     // Main container with a custom background pattern and flexbox for centering. This setup is inherently responsive.
     <div className="min-h-[80vh] p-6 relative w-full flex items-center justify-center font-sans overflow-hidden">
       {/* Login Card - More compact and shadcn-like */}
-      <div className="relative w-full max-w-sm p-6 space-y-6 bg-card text-card-foreground rounded-lg border shadow-lg">
-        {/* Header section with icon and title - More compact */}
-        <div className="text-center space-y-3">
-          <div className="inline-flex p-2 bg-muted rounded-md border">
-            <UserIcon />
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">
+      <div className="relative w-full max-w-sm p-6 space-y-6 bg-card text-card-foreground rounded-none border shadow-lg hover:border-primary/40 transition-colors duration-200">
+        {/* Sharp top accent line */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary" />
+        <div className="text-center space-y-3 mt-2">
+          
+          <div className="flex flex-col space-y-1 text-center mb-6 mt-2">
+            <div className="inline-flex items-center gap-3 justify-center mb-2">
+              <div className="h-px w-6 bg-primary/50" />
+              <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">Login</span>
+              <div className="h-px w-6 bg-primary/50" />
+            </div>
+            
+            <h1 className="font-black uppercase leading-none text-foreground"
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.6rem, 4vw, 2.2rem)" }}>
               Welcome back
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Enter your credentials to sign in
-            </p>
+            <p className="text-xs text-muted-foreground tracking-wider uppercase pt-1">
+                Enter your details below to login to your account
+              </p>
           </div>
         </div>
         {form.formState.errors.root?.serverError && (
@@ -121,7 +127,7 @@ export default function Login() {
         )}
         {/* Social login buttons - More compact shadcn style */}
         <div className="flex justify-center items-center">
-          <button onClick={handleGoogleSignIn} className="cursor-pointer flex items-center justify-center h-9 px-3 rounded-md border bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+          <button onClick={handleGoogleSignIn} className="cursor-pointer flex items-center justify-center h-9 px-3 rounded-none border bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
             <span className="flex items-center gap-2">
               <GoogleIcon />
               Google
@@ -135,7 +141,7 @@ export default function Login() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">
+            <span className="bg-card px-2 text-muted-foreground tracking-widest uppercase text-xs">
               Or continue with
             </span>
           </div>
@@ -146,7 +152,7 @@ export default function Login() {
           <div className="flex flex-col gap-0.3 space-y-2">
             <label
               htmlFor="email"
-              className="ml-1 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-xs font-bold tracking-widest uppercase text-muted-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Email
             </label>
@@ -164,7 +170,7 @@ export default function Login() {
           <div className="flex flex-col gap-0.3 space-y-2">
             <label
               htmlFor="password"
-              className="ml-1 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-xs font-bold tracking-widest uppercase text-muted-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Password
             </label>
@@ -191,7 +197,7 @@ export default function Login() {
           <button
             disabled={form.formState.isSubmitting}
             type="submit"
-            className="cursor-pointer inline-flex gap-4 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full"
+            className="cursor-pointer inline-flex gap-4 items-center justify-center whitespace-nowrap rounded-none text-sm font-bold tracking-widest uppercase transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full"
           >
             Sign In
             {form.formState.isSubmitting ? <Loader /> : null}

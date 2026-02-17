@@ -23,10 +23,12 @@ export default function RoomBooking({
     <Card className="w-full xl:max-w-xl sm:max-w-lg max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          Room Booking
-          <IconDoor />
+          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+            Room Booking
+          </span>
+          <IconDoor className="text-primary" />
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-xs tracking-wider uppercase">
           Book different rooms for the following class sessions
         </CardDescription>
       </CardHeader>

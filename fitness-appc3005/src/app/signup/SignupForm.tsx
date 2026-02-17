@@ -80,7 +80,7 @@ const FloatingLabelInput = ({
       <label
         htmlFor={id}
         className={`absolute left-10 transition-all duration-200 pointer-events-none text-sm font-medium ${isFocused || inputValue
-          ? "-top-2 text-xs bg-white dark:bg-black px-2 text-foreground rounded-sm"
+          ? "-top-2 text-xs bg-card px-2 text-foreground"
           : "top-2.5 text-muted-foreground"
           }`}
       >
@@ -172,7 +172,7 @@ const SignupForm: React.FC = () => {
   }
 
   if (session) {
-    return <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">You are already logged in as {session.user?.name}</div>;
+    return <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">You are already logged in as {session.user?.name}</div>;
   }
 
   return (
@@ -182,14 +182,25 @@ const SignupForm: React.FC = () => {
           {/* Main Card with shadcn/ui styling */}
           <div
             ref={cardRef}
-            className="relative bg-white dark:bg-zinc-900 border border-border rounded-lg p-6 shadow-sm transition-all duration-200 hover:shadow-md"
+            className="relative bg-card border border-border rounded-none p-6 shadow-sm transition-all duration-200 hover:border-primary/40"
           >
+            {/* Sharp top accent line */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary" />
+
             {/* Header */}
-            <div className="flex flex-col space-y-2 text-center mb-6">
-              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-                Become a member today
+            <div className="flex flex-col space-y-1 text-center mb-6 mt-2">
+              <div className="inline-flex items-center gap-3 justify-center mb-2">
+                <div className="h-px w-6 bg-primary/50" />
+                <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">New Account</span>
+                <div className="h-px w-6 bg-primary/50" />
+              </div>
+              <h1
+                className="font-black uppercase leading-none text-foreground"
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.6rem, 4vw, 2.2rem)" }}
+              >
+                Become a member
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground tracking-wider uppercase pt-1">
                 Enter your details below to create your account
               </p>
             </div>
@@ -276,10 +287,10 @@ const SignupForm: React.FC = () => {
                   type="submit"
                   disabled={form.formState.isSubmitting}
                   className="cursor-pointer inline-flex gap-4 items-center justify-center
-                 whitespace-nowrap rounded-md text-sm font-medium 
-                 ring-offset-background transition-colors focus-visible:outline-none 
-                 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
-                 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground 
+                 whitespace-nowrap rounded-none text-sm font-bold tracking-widest uppercase
+                 ring-offset-background transition-colors focus-visible:outline-none
+                 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+                 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground
                  hover:bg-primary/90 h-10 px-4 py-2 w-full"
                 >
                   Create Account
@@ -293,7 +304,7 @@ const SignupForm: React.FC = () => {
                 <span className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-zinc-100 dark:bg-zinc-900 px-2 text-muted-foreground">
+                <span className="bg-card px-2 text-muted-foreground tracking-widest uppercase text-xs">
                   Or continue with
                 </span>
               </div>
@@ -303,7 +314,7 @@ const SignupForm: React.FC = () => {
             <div className="flex items-center justify-center">
               <button
                 type="button"
-                className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+                className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-none text-sm font-bold tracking-widest uppercase ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
                 onClick={handleGoogleSubmit}
               >
                 <GoogleIcon />

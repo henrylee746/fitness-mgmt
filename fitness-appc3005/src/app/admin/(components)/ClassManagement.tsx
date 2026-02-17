@@ -103,21 +103,29 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
     <Card className="w-full xl:max-w-xl sm:max-w-lg max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          Class Management
-          <IconCirclePlusFilled />
+          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+            Class Management
+          </span>
+          <IconCirclePlusFilled className="text-primary" />
         </CardTitle>
         {form.formState.errors.root?.serverError && (
           <p className="text-xs text-red-500">{form.formState.errors.root.serverError.message}</p>
         )}
-        <CardDescription>
-          Create new sessions here (all fields required).
+        <CardDescription className="text-xs tracking-wider uppercase">
+          Create new sessions here — all fields required.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex w-full items-center  gap-2">
           <form className="w-full" noValidate onSubmit={form.handleSubmit(onSubmit)} >
             <div className="flex flex-col gap-4 justify-stretch">
-              <CardDescription>Basic Details</CardDescription>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-mono font-bold tracking-wider text-primary/60">01</span>
+                  <div className="h-px flex-1 bg-border/60" />
+                </div>
+                <CardDescription className="text-xs font-bold tracking-widest uppercase">Basic Details</CardDescription>
+              </div>
               <Input
                 {...form.register("sessionName")}
                 id="sessionName"
@@ -174,7 +182,13 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
               {form.formState.errors.time && (
                 <p className="text-xs text-red-500">{form.formState.errors.time.message}</p>
               )}
-              <CardDescription>Room</CardDescription>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-mono font-bold tracking-wider text-primary/60">02</span>
+                  <div className="h-px flex-1 bg-border/60" />
+                </div>
+                <CardDescription className="text-xs font-bold tracking-widest uppercase">Room</CardDescription>
+              </div>
               {rooms.length > 0 && (
                 <Controller
                   control={form.control}
@@ -202,7 +216,7 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
               {form.formState.errors.roomId && (
                 <p className="text-xs text-red-500">{form.formState.errors.roomId.message}</p>
               )}
-              <Button type="submit" variant="secondary" disabled={form.formState.isSubmitting}>
+              <Button type="submit" variant="secondary" disabled={form.formState.isSubmitting} className="rounded-none font-bold tracking-widest uppercase">
                 Create
                 {form.formState.isSubmitting ? <Loader /> : null}
               </Button>
