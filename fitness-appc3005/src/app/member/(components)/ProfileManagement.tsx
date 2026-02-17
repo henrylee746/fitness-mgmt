@@ -115,10 +115,12 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
     <Card className="w-full xl:max-w-xl lg:max-w-md sm:max-w-sm max-w-xs mb-5">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          Profile Management
-          <IconUserScan />
+          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+            Profile Management
+          </span>
+          <IconUserScan className="text-primary" />
         </CardTitle>
-        <CardDescription>Update your details/fitness goals</CardDescription>
+        <CardDescription className="text-xs tracking-wider uppercase">Update your details/fitness goals</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -126,9 +128,13 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
           {/*Hidden Input to retrieve memberId, so we know each member to update details*/}
           <input type="hidden" name="userId" value={userId} />
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <CardTitle>Personal Details</CardTitle>
-              <CardDescription>All fields optional (update what you want to change).</CardDescription>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-mono font-bold tracking-wider text-primary/60">01</span>
+                <div className="h-px flex-1 bg-border/60" />
+              </div>
+              <CardTitle className="text-sm font-bold tracking-widest uppercase">Personal Details</CardTitle>
+              <CardDescription>All fields optional — update what you want to change.</CardDescription>
             </div>
 
             {/* Error message for server errors (Personal Details)*/}
@@ -169,9 +175,13 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
         <form onSubmit={fitnessForm.handleSubmit(onFitnessSubmit)} noValidate>
           <input type="hidden" name="memberId" value={memberId} />
           <div className="flex flex-col gap-4 my-4">
-            <div className="flex flex-col gap-2">
-              <CardTitle>Fitness Details</CardTitle>
-              <CardDescription>All fields required - please enter both fields.</CardDescription>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-mono font-bold tracking-wider text-primary/60">02</span>
+                <div className="h-px flex-1 bg-border/60" />
+              </div>
+              <CardTitle className="text-sm font-bold tracking-widest uppercase">Fitness Details</CardTitle>
+              <CardDescription>All fields required — please enter both fields.</CardDescription>
             </div>
 
             {/* Error message for server errors (Fitness Details)*/}

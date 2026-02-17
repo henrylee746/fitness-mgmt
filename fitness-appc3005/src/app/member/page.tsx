@@ -13,7 +13,7 @@ export default async function Members() {
     const session = await getSession()
 
     if (!session) {
-      return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+      return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
         Not Authorized. Please sign in to access your account.
         <Button asChild>
           <Link href="/signin">Sign in</Link>
@@ -24,7 +24,7 @@ export default async function Members() {
     const member = await getMember(session.user.id);
     if (!member) {
       return <div
-        className="text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">Member not found. </div>;
+        className="text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">Member not found. </div>;
     }
 
     const sessions = await getSessions();
@@ -33,9 +33,19 @@ export default async function Members() {
     return (
       <>
         <SessionGuard />
-        <h1 className="my-4 max-w-s text-center text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-          Member's Hub
-        </h1>
+        <div className="my-6 text-center">
+          <div className="inline-flex items-center gap-3 justify-center mb-1">
+            <div className="h-px w-8 bg-primary/50" />
+            <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">Member Portal</span>
+            <div className="h-px w-8 bg-primary/50" />
+          </div>
+          <h1
+            className="font-black uppercase leading-none text-foreground"
+            style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem, 6vw, 4rem)" }}
+          >
+            Member's Hub
+          </h1>
+        </div>
         <div
           className="flex justify-center items-start flex-wrap gap-6 lg:gap-8 font-sans py-6 px-4"
         >
@@ -48,7 +58,7 @@ export default async function Members() {
       </>
     );
   } catch (error) {
-    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+    return <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
       Failed to get session: ${error instanceof Error ? error.message : "Unknown error"} Please contact if the issue persists.
     </div>
   }

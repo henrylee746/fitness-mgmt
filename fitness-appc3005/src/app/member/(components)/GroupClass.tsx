@@ -41,9 +41,12 @@ export default function GroupClass({
     <Card className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-md sm:max-w-sm max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          Group Class Registration <IconCalendarUser />
+          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+            Group Class Registration
+          </span>
+          <IconCalendarUser className="text-primary" />
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-xs tracking-wider uppercase">
           Register for upcoming group sessions here
         </CardDescription>
       </CardHeader>
@@ -61,7 +64,7 @@ export default function GroupClass({
           {!state.success && state.error && (
             <p className="text-xs text-red-500 mt-2">{state.error}</p>
           )}
-          <Button className="w-full mt-6 cursor-pointer">Register</Button>
+          <Button className="w-full mt-6 cursor-pointer rounded-none font-bold tracking-widest uppercase">Register</Button>
         </form>
       </CardContent>
     </Card>
