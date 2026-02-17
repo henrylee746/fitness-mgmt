@@ -126,11 +126,24 @@ export const auth = betterAuth({
         if (email) {
           const existing = await prisma.user.findUnique({
             where: { email },
+            include: {
+              accounts: {
+                where: { providerId: "credential" },
+                select: { id: true },
+              },
+            },
           });
-          if (existing?.emailVerified) {
+          // Only block if the user exists but has no credential account (OAuth-only)
+          /*
+          The logic behind this is: 
+          - Email/Pw users have a credential account (accounts.length > 0)
+          - OAuth users have no credential account (accounts.length === 0)
+          - Linked accounts also have a credential account (accounts.length > 0)
+          */
+          if (existing?.emailVerified && existing.accounts.length === 0) {
             throw new APIError("BAD_REQUEST", {
               message:
-                "Email already registered. Please sign up using a different email or sign in with Google if you already signed in with Google.",
+                "This email is linked to a Google account. Please sign in with Google.",
             });
           }
         }
