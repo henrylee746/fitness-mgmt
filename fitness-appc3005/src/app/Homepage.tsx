@@ -48,7 +48,7 @@ const UserPill = ({ user, text, selected, onClick, index }: userPillProps) => {
         }
       `}
     >
-      <span className={`text-xs font-mono font-bold tracking-wider ${selected ? "opacity-60" : "opacity-30"}`}>
+      <span className={`text-secondary-foreground text-xs font-mono font-bold tracking-wider ${selected ? "opacity-60" : "opacity-30"}`}>
         0{index + 1}
       </span>
       <Icon />
@@ -139,7 +139,7 @@ export const Homepage = () => {
               </div>
             </div>
 
-            {/* Main heading — Barlow Condensed display font */}
+            {/* Main heading - Barlow Condensed display font */}
             <div
               className={`transition-all duration-600 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
               style={{ transitionDelay: "100ms" }}
@@ -176,11 +176,11 @@ export const Homepage = () => {
             >
               <p className="text-muted-foreground text-sm sm:text-base max-w-xl sm:max-w-2xl mx-auto mb-8 mt-5 leading-relaxed px-2">
                 Manage your gym operations with powerful tools for managing members,
-                trainers, bookings, and health metrics — all in one place.
+                trainers, bookings, and health metrics - all in one place.
               </p>
             </div>
 
-            {/* CTA buttons — rectangular, no rounded-full */}
+            {/* CTA buttons - rectangular, no rounded-full */}
             <div
               className={`transition-all duration-600 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
               style={{ transitionDelay: "300ms" }}
@@ -212,7 +212,7 @@ export const Homepage = () => {
               </div>
             </div>
 
-            {/* Role pills — angular with numbered prefix */}
+            {/* Role pills - angular with numbered prefix */}
             <div
               className={`transition-all duration-600 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
               style={{ transitionDelay: "400ms" }}

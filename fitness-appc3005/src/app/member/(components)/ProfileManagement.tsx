@@ -134,7 +134,7 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
                 <div className="h-px flex-1 bg-border/60" />
               </div>
               <CardTitle className="text-sm font-bold tracking-widest uppercase">Personal Details</CardTitle>
-              <CardDescription>All fields optional — update what you want to change.</CardDescription>
+              <CardDescription>All fields optional - update what you want to change.</CardDescription>
             </div>
 
             {/* Error message for server errors (Personal Details)*/}
@@ -181,7 +181,7 @@ export default function ProfileManagement({ userId, memberId }: { userId: string
                 <div className="h-px flex-1 bg-border/60" />
               </div>
               <CardTitle className="text-sm font-bold tracking-widest uppercase">Fitness Details</CardTitle>
-              <CardDescription>All fields required — please enter both fields.</CardDescription>
+              <CardDescription>All fields required - please enter both fields.</CardDescription>
             </div>
 
             {/* Error message for server errors (Fitness Details)*/}

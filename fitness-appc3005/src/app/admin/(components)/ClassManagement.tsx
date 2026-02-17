@@ -112,7 +112,7 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
           <p className="text-xs text-red-500">{form.formState.errors.root.serverError.message}</p>
         )}
         <CardDescription className="text-xs tracking-wider uppercase">
-          Create new sessions here — all fields required.
+          Create new sessions here - all fields required.
         </CardDescription>
       </CardHeader>
       <CardContent>
