@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { LuMail, LuCircleCheck, LuLoader } from "react-icons/lu";
+import Link from "next/link";
 
 const COOLDOWN_SECONDS = 60 * 60; // 1 hour in seconds
 
@@ -127,12 +128,12 @@ export default function Verify({ email }: { email: string }) {
 
                 {/* Back to sign in */}
                 <div className="mt-6 text-center">
-                    <a
+                    <Link
                         href="/signin"
                         className="text-sm text-zinc-600 dark:text-zinc-400 underline underline-offset-4 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                     >
                         Back to sign in
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

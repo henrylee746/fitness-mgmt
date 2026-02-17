@@ -14,7 +14,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html>
+    <html lang="en">
       <body>
         <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-6 text-center">
           <h2 className="text-2xl font-semibold">Something went wrong</h2>

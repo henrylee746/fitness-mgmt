@@ -9,6 +9,7 @@ import Verify from "./Verify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 const UserIcon: React.FC = () => <LuUser size={16} />;
 
@@ -326,12 +327,12 @@ const SignupForm: React.FC = () => {
             <div className="mt-6 text-center text-sm">
               <span className="text-muted-foreground">
                 Already have an account?{" "}
-                <a
+                <Link
                   href="/signin"
                   className="underline underline-offset-4 hover:text-primary transition-colors"
                 >
                   Sign in
-                </a>
+                </Link>
               </span>
             </div>
           </div>
