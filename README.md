@@ -1,5 +1,8 @@
 # Health and Fitness Club Management System
 
+<img width="939" height="690" alt="image" src="https://github.com/user-attachments/assets/48bcce49-313e-469d-a008-63867c708498" />
+
+
 <div align="center">
 
 **Built with Next.js, Prisma ORM, PostgreSQL, and Better Auth**
