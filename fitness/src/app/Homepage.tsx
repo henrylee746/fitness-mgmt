@@ -18,7 +18,9 @@ import Image from "next/image";
 const MemberIcon = () => <FaUser />;
 const TrainerIcon = () => <IoMdFitness />;
 const AdminIcon = () => <RiAdminFill />;
-const ArrowRight = () => <FaArrowRight className="transition-transform group-hover:translate-x-1" />;
+const ArrowRight = () => (
+  <FaArrowRight className="transition-transform group-hover:translate-x-1" />
+);
 
 const iconMap = {
   member: MemberIcon,
@@ -42,17 +44,20 @@ const UserPill = ({ user, text, selected, onClick, index }: userPillProps) => {
       className={`
         inline-flex items-center px-4 py-2.5 sm:px-5 sm:py-3 border
         transition-all duration-300 cursor-pointer gap-3
-        ${selected
-          ? "bg-primary border-primary text-primary-foreground"
-          : "bg-transparent border-border/60 text-muted-foreground hover:border-primary/60 hover:text-foreground"
+        ${
+          selected
+            ? "bg-primary border-primary text-primary-foreground"
+            : "bg-transparent border-border/60 text-muted-foreground hover:border-primary/60 hover:text-foreground"
         }
       `}
     >
-      <span className={`text-secondary-foreground text-xs font-mono font-bold tracking-wider ${selected ? "opacity-60" : "opacity-30"}`}>
+      <span
+        className={`text-secondary-foreground text-xs font-mono font-bold tracking-wider ${selected ? "opacity-60" : "opacity-30"}`}
+      >
         0{index + 1}
       </span>
       <Icon />
-      <span className="text-xs sm:text-sm font-bold tracking-widest uppercase whitespace-nowrap">
+      <span className="text-slate-100 dark:text-foreground text-xs sm:text-sm font-bold tracking-widest uppercase whitespace-nowrap">
         {text}
       </span>
     </button>
@@ -110,8 +115,8 @@ export const Homepage = () => {
           height={1000}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/20" />
-          <div className="sm:block hidden absolute top-8 left-8 w-12 h-12 border-t-2 border-l-2 border-primary/40" />
-          <div className="sm:block hidden absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-primary/40" />
+        <div className="sm:block hidden absolute top-8 left-8 w-12 h-12 border-t-2 border-l-2 border-primary/40" />
+        <div className="sm:block hidden absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-primary/40" />
       </div>
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8">
@@ -132,10 +137,24 @@ export const Homepage = () => {
               className={`transition-all duration-500 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
             >
               <div className="inline-flex items-center gap-3 px-4 py-2 mt-10 border border-primary/60 bg-primary/10 text-primary">
-                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" className="flex-shrink-0">
-                  <polyline points="0,5 2.5,5 4,1 6,9 8,3 9.5,5 14,5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  width="14"
+                  height="10"
+                  viewBox="0 0 14 10"
+                  fill="none"
+                  className="flex-shrink-0"
+                >
+                  <polyline
+                    points="0,5 2.5,5 4,1 6,9 8,3 9.5,5 14,5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
-                <span className="text-xs font-bold tracking-[0.2em] uppercase">Fitness Management Platform</span>
+                <span className="text-indigo-900 dark:text-primary text-xs font-bold tracking-[0.2em] uppercase">
+                  Fitness Management Platform
+                </span>
               </div>
             </div>
 
@@ -155,14 +174,17 @@ export const Homepage = () => {
                   Hassle-free
                 </span>
                 <span
-                  className="block font-black uppercase leading-none text-primary sm:wrap-normal wrap-break-word"
+                  className="block font-black uppercase leading-none text-violet-900 dark:text-primary sm:wrap-normal wrap-break-word"
                   style={{ fontSize: "clamp(3.5rem, 11vw, 8.5rem)" }}
                 >
                   Management
                 </span>
                 <span
                   className="block font-bold tracking-[0.35em] uppercase mt-3 text-muted-foreground"
-                  style={{ fontSize: "clamp(0.6rem, 1.4vw, 0.8rem)", fontFamily: "var(--font-sans)" }}
+                  style={{
+                    fontSize: "clamp(0.6rem, 1.4vw, 0.8rem)",
+                    fontFamily: "var(--font-sans)",
+                  }}
                 >
                   for your fitness club
                 </span>
@@ -174,9 +196,10 @@ export const Homepage = () => {
               className={`transition-all duration-600 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
               style={{ transitionDelay: "200ms" }}
             >
-              <p className="text-muted-foreground text-sm sm:text-base max-w-xl sm:max-w-2xl mx-auto mb-8 mt-5 leading-relaxed px-2">
-                Manage your gym operations with powerful tools for managing members,
-                trainers, bookings, and health metrics - all in one place.
+              <p className="text-slate-100 dark:text-foreground text-sm sm:text-base max-w-xl sm:max-w-2xl mx-auto mb-8 mt-5 leading-relaxed px-2">
+                Manage your gym operations with powerful tools for managing
+                members, trainers, bookings, and health metrics - all in one
+                place.
               </p>
             </div>
 
@@ -196,7 +219,9 @@ export const Homepage = () => {
                     </Link>
                     <Link href="/signin" className="w-full sm:w-auto">
                       <button className="w-full sm:w-auto cursor-pointer inline-flex items-center justify-center px-8 py-3.5 bg-transparent hover:bg-white/5 border border-border/60 hover:border-primary/50 font-bold text-sm text-foreground tracking-widest uppercase transition-all duration-300">
-                        Sign In
+                        <p className="text-slate-100 dark:text-foreground">
+                          Sign In
+                        </p>
                       </button>
                     </Link>
                   </>
