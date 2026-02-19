@@ -32,10 +32,10 @@ export const RequestPasswordResetForm = () => {
       {
         onSuccess: () => {
           //BetterAuth won't send the email to nonexistent users, so we don't need to check for that here
-          setMessage("Reset email sent!");
-          toast.info(
-            "If you don't see the email, check your spam folder, or register with this email address if you haven't already.",
+          setMessage(
+            "Reset email sent! If an account exists with this email, you will receive a password reset link in your inbox.",
           );
+          toast.info("If you don't see the email, check your spam folder.");
           form.reset();
         },
         onError: (error) => {
@@ -67,7 +67,7 @@ export const RequestPasswordResetForm = () => {
         Request a password reset
       </h1>
       <p className="text-xs text-muted-foreground tracking-wider uppercase py-4 text-center">
-        Enter your email to request a password reset
+        Enter your email to request a password reset (expires in 1 hour)
       </p>
 
       {message && (
@@ -78,17 +78,31 @@ export const RequestPasswordResetForm = () => {
       )}
 
       <form
-        className="flex flex-col gap-4 w-full"
+        className="flex flex-col gap-4 sm:min-w-sm mx-auto"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
       >
-        <Input type="email" placeholder="Email" {...form.register("email")} />
         {form.formState.errors.email && (
-          <p className="text-xs text-destructive">
+          <p className="text-xs text-destructive text-center">
             {form.formState.errors.email.message}
           </p>
         )}
-        <Button type="submit" disabled={form.formState.isSubmitting}>
+        {form.formState.errors?.root?.serverError && (
+          <p className="text-xs text-destructive text-center">
+            {form.formState.errors?.root?.serverError?.message}
+          </p>
+        )}
+        <Input
+          type="email"
+          placeholder="Email"
+          {...form.register("email")}
+          className="max-w-sm mx-auto"
+        />
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting}
+          className="cursor-pointer max-w-fit mx-auto"
+        >
           Request Password Reset
           {form.formState.isSubmitting ? <Loader /> : null}
         </Button>

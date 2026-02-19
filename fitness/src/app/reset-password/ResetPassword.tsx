@@ -9,6 +9,13 @@ import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { EyeIcon, InfoIcon } from "lucide-react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@/components/ui/input-group";
 
 export const ResetPasswordForm = () => {
   const { data: session } = authClient.useSession();
@@ -16,15 +23,17 @@ export const ResetPasswordForm = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const formSchema = z
     .object({
       password: z
         .string()
-        .min(8)
+        .min(8, { message: "Password must be at least 8 characters long" })
         .max(100, { message: "Password must be between 8 and 100 characters" }),
       confirmPassword: z
         .string()
-        .min(8)
+        .min(8, { message: "Password must be at least 8 characters long" })
         .max(100, { message: "Password must be between 8 and 100 characters" }),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -47,7 +56,6 @@ export const ResetPasswordForm = () => {
     if (typeof window === "undefined") return;
     const token = new URLSearchParams(window.location.search).get("token");
     if (!token) {
-      toast.error("Invalid token");
       router.push("/request-password-reset");
       return;
     }
@@ -114,21 +122,49 @@ export const ResetPasswordForm = () => {
         Reset your password
       </h1>
       <form
-        className="flex flex-col gap-4 w-full"
+        className="flex flex-col gap-4 sm:min-w-sm mx-auto"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
       >
-        <Input
-          type="password"
-          placeholder="Password"
-          {...form.register("password")}
-        />
-        <Input
-          type="password"
-          placeholder="Confirm Password"
-          {...form.register("confirmPassword")}
-        />
-        <Button type="submit">
+        <InputGroup>
+          <InputGroupInput
+            id="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            {...form.register("password")}
+          />
+          <InputGroupAddon align="inline-end">
+            <EyeIcon
+              className="cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            />
+          </InputGroupAddon>
+        </InputGroup>
+        {form.formState.errors?.password && (
+          <p className="text-xs text-destructive">
+            {form.formState.errors?.password?.message}
+          </p>
+        )}
+        <InputGroup>
+          <InputGroupInput
+            id="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm Password"
+            {...form.register("confirmPassword")}
+          />
+          <InputGroupAddon align="inline-end">
+            <EyeIcon
+              className="cursor-pointer"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            />
+          </InputGroupAddon>
+        </InputGroup>
+        {form.formState.errors?.confirmPassword && (
+          <p className="text-xs text-destructive">
+            {form.formState.errors?.confirmPassword?.message}
+          </p>
+        )}
+        <Button type="submit" className="cursor-pointer max-w-fit mx-auto">
           Reset Password {form.formState.isSubmitting ? <Loader /> : null}
         </Button>
       </form>
