@@ -69,6 +69,7 @@ export const RequestPasswordResetForm = () => {
         Enter your email to reset your password
       </p>
 
+      {/* action serves as an HTML fallback; onSubmit handles submission when JS is available */}
       <form
         className="flex flex-col gap-4 w-full"
         action="/reset-password"

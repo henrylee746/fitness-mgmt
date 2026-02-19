@@ -38,6 +38,7 @@ export const ResetPasswordForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // BetterAuth appends ?token=<value> to the reset URL in the email link
     const token = new URLSearchParams(window.location.search).get("token");
 
     if (!token) {

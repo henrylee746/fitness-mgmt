@@ -71,6 +71,7 @@ export const auth = betterAuth({
     //Users must verify their email after signing up before logging in
     sendResetPassword: async ({ user, url, token }, request) => {
       const name = user.name.split(" ")[0];
+      // Don't await - prevents timing attacks and allows the request to complete even if email fails
       resend.emails
         .send({
           from: `FitnessApp <${process.env.NODE_ENV === "development" ? "onboarding@resend.dev" : "henry@fitnessmgmt.tech"}>`,
