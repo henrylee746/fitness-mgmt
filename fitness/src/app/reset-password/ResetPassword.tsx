@@ -15,6 +15,7 @@ export const ResetPasswordForm = () => {
 
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const formSchema = z
     .object({
       password: z
@@ -51,6 +52,7 @@ export const ResetPasswordForm = () => {
       return;
     }
     setToken(token);
+    setIsMounted(true);
   }, []);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -72,7 +74,7 @@ export const ResetPasswordForm = () => {
     );
   };
 
-  if (!token) {
+  if (!token || !isMounted) {
     return (
       <div className="min-h-[80vh] flex flex-col justify-center items-center p-6">
         <h1 className="font-black uppercase leading-none text-foreground text-center my-4">
