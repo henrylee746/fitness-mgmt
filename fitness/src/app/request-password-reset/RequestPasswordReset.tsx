@@ -69,6 +69,10 @@ export const RequestPasswordResetForm = () => {
       <p className="text-xs text-muted-foreground tracking-wider uppercase py-4 text-center">
         Enter your email to request a password reset (expires in 1 hour)
       </p>
+      <p className="text-xs text-muted-foreground tracking-wider uppercase pb-4 text-center">
+        Signed up with Google? You can still request a reset to add
+        email/password to your account.
+      </p>
 
       {message && (
         <p className="flex items-center gap-2 text-green-500 text-xs tracking-wider uppercase py-4 text-center">
