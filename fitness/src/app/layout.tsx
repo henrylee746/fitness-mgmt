@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,8 +27,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -41,14 +39,18 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
-
-
             <Header />
             <main className="flex-1 flex flex-col overflow-x-hidden">
               {children}
               <SpeedInsights />
             </main>
-            <Toaster richColors expand position="top-center" closeButton />
+            <Toaster
+              duration={5000}
+              richColors
+              expand
+              position="top-center"
+              closeButton
+            />
           </Providers>
         </ThemeProvider>
       </body>
