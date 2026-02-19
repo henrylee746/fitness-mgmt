@@ -7,12 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
+import { useState } from "react";
+import { CheckCircleIcon } from "lucide-react";
 
 const formSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
 });
 
 export const RequestPasswordResetForm = () => {
+  const [message, setMessage] = useState<string | null>(null);
   const { data: session } = authClient.useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -29,9 +32,7 @@ export const RequestPasswordResetForm = () => {
       {
         onSuccess: () => {
           //BetterAuth won't send the email to nonexistent users, so we don't need to check for that here
-          toast.success(
-            "Password reset email sent. Check your email. Reset link expires in 1 hour.",
-          );
+          setMessage("Reset email sent!");
           toast.info(
             "If you don't see the email, check your spam folder, or register with this email address if you haven't already.",
           );
@@ -63,15 +64,21 @@ export const RequestPasswordResetForm = () => {
           fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
         }}
       >
-        Reset your password
+        Request a password reset
       </h1>
       <p className="text-xs text-muted-foreground tracking-wider uppercase py-4 text-center">
-        Enter your email to reset your password
+        Enter your email to request a password reset
       </p>
+
+      {message && (
+        <p className="flex items-center gap-2 text-green-500 text-xs tracking-wider uppercase py-4 text-center">
+          <CheckCircleIcon className="size-4" />
+          {message}
+        </p>
+      )}
 
       <form
         className="flex flex-col gap-4 w-full"
-        action="/reset-password"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
       >
@@ -82,7 +89,7 @@ export const RequestPasswordResetForm = () => {
           </p>
         )}
         <Button type="submit" disabled={form.formState.isSubmitting}>
-          Reset Password
+          Request Password Reset
           {form.formState.isSubmitting ? <Loader /> : null}
         </Button>
       </form>
