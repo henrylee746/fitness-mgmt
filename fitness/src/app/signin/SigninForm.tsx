@@ -218,7 +218,7 @@ export default function Login() {
              <p className="text-sm text-muted-foreground">
             Forgot your password?{" "}
             <Link
-              href="/reset-password"
+              href="/request-password-reset"
               className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80 transition-colors"
             >
               Reset password

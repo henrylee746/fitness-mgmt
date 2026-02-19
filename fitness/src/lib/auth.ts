@@ -73,7 +73,7 @@ export const auth = betterAuth({
       const name = user.name.split(" ")[0];
       resend.emails
         .send({
-          from: "FitnessApp <onboarding@resend.dev>",
+          from: `FitnessApp <${process.env.NODE_ENV === "development" ? "onboarding@resend.dev" : "henry@fitnessmgmt.tech"}>`,
           to: user.email,
           subject: "Reset your password",
           react: ResetPasswordTemplate({
@@ -87,6 +87,7 @@ export const auth = betterAuth({
           }
         });
     },
+    resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
@@ -96,7 +97,7 @@ export const auth = betterAuth({
       // Important: In dev mode, Resend only sends to your registered email address
       resend.emails
         .send({
-          from: "FitnessApp <hello@fitnessapp.com>",
+          from: `FitnessApp <${process.env.NODE_ENV === "development" ? "onboarding@resend.dev" : "henry@fitnessmgmt.tech"}>`,
           to: user.email,
           subject: "Verify your email address",
           react: EmailTemplate({
