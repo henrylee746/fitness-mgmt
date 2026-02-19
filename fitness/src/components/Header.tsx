@@ -10,7 +10,6 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { UserAvatar } from "@daveyplate/better-auth-ui";
 import { HeaderDock } from "./Dock";
 import { getActiveMemberRole } from "@/lib/actions";
 import { useState, useEffect } from "react";
@@ -27,7 +26,8 @@ const Header = () => {
         const role = await getActiveMemberRole();
         setRole(role);
       } catch (error) {
-        toast.error(`Failed to fetch role: ${error instanceof Error ? error.message : "Unknown error"}`
+        toast.error(
+          `Failed to fetch role: ${error instanceof Error ? error.message : "Unknown error"}`,
         );
       }
     };
@@ -35,7 +35,6 @@ const Header = () => {
       fetchRole();
     }
   }, [session]);
-
 
   const handleSignOut = async () => {
     await authClient.signOut({
@@ -51,15 +50,20 @@ const Header = () => {
     });
   };
 
-
   return (
     <div className="bg-background/50 backdrop-blur-sm border-b border-border/50 flex flex-col sm:flex-row px-4 py-4 flex-wrap items-center justify-between gap-4 text-base font-medium">
       <HeaderDock role={role} session={session?.user ?? undefined} />
       <div className="flex flex-col sm:flex-row gap-2 items-center">
         {!isPending && session ? (
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className="cursor-pointer">
-              <UserAvatar user={session.user} isPending={isPending} size="xl" className="border-2 border-primary" />
+            <DropdownMenuTrigger asChild>
+              <button className="cursor-pointer size-9 rounded-full border-2 border-primary overflow-hidden flex items-center justify-center bg-muted text-muted-foreground text-sm font-semibold">
+                {session.user?.image ? (
+                  <img src={session.user.image} alt={session.user?.name ?? "avatar"} className="w-full h-full object-cover" />
+                ) : (
+                  session.user?.name?.split(" ").map((n) => n[0]).slice(0, 2).join("")
+                )}
+              </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuLabel>{session.user?.name}</DropdownMenuLabel>

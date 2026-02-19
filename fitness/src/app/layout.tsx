@@ -4,7 +4,6 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Providers } from "./providers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
@@ -38,20 +37,18 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Providers>
-            <Header />
-            <main className="flex-1 flex flex-col overflow-x-hidden">
-              {children}
-              <SpeedInsights />
-            </main>
-            <Toaster
-              duration={5000}
-              richColors
-              expand
-              position="top-center"
-              closeButton
-            />
-          </Providers>
+          <Header />
+          <main className="flex-1 flex flex-col overflow-x-hidden">
+            {children}
+            <SpeedInsights />
+          </main>
+          <Toaster
+            duration={5000}
+            richColors
+            expand
+            position="top-center"
+            closeButton
+          />
         </ThemeProvider>
       </body>
     </html>
