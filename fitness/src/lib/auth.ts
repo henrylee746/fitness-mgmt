@@ -8,6 +8,7 @@ import { Resend } from "resend";
 import { EmailTemplate } from "../components/EmailTemplate";
 import { organization } from "better-auth/plugins";
 import { ac, member, trainer, admin } from "./permissions";
+import { ResetPasswordTemplate } from "@/components/ResetPasswordTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -68,6 +69,24 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     //Users must verify their email after signing up before logging in
+    sendResetPassword: async ({ user, url, token }, request) => {
+      const name = user.name.split(" ")[0];
+      resend.emails
+        .send({
+          from: "FitnessApp <onboarding@resend.dev>",
+          to: user.email,
+          subject: "Reset your password",
+          react: ResetPasswordTemplate({
+            firstName: name,
+            resetPasswordUrl: url,
+          }),
+        })
+        .then(({ error }) => {
+          if (error) {
+            console.error("Failed to send reset password email:", error);
+          }
+        });
+    },
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
@@ -77,7 +96,7 @@ export const auth = betterAuth({
       // Important: In dev mode, Resend only sends to your registered email address
       resend.emails
         .send({
-          from: "FitnessApp <onboarding@resend.dev>", // Resend's test domain - only sends to your Resend account email
+          from: "FitnessApp <hello@fitnessapp.com>",
           to: user.email,
           subject: "Verify your email address",
           react: EmailTemplate({
