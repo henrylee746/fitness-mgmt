@@ -8,10 +8,13 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const ResetPasswordForm = () => {
   const { data: session } = authClient.useSession();
+
   const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
   const formSchema = z
     .object({
       password: z
@@ -37,16 +40,23 @@ export const ResetPasswordForm = () => {
     mode: "onBlur",
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  //User shouldn't be able to access this page directly,
+  // so we check for the token in the URL
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     const token = new URLSearchParams(window.location.search).get("token");
-
     if (!token) {
       toast.error("Invalid token");
+      router.push("/request-password-reset");
       return;
     }
+    setToken(token);
+  }, []);
 
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    // BetterAuth appends ?token=<value> from the reset email link
     await authClient.resetPassword(
-      { newPassword: data.password, token },
+      { newPassword: data.password, token: token ?? undefined },
       {
         onSuccess: () => {
           toast.success("Password reset successfully");
@@ -62,6 +72,26 @@ export const ResetPasswordForm = () => {
     );
   };
 
+  if (!token) {
+    return (
+      <div className="min-h-[80vh] flex flex-col justify-center items-center p-6">
+        <h1 className="font-black uppercase leading-none text-foreground text-center my-4">
+          Invalid token
+        </h1>
+        <p className="text-sm text-muted-foreground text-center">
+          The password reset link is invalid or has expired. Please request a
+          new password reset.
+        </p>
+        <Button
+          onClick={() => router.push("/request-password-reset")}
+          className="mt-4"
+        >
+          Request a new password reset
+        </Button>
+      </div>
+    );
+  }
+
   if (session) {
     return (
       <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
@@ -71,8 +101,16 @@ export const ResetPasswordForm = () => {
   }
 
   return (
-    <div>
-      <h1>Reset Password</h1>
+    <div className="min-h-[80vh] flex flex-col justify-center items-center p-6">
+      <h1
+        className="font-black uppercase leading-none text-foreground text-center my-4"
+        style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+        }}
+      >
+        Reset your password
+      </h1>
       <form
         className="flex flex-col gap-4 w-full"
         onSubmit={form.handleSubmit(onSubmit)}
