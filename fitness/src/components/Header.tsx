@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { HeaderDock } from "./Dock";
 import { getActiveMemberRole } from "@/lib/actions";
 import { useState, useEffect } from "react";
+import { CircleUserRoundIcon, LogOutIcon } from "lucide-react";
+import Link from "next/link";
 
 const Header = () => {
   const router = useRouter();
@@ -59,20 +61,35 @@ const Header = () => {
             <DropdownMenuTrigger asChild>
               <button className="cursor-pointer size-9 rounded-full border-2 border-primary overflow-hidden flex items-center justify-center bg-muted text-muted-foreground text-sm font-semibold">
                 {session.user?.image ? (
-                  <img src={session.user.image} alt={session.user?.name ?? "avatar"} className="w-full h-full object-cover" />
+                  <img
+                    src={session.user.image}
+                    alt={session.user?.name ?? "avatar"}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
-                  session.user?.name?.split(" ").map((n) => n[0]).slice(0, 2).join("")
+                  session.user?.name
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .slice(0, 2)
+                    .join("")
                 )}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuLabel>{session.user?.name}</DropdownMenuLabel>
-              <hr />
-              <DropdownMenuGroup className="mt-1">
-                <DropdownMenuItem onClick={handleSignOut}>
-                  Log Out
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link href="/account" className="flex items-center gap-2">
+                  <CircleUserRoundIcon />
+                  Account
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="flex items-center gap-2"
+              >
+                <LogOutIcon className="size-4" />
+                <p className="text-sm font-medium">Sign Out</p>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : null}

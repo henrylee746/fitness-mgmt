@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 import { useState } from "react";
 import { CheckCircleIcon } from "lucide-react";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -50,7 +51,15 @@ export const RequestPasswordResetForm = () => {
   if (session) {
     return (
       <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        You are already logged in as {session.user?.name}
+        <span className="flex flex-col gap-2">
+          You are already logged in as {session.user?.name}
+        </span>
+        <span className="flex gap-2">
+          If you want to update your password, you can do so{" "}
+          <Link href="/account" className="text-primary underline">
+            here
+          </Link>
+        </span>
       </div>
     );
   }

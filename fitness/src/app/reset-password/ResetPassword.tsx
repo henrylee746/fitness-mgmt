@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { EyeIcon, InfoIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -24,7 +24,7 @@ export const ResetPasswordForm = () => {
   const [token, setToken] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const formSchema = z
     .object({
       password: z
@@ -56,7 +56,6 @@ export const ResetPasswordForm = () => {
     if (typeof window === "undefined") return;
     const token = new URLSearchParams(window.location.search).get("token");
     if (!token) {
-      router.push("/request-password-reset");
       return;
     }
     setToken(token);
@@ -134,10 +133,17 @@ export const ResetPasswordForm = () => {
             {...form.register("password")}
           />
           <InputGroupAddon align="inline-end">
-            <EyeIcon
-              className="cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            />
+            {showPassword ? (
+              <EyeOffIcon
+                className="cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              />
+            ) : (
+              <EyeIcon
+                className="cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              />
+            )}
           </InputGroupAddon>
         </InputGroup>
         {form.formState.errors?.password && (
@@ -148,16 +154,10 @@ export const ResetPasswordForm = () => {
         <InputGroup>
           <InputGroupInput
             id="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
+            type="password"
             placeholder="Confirm Password"
             {...form.register("confirmPassword")}
           />
-          <InputGroupAddon align="inline-end">
-            <EyeIcon
-              className="cursor-pointer"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            />
-          </InputGroupAddon>
         </InputGroup>
         {form.formState.errors?.confirmPassword && (
           <p className="text-xs text-destructive">
