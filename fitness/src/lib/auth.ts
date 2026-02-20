@@ -5,10 +5,11 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "../../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Resend } from "resend";
-import { EmailTemplate } from "../components/EmailTemplate";
+import { EmailTemplate } from "@/components/emailtemplates/EmailTemplate";
 import { organization } from "better-auth/plugins";
 import { ac, member, trainer, admin } from "./permissions";
-import { ResetPasswordTemplate } from "@/components/ResetPasswordTemplate";
+import { ResetPasswordTemplate } from "@/components/emailtemplates/ResetPasswordTemplate";
+import { DeleteAccountTemplate } from "@/components/emailtemplates/DeleteAccountTemplate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -64,6 +65,32 @@ export const auth = betterAuth({
     // 1 day
     expiresIn: 60 * 60 * 24,
     updateAge: 60 * 60 * 24, // Extend session by 1 day
+  },
+  user: {
+    deleteUser: {
+      enabled: true,
+      sendDeleteAccountVerification: async ({ user, url, token }, request) => {
+        const name = user.name.split(" ")[0];
+        resend.emails
+          .send({
+            from: `FitnessApp <${process.env.NODE_ENV === "development" ? "onboarding@resend.dev" : "henry@fitnessmgmt.tech"}>`,
+            to: user.email,
+            subject: "Delete your account",
+            react: DeleteAccountTemplate({
+              firstName: name,
+              deleteAccountUrl: url,
+            }),
+          })
+          .then(({ error }) => {
+            if (error) {
+              console.error(
+                "Failed to send delete account verification email:",
+                error,
+              );
+            }
+          });
+      },
+    },
   },
   emailAndPassword: {
     enabled: true,
