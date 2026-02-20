@@ -305,7 +305,10 @@ export const AccountPage = () => {
                     onClick={async () => {
                       setIsDeleting(true);
                       await authClient.deleteUser(
-                        { password: deletePassword, callbackURL: "/" },
+                        {
+                          password: deletePassword,
+                          callbackURL: "/account-deleted",
+                        },
                         {
                           onSuccess: () => {
                             toast.info(
@@ -341,7 +344,7 @@ export const AccountPage = () => {
                     onClick={async () => {
                       setIsDeleting(true);
                       await authClient.deleteUser(
-                        { callbackURL: "/" },
+                        { callbackURL: "/account-deleted" },
                         {
                           onSuccess: () => {
                             toast.info(
