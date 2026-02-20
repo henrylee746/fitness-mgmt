@@ -230,7 +230,9 @@ export const Homepage = () => {
                     onClick={handleSignOut}
                     className="group cursor-pointer inline-flex gap-3 items-center px-8 py-3.5 bg-transparent border border-border/60 hover:border-destructive/60 font-bold text-sm text-foreground hover:text-destructive tracking-widest uppercase transition-all duration-300"
                   >
-                    Sign Out
+                    <p className="text-slate-100 dark:text-foreground">
+                      Sign Out
+                    </p>
                     <ArrowRight />
                   </button>
                 )}
