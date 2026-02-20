@@ -76,7 +76,7 @@ const Header = () => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href="/account" className="flex items-center gap-2">
                   <CircleUserRoundIcon />
                   Account

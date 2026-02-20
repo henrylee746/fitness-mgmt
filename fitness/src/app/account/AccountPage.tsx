@@ -115,6 +115,8 @@ export const AccountPage = () => {
             </CardTitle>
             <CardDescription className="text-xs tracking-wider uppercase text-center">
               Update your password to secure your account.
+              <br />
+              Please use 8 characters at minimum.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -201,13 +203,18 @@ export const AccountPage = () => {
               Delete Account
             </CardTitle>
             <CardDescription className="text-xs tracking-wider uppercase text-center">
-              Delete your account to permanently remove your data.
+              <p className="mb-2">
+                Delete your account to permanently remove your data.{" "}
+              </p>{" "}
+              <p className="mt-2">
+                This action is irreversible, so please be careful.
+              </p>
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               type="submit"
-              className="w-full mt-4 cursor-pointer"
+              className="w-full mt-4 cursor-pointer hover:bg-destructive/30"
               variant="destructive"
             >
               Delete Account
