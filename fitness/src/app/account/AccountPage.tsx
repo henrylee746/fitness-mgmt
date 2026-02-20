@@ -1,5 +1,4 @@
 "use client";
-import { Separator } from "@/components/ui/separator";
 import {
   InputGroup,
   InputGroupAddon,
@@ -13,16 +12,19 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Loader } from "@/components/ui/loader";
 import { EyeOffIcon, EyeIcon } from "lucide-react";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z
   .object({
@@ -46,6 +48,23 @@ export const AccountPage = () => {
   const { data: session } = authClient.useSession();
 
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [updatedPassword, setUpdatedPassword] = useState(false);
+  const [isCredentialUser, setIsCredentialUser] = useState<boolean | null>(
+    null,
+  );
+  const [deletePassword, setDeletePassword] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDialogOpen = async (open: boolean) => {
+    if (!open) {
+      setDeletePassword("");
+      return;
+    }
+    const { data: accounts } = await authClient.listAccounts();
+    setIsCredentialUser(
+      accounts?.some((a) => a.providerId === "credential") ?? false,
+    );
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,6 +85,7 @@ export const AccountPage = () => {
       {
         onSuccess: () => {
           toast.success("Password updated successfully");
+          setUpdatedPassword(true);
           form.reset();
         },
         onError: (error) => {
@@ -77,7 +97,7 @@ export const AccountPage = () => {
 
   if (!session) {
     return (
-      <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
+      <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
         You are not logged in to view this page.
         <Link href="/signin">
           <Button className="mt-4 cursor-pointer px-6">Sign in</Button>
@@ -87,53 +107,68 @@ export const AccountPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full min-h-[80vh] justify-center items-center mt-4">
-      <h1
-        className="font-black uppercase leading-none text-foreground text-center my-2"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
-        }}
-      >
-        Account Settings
-      </h1>
-      <h2 className="text-lg font-medium text-center text-muted-foreground">
-        Manage your account settings and preferences.
-      </h2>
-      <Separator className="max-w-[75%] my-4" />
-      <div className="flex flex-wrap gap-8 mt-4 p-4 justify-center items-center">
-        <Card className="sm:min-w-sm">
-          <CardHeader className="w-full">
-            <CardTitle
-              className="text-lg font-semibold text-center"
+    <div className="min-h-[80vh] flex flex-col items-center p-6 py-10">
+      {/* Page header */}
+      <div className="text-center space-y-2 mb-10">
+        <div className="inline-flex items-center gap-3 justify-center mb-2">
+          <div className="h-px w-6 bg-primary/50" />
+          <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">
+            Settings
+          </span>
+          <div className="h-px w-6 bg-primary/50" />
+        </div>
+        <h1
+          className="font-black uppercase leading-none text-foreground"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+          }}
+        >
+          Account Settings
+        </h1>
+        <p className="text-xs text-muted-foreground tracking-wider uppercase pt-1">
+          Manage your account settings and preferences.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap gap-6 justify-center items-start w-full max-w-4xl">
+        {/* Update Password card */}
+        <div className="relative w-full max-w-xl p-6 space-y-4 bg-card text-card-foreground border shadow-lg hover:border-primary/40 transition-colors duration-200">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-primary" />
+          <div className="text-center space-y-1">
+            <h2
+              className="font-black uppercase leading-none text-foreground"
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+                fontSize: "clamp(1.2rem, 3vw, 1.6rem)",
               }}
             >
               Update Password
-            </CardTitle>
-            <CardDescription className="text-xs tracking-wider uppercase text-center">
-              Update your password to secure your account.
-              <br />
-              Please use 8 characters at minimum.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {form.formState.errors && (
-              <p className="text-xs text-destructive">
-                {form.formState.errors.root?.serverError?.message}
-              </p>
-            )}
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={form.handleSubmit(onSubmit)}
-            >
+            </h2>
+            <p className="text-xs text-muted-foreground tracking-wider uppercase">
+              Minimum 8 characters required.
+            </p>
+          </div>
+
+          {form.formState.errors.root?.serverError && (
+            <p className="text-xs text-destructive text-center">
+              {form.formState.errors.root.serverError.message}
+            </p>
+          )}
+
+          <form
+            className="flex flex-col gap-3"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <div className="space-y-1">
+              <label className="text-xs font-bold tracking-widest uppercase text-muted-foreground">
+                Current Password
+              </label>
               <InputGroup>
                 <InputGroupInput
                   id="currentPassword"
                   type="password"
-                  placeholder="Current Password"
+                  placeholder="Enter current password"
                   {...form.register("currentPassword")}
                 />
               </InputGroup>
@@ -142,22 +177,28 @@ export const AccountPage = () => {
                   {form.formState.errors.currentPassword.message}
                 </p>
               )}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-bold tracking-widest uppercase text-muted-foreground">
+                New Password
+              </label>
               <InputGroup>
                 <InputGroupInput
                   id="newPassword"
                   type={showNewPassword ? "text" : "password"}
-                  placeholder="New Password"
+                  placeholder="Enter new password"
                   {...form.register("newPassword")}
                 />
                 <InputGroupAddon align="inline-end">
                   {showNewPassword ? (
                     <EyeOffIcon
-                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      onClick={() => setShowNewPassword(false)}
                       className="cursor-pointer"
                     />
                   ) : (
                     <EyeIcon
-                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      onClick={() => setShowNewPassword(true)}
                       className="cursor-pointer"
                     />
                   )}
@@ -168,11 +209,17 @@ export const AccountPage = () => {
                   {form.formState.errors.newPassword.message}
                 </p>
               )}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-bold tracking-widest uppercase text-muted-foreground">
+                Confirm Password
+              </label>
               <InputGroup>
                 <InputGroupInput
                   id="confirmPassword"
                   type="password"
-                  placeholder="Confirm Password"
+                  placeholder="Confirm new password"
                   {...form.register("confirmPassword")}
                 />
               </InputGroup>
@@ -181,46 +228,154 @@ export const AccountPage = () => {
                   {form.formState.errors.confirmPassword.message}
                 </p>
               )}
-              <Button
-                type="submit"
-                className="w-full mt-4 cursor-pointer"
-                variant="secondary"
-              >
-                {form.formState.isSubmitting ? <Loader /> : "Update Password"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-        <Card className="sm:min-w-sm flex justify-center items-center">
-          <CardHeader className="w-full">
-            <CardTitle
-              className="text-lg font-semibold text-center"
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full mt-2 cursor-pointer rounded-none text-sm font-bold tracking-widest uppercase"
+              variant="secondary"
+              disabled={updatedPassword || form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? <Loader /> : "Update Password"}
+            </Button>
+          </form>
+        </div>
+
+        {/* Delete Account card */}
+        <div className="relative w-full max-w-xl p-6 space-y-4 bg-card text-card-foreground border border-destructive/50 shadow-lg hover:border-destructive transition-colors duration-200">
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-destructive" />
+          <div className="text-center space-y-1">
+            <h2
+              className="font-black uppercase leading-none text-foreground"
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+                fontSize: "clamp(1.2rem, 3vw, 1.6rem)",
               }}
             >
               Delete Account
-            </CardTitle>
-            <CardDescription className="text-xs tracking-wider uppercase text-center">
-              <p className="mb-2">
-                Delete your account to permanently remove your data.{" "}
-              </p>{" "}
-              <p className="mt-2">
-                This action is irreversible, so please be careful.
-              </p>
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              type="submit"
-              className="w-full mt-4 cursor-pointer hover:bg-destructive/30"
-              variant="destructive"
-            >
-              Delete Account
-            </Button>
-          </CardContent>
-        </Card>
+            </h2>
+            <p className="text-xs text-muted-foreground tracking-wider uppercase">
+              Permanently removes all your data.
+            </p>
+            <p className="text-xs text-destructive/80 tracking-wider uppercase">
+              This action is irreversible.
+            </p>
+          </div>
+
+          <Dialog onOpenChange={handleDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                type="button"
+                className="w-full cursor-pointer rounded-none text-sm font-bold tracking-widest uppercase hover:text-black"
+                variant="destructive"
+              >
+                Delete Account
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Account</DialogTitle>
+                <DialogDescription>
+                  This action is irreversible and will permanently remove all
+                  your data.
+                </DialogDescription>
+              </DialogHeader>
+
+              {isCredentialUser === null ? (
+                <div className="flex items-center justify-center py-4 gap-2 text-sm text-muted-foreground">
+                  <Loader /> Loading...
+                </div>
+              ) : isCredentialUser ? (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-muted-foreground">
+                    Enter your password, then check your email for a
+                    confirmation link to complete deletion.
+                  </p>
+                  <Input
+                    type="password"
+                    placeholder="Your password"
+                    value={deletePassword}
+                    onChange={(e) => setDeletePassword(e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    disabled={isDeleting || deletePassword.length < 8}
+                    className="cursor-pointer rounded-none font-bold tracking-widest uppercase hover:text-black"
+                    onClick={async () => {
+                      setIsDeleting(true);
+                      await authClient.deleteUser(
+                        { password: deletePassword, callbackURL: "/" },
+                        {
+                          onSuccess: () => {
+                            toast.info(
+                              "Check your email for the deletion link.",
+                            );
+                            setIsDeleting(false);
+                          },
+                          onError: (error) => {
+                            toast.error(error.error.message);
+                            setIsDeleting(false);
+                          },
+                        },
+                      );
+                    }}
+                  >
+                    {isDeleting ? <Loader /> : "Confirm Delete"}
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  <p className="text-sm text-muted-foreground">
+                    A verification link will be sent to{" "}
+                    <span className="font-medium text-foreground">
+                      {session.user?.email}
+                    </span>
+                    . Click it to confirm deletion.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    disabled={isDeleting}
+                    className="cursor-pointer rounded-none font-bold tracking-widest uppercase hover:text-black"
+                    onClick={async () => {
+                      setIsDeleting(true);
+                      await authClient.deleteUser(
+                        { callbackURL: "/" },
+                        {
+                          onSuccess: () => {
+                            toast.info(
+                              "Check your email for the deletion link.",
+                            );
+                            setIsDeleting(false);
+                          },
+                          onError: (error) => {
+                            toast.error(error.error.message);
+                            setIsDeleting(false);
+                          },
+                        },
+                      );
+                    }}
+                  >
+                    {isDeleting ? <Loader /> : "Send Verification Email"}
+                  </Button>
+                </div>
+              )}
+
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="cursor-pointer rounded-none font-bold tracking-widest uppercase"
+                  >
+                    Cancel
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </div>
   );
