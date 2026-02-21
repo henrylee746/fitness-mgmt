@@ -1,10 +1,10 @@
-export type Room = {
+export interface Room {
   capacity: number;
   id: number;
   name: string;
-};
+}
 
-export type ClassSessionExtended = {
+export interface ClassSessionExtended {
   capacity: number;
   dateTime: Date;
   id: number;
@@ -13,48 +13,48 @@ export type ClassSessionExtended = {
   trainer: Trainer;
   roomId: number;
   trainerId: number;
-};
+}
 
-export type ClassSession = {
+export interface ClassSession {
   capacity: number;
   dateTime: Date;
   id: number;
   name: string;
   roomId: number;
   trainerId: number;
-};
+}
 
-export type Booking = {
+export interface Booking {
   classSessionId: number;
   memberId: number;
   classSession: ClassSession | ClassSessionExtended;
   id: number;
   createdAt: Date;
-};
+}
 
-export type Trainer = {
+export interface Trainer {
   id: number;
   email: string;
   name: string;
-};
+}
 
-export type HealthMetric = {
+export interface HealthMetric {
   weightGoal: number;
   weight: number;
   memberId: number;
   id: number;
   timestamp: Date;
-};
+}
 
-export type Member = {
+export interface Member {
   id: number;
   email: string;
   firstName: string;
   lastName: string;
   registeredAt: Date;
-};
+}
 
-export type User = {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -62,25 +62,25 @@ export type User = {
   emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
-};
+}
 
-export type MemberInfo = {
+export interface MemberInfo {
   weight: number;
   weightGoal: number;
   firstName: string;
   lastName: string;
   email: string;
-};
+}
 
-export type MemberExtended = Member & {
+export interface MemberExtended {
   bookings: Booking[] | [];
   metrics: HealthMetric[] | [];
-};
+}
 
-export type MemberExtendedMetrics = Member & {
+export interface MemberExtendedMetrics {
   metrics: HealthMetric[] | [];
-};
+}
 
-export type MemberExtendedBookings = Member & {
+export interface MemberExtendedBookings {
   bookings: Booking[] | [];
-};
+}
