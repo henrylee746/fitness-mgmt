@@ -21,13 +21,13 @@ import { registerSessions } from "@/lib/actions";
 import { useState, useActionState } from "react";
 import { Booking } from "@/lib/types";
 
-export default function GroupClass({
+export const GroupClass = ({
   sessions,
   member,
 }: {
   sessions: ClassSessionExtended[];
   member: MemberExtended | null;
-}) {
+}) => {
   /*Filters only sessions that the member has not registered for yet*/
   const sessionIds = member
     ? member.bookings.map((booking: Booking) => booking.classSessionId)

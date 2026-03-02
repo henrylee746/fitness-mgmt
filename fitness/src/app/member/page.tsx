@@ -1,7 +1,7 @@
 import { getSessions, getMember } from "@/lib/actions";
-import ProfileManagement from "./(components)/ProfileManagement";
-import MemberDashboard from "./(components)/MemberDashboard";
-import GroupClass from "./(components)/GroupClass";
+import { ProfileManagement } from "./(components)/ProfileManagement";
+import { MemberDashboard } from "./(components)/MemberDashboard";
+import { GroupClass } from "./(components)/GroupClass";
 import { SessionGuard } from "@/components/SessionGuard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";

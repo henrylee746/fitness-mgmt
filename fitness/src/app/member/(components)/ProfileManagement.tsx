@@ -41,7 +41,7 @@ const fitnessFormSchema = z.object({
 
 type FitnessFormData = z.infer<typeof fitnessFormSchema>;
 
-export default function ProfileManagement({ userId, memberId }: { userId: string, memberId: number }) {
+export const ProfileManagement = ({ userId, memberId }: { userId: string, memberId: number }) => {
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),

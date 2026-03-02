@@ -5,7 +5,7 @@ import { SiGoogle } from "react-icons/si";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
-import Verify from "./Verify";
+import { Verify } from "./Verify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -110,7 +110,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 // Main Component with shadcn/ui styling
-const SignupForm: React.FC = () => {
+export const SignupForm: React.FC = () => {
 
   //Get session from Better Auth in case user is signed in and tries to access signup page
   const { data: session } = authClient.useSession();
@@ -341,5 +341,3 @@ const SignupForm: React.FC = () => {
     </>
   );
 };
-
-export default SignupForm;

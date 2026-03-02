@@ -16,7 +16,7 @@ interface ResetPasswordTemplateProps {
     resetPasswordUrl: string;
 }
 
-export function ResetPasswordTemplate({ firstName, resetPasswordUrl }: ResetPasswordTemplateProps) {
+export const ResetPasswordTemplate = ({ firstName, resetPasswordUrl }: ResetPasswordTemplateProps) => {
     return (
         <Html>
             <Head />

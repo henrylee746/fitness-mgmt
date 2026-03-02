@@ -16,7 +16,7 @@ interface EmailTemplateProps {
     verificationUrl: string;
 }
 
-export function EmailTemplate({ firstName, verificationUrl }: EmailTemplateProps) {
+export const EmailTemplate = ({ firstName, verificationUrl }: EmailTemplateProps) => {
     return (
         <Html>
             <Head />

@@ -48,7 +48,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
+export const ClassManagement = ({ trainers }: { trainers: Trainer[] }) => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [calendarKey, setCalendarKey] = useState(0);
 

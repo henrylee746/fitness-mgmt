@@ -22,7 +22,7 @@ interface OnboardingFormProps {
   lastName: string;
 }
 
-export default function OnboardingForm({ userId, email, firstName, lastName }: OnboardingFormProps) {
+export const OnboardingForm = ({ userId, email, firstName, lastName }: OnboardingFormProps) => {
   const router = useRouter();
 
   const form = useForm<FormData>({

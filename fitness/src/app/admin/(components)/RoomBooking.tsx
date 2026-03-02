@@ -14,11 +14,11 @@ import { sessionColumns } from "./columns";
 import { ClassSessionExtended } from "@/lib/types";
 import { DataTable } from "./data-table";
 
-export default function RoomBooking({
+export const RoomBooking = ({
   sessions,
 }: {
   sessions: ClassSessionExtended[];
-}) {
+}) => {
   return (
     <Card className="w-full xl:max-w-xl sm:max-w-lg max-w-xs">
       <CardHeader>
