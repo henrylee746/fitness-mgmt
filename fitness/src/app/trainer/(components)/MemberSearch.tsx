@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IconZoomCheck } from "@tabler/icons-react";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { MemberInfo } from "@/lib/types";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
@@ -20,13 +20,14 @@ export default function MemberSearch() {
   const [query, setQuery] = useState("");
   const [notFound, setNotFound] = useState("");
   const [loading, setLoading] = useState(false);
+  const [cooldown, setCooldown] = useState(false);
+  const cooldownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   //async function for looking up member by name (calls /api/member/search)
   /*would normally use this as a server action 
     can be used for multiple purposes */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!query) return;
     try {
       setLoading(true);
       const res = await fetch("/api/member/search", {
@@ -40,16 +41,21 @@ export default function MemberSearch() {
       const data = await res.json();
 
       if (data.length === 0) {
+        setResults([]);
         setNotFound("No results found.");
       } else {
         setResults(data);
         setNotFound("");
       }
     } catch (error) {
-      toast.error(`Failed to search members: ${error instanceof Error ? error.message : "Unknown error"}`
+      toast.error(
+        `Failed to search members: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     } finally {
       setLoading(false);
+      setCooldown(true);
+      if (cooldownTimer.current) clearTimeout(cooldownTimer.current);
+      cooldownTimer.current = setTimeout(() => setCooldown(false), 3000);
     }
   };
 
@@ -58,13 +64,17 @@ export default function MemberSearch() {
       <form onSubmit={handleSubmit}>
         <CardHeader>
           <CardTitle className="flex gap-2 items-center">
-            <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+            <span
+              style={{ fontFamily: "var(--font-display)" }}
+              className="font-black uppercase tracking-wide text-2xl leading-none"
+            >
               Member Search
             </span>
             <IconZoomCheck className="text-primary" />
           </CardTitle>
           <CardDescription className="text-xs tracking-wider uppercase">
-            Search members by name to view their current weight goal and last measured weight.
+            Search members by name to view their current weight goal and last
+            measured weight.
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 p-4">
@@ -76,7 +86,12 @@ export default function MemberSearch() {
               onChange={(e) => setQuery(e.target.value)}
             />
 
-            <Button type="submit" variant="outline" disabled={loading} className="rounded-none font-bold tracking-widest uppercase">
+            <Button
+              type="submit"
+              variant="outline"
+              disabled={loading || !query || cooldown}
+              className="rounded-none font-bold tracking-widest uppercase"
+            >
               {loading ? <Loader /> : "Search"}
             </Button>
           </div>
@@ -85,7 +100,10 @@ export default function MemberSearch() {
           {results.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {results.map((member) => (
-                <li key={member.email} className="py-2 border-l-2 border-primary/50 pl-3">
+                <li
+                  key={member.email}
+                  className="py-2 border-l-2 border-primary/50 pl-3"
+                >
                   {member.firstName} {member.lastName} - {member.email}
                   <p className="text-muted-foreground text-sm font-mono">
                     Weight: {member?.weight ?? "N/A"}

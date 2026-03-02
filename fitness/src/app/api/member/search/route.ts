@@ -8,17 +8,28 @@ export async function POST(req: Request) {
         status: 200,
         headers: { "Content-Type": "application/json" },
       });
-    } //There is also protection in the frontend using
-    //if (!query) return;
+    }
 
-    const [firstName, lastName] = [name.split(" ")[0], name.split(" ")[1]];
+    //Regex to split name into first and last name if there is 1 or more spaces
+    const parts = name.trim().split(/\s+/);
+    const firstName = parts[0];
+    const lastName = parts[1];
+
     const members = await prisma.memberInfo.findMany({
-      where: {
-        AND: [
-          { firstName: { equals: firstName, mode: "insensitive" } },
-          { lastName: { equals: lastName, mode: "insensitive" } },
-        ],
-      },
+      where: lastName
+        ? {
+            AND: [
+              { firstName: { equals: firstName, mode: "insensitive" } },
+              { lastName: { equals: lastName, mode: "insensitive" } },
+            ],
+          }
+        : {
+            //If only one word, see if it matches either first or last name
+            OR: [
+              { firstName: { equals: firstName, mode: "insensitive" } },
+              { lastName: { equals: firstName, mode: "insensitive" } },
+            ],
+          },
     });
 
     return new Response(JSON.stringify(members), {
