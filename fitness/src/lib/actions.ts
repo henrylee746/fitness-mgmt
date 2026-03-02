@@ -4,7 +4,12 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
+import { ClassSessionExtended, Room } from "@/lib/types";
 
+/*
+ * @returns The session object
+ * @throws An error if the session cannot be fetched
+ */
 export async function getSession() {
   try {
     const session = await auth.api.getSession({
@@ -16,7 +21,11 @@ export async function getSession() {
   }
 }
 
-export async function getRooms() {
+/*
+ * @returns The rooms object, array of Room objects
+ * @throws An error if the rooms cannot be fetched
+ */
+export async function getRooms(): Promise<Room[]> {
   try {
     const rooms = await prisma.room.findMany({
       orderBy: {
@@ -29,7 +38,10 @@ export async function getRooms() {
   }
 }
 
-export async function getActiveMemberRole() {
+/*
+ * @returns The active member role or null if no role is found
+ */
+export async function getActiveMemberRole(): Promise<string | null> {
   try {
     const roleData = await auth.api.getActiveMemberRole({
       headers: await headers(),
@@ -40,6 +52,11 @@ export async function getActiveMemberRole() {
   }
 }
 
+/*
+ * @param userId - The user id
+ * @returns The member object
+ * @throws An error if the member cannot be fetched
+ */
 export async function getMember(userId: string) {
   try {
     const member = await prisma.member.findUnique({
@@ -59,7 +76,11 @@ export async function getMember(userId: string) {
   }
 }
 
-export async function getSessions() {
+/*
+ * @returns The sessions object (ClassSessionExtended[])
+ * @throws An error if the sessions cannot be fetched
+ */
+export async function getSessions(): Promise<ClassSessionExtended[]> {
   try {
     const sessions = await prisma.classSession.findMany({
       where: {
@@ -78,6 +99,37 @@ export async function getSessions() {
   }
 }
 
+/*
+ * @param role - The role to update
+ * @param userId - The user id
+ * @returns The success or failure of the update
+ */
+export async function updateRole(
+  role: string,
+  userId: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const member = await prisma.member.findUnique({
+      where: { userId },
+    });
+    if (!member) {
+      return { success: false, error: "Member not found" };
+    }
+    await prisma.member.update({
+      where: { userId },
+      data: { role },
+    });
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Failed to update role" };
+  }
+}
+
+/*
+ * @param formData - The form data
+ * @returns The success or failure of the update
+ * @throws An error if the session room cannot be updated
+ */
 export async function updateSessionRoom(
   formData: FormData,
 ): Promise<{ success: boolean; error?: string }> {
@@ -137,6 +189,11 @@ export async function updateSessionRoom(
   return { success: true };
 }
 
+/*
+ * @param formData - The form data
+ * @returns The success or failure of the creation
+ * @throws An error if the session cannot be created
+ */
 export async function createSession(
   formData: FormData,
 ): Promise<{ success: boolean; error?: string }> {
@@ -194,8 +251,12 @@ export async function createSession(
   return { success: true };
 }
 
-/*Register New Member*/
-export const registerMember = async (formData: FormData) => {
+/*
+ * @param formData - The form data
+ * @returns The organization id
+ * @throws An error if the member cannot be registered
+ */
+export const registerMember = async (formData: FormData): Promise<string> => {
   const userId = formData.get("userId") as string;
   const email = formData.get("email") as string;
   const firstName = formData.get("firstName") as string;
@@ -254,9 +315,12 @@ export const registerMember = async (formData: FormData) => {
   }
 };
 
-/*Update Profile Details, including making/updating weight metric & target*/
-
-export const updateMember = async (formData: FormData) => {
+/*
+ * @param formData - The form data
+ * @returns Void
+ * @throws An error if the member cannot be updated
+ */
+export const updateMember = async (formData: FormData): Promise<void> => {
   const userId = formData.get("userId") as string;
   const email = formData.get("email") as string | null;
   const firstName = formData.get("firstName") as string | null;
@@ -305,7 +369,12 @@ export const updateMember = async (formData: FormData) => {
   }
 };
 
-export const updateMetrics = async (formData: FormData) => {
+/*
+ * @param formData - The form data
+ * @returns Void
+ * @throws An error if the metrics cannot be updated
+ */
+export const updateMetrics = async (formData: FormData): Promise<void> => {
   const memberId = formData.get("memberId");
   const weight = formData.get("currWeight");
   const weightGoal = formData.get("weightTarget");
@@ -329,6 +398,11 @@ export const updateMetrics = async (formData: FormData) => {
   }
 };
 
+/*
+ * @param formData - The form data
+ * @returns The success or failure of the registration
+ * @throws An error if the sessions cannot be registered
+ */
 export const registerSessions = async (
   _prevState: { success: boolean; error?: string },
   formData: FormData,
