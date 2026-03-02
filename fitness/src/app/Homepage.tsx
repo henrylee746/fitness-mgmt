@@ -175,7 +175,7 @@ export const Homepage = () => {
                 </span>
                 <span
                   className="block font-black uppercase leading-none text-violet-900 dark:text-primary sm:wrap-normal wrap-break-word"
-                  style={{ fontSize: "clamp(3.5rem, 11vw, 8.5rem)" }}
+                  style={{ fontSize: "clamp(2.15rem, 11vw, 8.5rem)" }}
                 >
                   Management
                 </span>
