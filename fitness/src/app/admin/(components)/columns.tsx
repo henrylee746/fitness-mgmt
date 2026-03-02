@@ -39,7 +39,6 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-
 export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
   {
     id: "actions",
@@ -77,7 +76,9 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
           toast.success("Session room updated successfully");
           form.reset();
         } catch (error: unknown) {
-          form.setError("root.serverError", { message: "Failed to update session room" });
+          form.setError("root.serverError", {
+            message: "Failed to update session room",
+          });
           toast.error("Failed to update session room");
         }
       };
@@ -103,37 +104,70 @@ export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
             </DialogHeader>
             <DialogDescription>Choose your new room here.</DialogDescription>
             {form.formState.errors.roomId && (
-              <p className="text-xs text-red-500">{form.formState.errors.roomId.message}</p>
+              <p className="text-xs text-red-500">
+                {form.formState.errors.roomId.message}
+              </p>
             )}
             {form.formState.errors.sessionId && (
-              <p className="text-xs text-red-500">{form.formState.errors.sessionId.message}</p>
+              <p className="text-xs text-red-500">
+                {form.formState.errors.sessionId.message}
+              </p>
             )}
             {form.formState.errors.root?.serverError && (
-              <p className="text-xs text-red-500">{form.formState.errors.root.serverError.message}</p>
+              <p className="text-xs text-red-500">
+                {form.formState.errors.root.serverError.message}
+              </p>
             )}
             <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-              {rooms.length > 0 && (<Controller
-                control={form.control}
-                name="roomId"
-                render={({ field }) => (
-                  <RadioGroup onValueChange={field.onChange} value={field.value} name="roomId" defaultValue="7" required={true}>
-                    <div className="flex items-center gap-3 mt-4">
-                      <RadioGroupItem value={rooms[0].id.toString()} id={rooms[0].id.toString()} />
-                      <Label htmlFor={rooms[0].id.toString()}>{rooms[0].name} (Capacity: {rooms[0].capacity})</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value={rooms[1].id.toString()} id={rooms[1].id.toString()} />
-                      <Label htmlFor={rooms[1].id.toString()}>{rooms[1].name} (Capacity: {rooms[1].capacity})</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value={rooms[2].id.toString()} id={rooms[2].id.toString()} />
-                      <Label htmlFor={rooms[2].id.toString()}>{rooms[2].name} (Capacity: {rooms[2].capacity})</Label>
-                    </div>
-                  </RadioGroup>
-                )}
-              />)}
+              {rooms.length > 0 && (
+                <Controller
+                  control={form.control}
+                  name="roomId"
+                  render={({ field }) => (
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      name="roomId"
+                      defaultValue="7"
+                      required={true}
+                    >
+                      <div className="flex items-center gap-3 mt-4">
+                        <RadioGroupItem
+                          value={rooms[0].id.toString()}
+                          id={rooms[0].id.toString()}
+                        />
+                        <Label htmlFor={rooms[0].id.toString()}>
+                          {rooms[0].name} (Capacity: {rooms[0].capacity})
+                        </Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem
+                          value={rooms[1].id.toString()}
+                          id={rooms[1].id.toString()}
+                        />
+                        <Label htmlFor={rooms[1].id.toString()}>
+                          {rooms[1].name} (Capacity: {rooms[1].capacity})
+                        </Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem
+                          value={rooms[2].id.toString()}
+                          id={rooms[2].id.toString()}
+                        />
+                        <Label htmlFor={rooms[2].id.toString()}>
+                          {rooms[2].name} (Capacity: {rooms[2].capacity})
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  )}
+                />
+              )}
               <DialogFooter>
-                <Button className="mt-4" type="submit" disabled={form.formState.isSubmitting}>
+                <Button
+                  className="mt-4"
+                  type="submit"
+                  disabled={form.formState.isSubmitting}
+                >
                   {form.formState.isSubmitting ? <Loader /> : null}
                   Save changes
                 </Button>

@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { ClassSession, Room } from "@/lib/types";
+import { ClassSessionExtended, Room } from "@/lib/types";
 
 /*
  * @returns The session object
@@ -25,7 +25,7 @@ export async function getSession() {
  * @returns The rooms object, array of Room objects
  * @throws An error if the rooms cannot be fetched
  */
-export async function getRooms(): Promise<Room[] | null> {
+export async function getRooms(): Promise<Room[]> {
   try {
     const rooms = await prisma.room.findMany({
       orderBy: {
@@ -77,10 +77,10 @@ export async function getMember(userId: string) {
 }
 
 /*
- * @returns The sessions object (ClassSession[])
+ * @returns The sessions object (ClassSessionExtended[])
  * @throws An error if the sessions cannot be fetched
  */
-export async function getSessions(): Promise<ClassSession[] | null> {
+export async function getSessions(): Promise<ClassSessionExtended[]> {
   try {
     const sessions = await prisma.classSession.findMany({
       where: {
