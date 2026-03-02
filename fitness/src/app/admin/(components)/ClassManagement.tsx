@@ -243,7 +243,7 @@ export default function ClassManagement({ trainers }: { trainers: Trainer[] }) {
                       onValueChange={field.onChange}
                       value={field.value}
                       name="roomId"
-                      defaultValue="7"
+                      defaultValue={rooms[0].id.toString()}
                       required={true}
                     >
                       {rooms.map((room: Room) => (
