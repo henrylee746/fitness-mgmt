@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 //Implements real-time session checking
 //User gets redirected if their session from the DB gets invalidated/deleted
-export function SessionGuard() {
+export const SessionGuard = () => {
     const router = useRouter();
     const { data: session, isPending, error } = authClient.useSession();
 

@@ -16,10 +16,10 @@ interface DeleteAccountTemplateProps {
   deleteAccountUrl: string;
 }
 
-export function DeleteAccountTemplate({
+export const DeleteAccountTemplate = ({
   firstName,
   deleteAccountUrl,
-}: DeleteAccountTemplateProps) {
+}: DeleteAccountTemplateProps) => {
   return (
     <Html>
       <Head />

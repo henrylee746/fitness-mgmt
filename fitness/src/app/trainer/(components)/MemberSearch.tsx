@@ -15,7 +15,7 @@ import { MemberInfo } from "@/lib/types";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 
-export default function MemberSearch() {
+export const MemberSearch = () => {
   const [results, setResults] = useState<MemberInfo[]>([]);
   const [query, setQuery] = useState("");
   const [notFound, setNotFound] = useState("");

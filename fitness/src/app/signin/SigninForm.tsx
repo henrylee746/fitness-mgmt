@@ -46,7 +46,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 // --- Main App Component ---
-export default function Login() {
+export const Login = () => {
   const { data: session } = authClient.useSession();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),

@@ -17,7 +17,7 @@ interface ClassManagementCalendarProps {
   onTimeChange: (time: string) => void;
 }
 
-export function ClassManagementCalendar({ onDateChange, onTimeChange }: ClassManagementCalendarProps) {
+export const ClassManagementCalendar = ({ onDateChange, onTimeChange }: ClassManagementCalendarProps) => {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>();
 

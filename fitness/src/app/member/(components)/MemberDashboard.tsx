@@ -12,11 +12,11 @@ import {
 import { MemberExtended } from "@/lib/types";
 import { Booking } from "@/lib/types";
 
-export default async function MemberDashboard({
+export const MemberDashboard = async ({
   member,
 }: {
   member: MemberExtended | null;
-}) {
+}) => {
   const currWeight =
     member?.metrics && member?.metrics.length > 0
       ? member?.metrics[member.metrics.length - 1]?.weight

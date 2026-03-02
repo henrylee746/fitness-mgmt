@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const COOLDOWN_SECONDS = 60 * 60; // 1 hour in seconds
 
-export default function Verify({ email }: { email: string }) {
+export const Verify = ({ email }: { email: string }) => {
     const [loading, setLoading] = useState(false);
     const [sent, setSent] = useState(false);
     const [secondsLeft, setSecondsLeft] = useState(0);

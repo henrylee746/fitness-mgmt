@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 import { CircleUserRoundIcon, LogOutIcon } from "lucide-react";
 import Link from "next/link";
 
-const Header = () => {
+export const Header = () => {
   const router = useRouter();
   //useSession triggers on window focus (or page refresh)
   const { data: session, isPending, error } = authClient.useSession();
@@ -98,4 +98,3 @@ const Header = () => {
   );
 };
 
-export default Header;

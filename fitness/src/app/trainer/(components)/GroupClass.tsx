@@ -10,7 +10,7 @@ import { IconCalendarUser } from "@tabler/icons-react";
 import { DataTable } from "./data-table";
 import prisma from "@/lib/prisma";
 
-export default async function GroupClass() {
+export const GroupClass = async () => {
   try {
     /*Querying so that all list of sessions are displayed before
     filtering by trainer

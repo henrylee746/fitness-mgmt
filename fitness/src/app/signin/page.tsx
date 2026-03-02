@@ -1,4 +1,4 @@
-import Login from "./SigninForm";
+import { Login } from "./SigninForm";
 
 export default function SigninPage() {
   return (
