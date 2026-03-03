@@ -6,7 +6,6 @@ import Link from "next/link";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole } from "@/lib/actions";
 import { getSession } from "@/lib/actions";
-import { RoleSelect } from "./(components)/RoleSelect";
 import { redirect } from "next/navigation";
 
 export default async function Admin() {
@@ -71,7 +70,6 @@ export default async function Admin() {
           <SessionGuard />
           <div className="flex flex-col gap-8 justify-center items-center">
             <RoomBooking sessions={sessions} />
-            <RoleSelect userId={session.user.id} />
           </div>
           <ClassManagement trainers={trainers} />
         </div>
