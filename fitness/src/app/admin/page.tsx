@@ -72,9 +72,11 @@ export default async function Admin() {
         </div>
         <div className="flex flex-wrap items-start justify-center font-sans gap-8 py-6 px-4">
           <SessionGuard />
-          <RoomBooking sessions={sessions} />
+          <div className="flex flex-col gap-8 justify-center items-center">
+            <RoomBooking sessions={sessions} />
+            <RoleSelect userId={session.user.id} />
+          </div>
           <ClassManagement trainers={trainers} />
-          <RoleSelect />
         </div>
       </>
     );
