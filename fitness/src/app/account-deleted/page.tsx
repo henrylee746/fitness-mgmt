@@ -1,7 +1,16 @@
+export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getSession } from "@/lib/actions";
+import { redirect } from "next/navigation";
 
-const AccountDeletedPage = () => {
+export default async function AccountDeletedPage() {
+  const session = await getSession();
+
+  if (session) {
+    redirect("/member");
+  }
+
   return (
     <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
       <h1 className="font-black uppercase leading-none text-foreground">
@@ -17,6 +26,4 @@ const AccountDeletedPage = () => {
       </Button>
     </div>
   );
-};
-
-export default AccountDeletedPage;
+}

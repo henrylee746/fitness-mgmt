@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Loader } from "@/components/ui/loader";
 import { EyeOffIcon, EyeIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 
 const formSchema = z
@@ -54,13 +54,21 @@ export const AccountPage = () => {
   );
   const [deletePassword, setDeletePassword] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleDialogOpen = async (open: boolean) => {
     if (!open) {
       setDeletePassword("");
       return;
     }
+
+    //Lists all accounts associated with the user
     const { data: accounts } = await authClient.listAccounts();
+    //Checks if the user has a credential account
     setIsCredentialUser(
       accounts?.some((a) => a.providerId === "credential") ?? false,
     );
@@ -95,7 +103,11 @@ export const AccountPage = () => {
     );
   };
 
-  if (!session) {
+  if (!isMounted) {
+    return <Loader />;
+  }
+
+  if (!session || !isMounted) {
     return (
       <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
         You are not logged in to view this page.
