@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { AccountPage } from "./AccountPage";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getSession } from "@/lib/actions";

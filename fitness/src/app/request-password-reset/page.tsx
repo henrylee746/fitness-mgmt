@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { RequestPasswordResetForm } from "./RequestPasswordReset";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/actions";
