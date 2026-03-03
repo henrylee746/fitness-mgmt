@@ -23,7 +23,10 @@ export const RoomBooking = ({
     <Card className="w-full xl:max-w-xl sm:max-w-lg max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+          <span
+            style={{ fontFamily: "var(--font-display)" }}
+            className="font-black uppercase tracking-wide text-2xl leading-none"
+          >
             Room Booking
           </span>
           <IconDoor className="text-primary" />
@@ -37,4 +40,4 @@ export const RoomBooking = ({
       </CardContent>
     </Card>
   );
-}
+};

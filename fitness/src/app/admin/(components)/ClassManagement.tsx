@@ -270,7 +270,7 @@ export const ClassManagement = ({ trainers }: { trainers: Trainer[] }) => {
                 type="submit"
                 variant="secondary"
                 disabled={form.formState.isSubmitting}
-                className="rounded-none font-bold tracking-widest uppercase"
+                className="rounded-none font-bold tracking-widest uppercase cursor-pointer"
               >
                 Create
                 {form.formState.isSubmitting ? <Loader /> : null}
@@ -281,4 +281,4 @@ export const ClassManagement = ({ trainers }: { trainers: Trainer[] }) => {
       </CardContent>
     </Card>
   );
-}
+};
