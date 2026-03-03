@@ -22,9 +22,9 @@ export default async function Members() {
         <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
           Member not found. If you haven't chosen your roles, select them in
           your onboarding page:
-          <Link href="/onboarding">
-            <Button>Onboarding</Button>
-          </Link>
+          <Button asChild>
+            <Link href="/onboarding">Onboarding</Link>
+          </Button>
         </div>
       );
     }
