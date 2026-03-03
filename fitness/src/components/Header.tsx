@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { HeaderDock } from "./Dock";
 import { getActiveMemberRole } from "@/lib/actions";
@@ -18,6 +18,7 @@ import Link from "next/link";
 
 export const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
   //useSession triggers on window focus (or page refresh)
   const { data: session, isPending, error } = authClient.useSession();
   const [role, setRole] = useState<string | undefined | null>(undefined);
@@ -36,7 +37,7 @@ export const Header = () => {
     if (session) {
       fetchRole();
     }
-  }, [session]);
+  }, [session, pathname]);
 
   const handleSignOut = async () => {
     await authClient.signOut({
