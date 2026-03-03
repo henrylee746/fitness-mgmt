@@ -7,20 +7,14 @@ import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole } from "@/lib/actions";
 import { getSession } from "@/lib/actions";
 import { RoleSelect } from "./(components)/RoleSelect";
+import { redirect } from "next/navigation";
 
 export default async function Admin() {
   try {
     const session = await getSession();
 
     if (!session) {
-      return (
-        <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-          Not Authorized. Please sign in to access your account.
-          <Button asChild>
-            <Link href="/signin">Sign in</Link>
-          </Button>
-        </div>
-      );
+      redirect("/signin");
     }
 
     // Use server-side auth to get organization role
@@ -30,6 +24,9 @@ export default async function Admin() {
       return (
         <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
           You do not have the role of admin to access this page.
+          <Button asChild>
+            <Link href="/account">Select role in your accounts page</Link>
+          </Button>
         </div>
       );
     }
