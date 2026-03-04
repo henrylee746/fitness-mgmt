@@ -109,7 +109,7 @@ export const MemberDashboard = async ({
             <p className="text-xs text-muted-foreground tracking-wider uppercase">
               Past Classes
             </p>
-            {pastClasses === "N/A" ? (
+            {pastClasses === "N/A" || pastClasses === null ? (
               <p className="text-sm font-mono">{pastClasses}</p>
             ) : (
               <ul className="list-disc pl-3">{pastClasses}</ul>
@@ -119,7 +119,7 @@ export const MemberDashboard = async ({
             <p className="text-xs text-muted-foreground tracking-wider uppercase">
               Upcoming
             </p>
-            {upcomingClasses === "N/A" ? (
+            {upcomingClasses === "N/A" || upcomingClasses === null ? (
               <p className="text-sm font-mono">{upcomingClasses}</p>
             ) : (
               <ul className="list-disc pl-3">{upcomingClasses}</ul>
