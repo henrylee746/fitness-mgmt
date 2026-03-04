@@ -1,7 +1,30 @@
 import prisma from "@/lib/prisma";
+import { getSession } from "@/lib/actions";
+import { getActiveMemberRole } from "@/lib/actions";
 /*Member Search Functionality in Trainers tab*/
 export async function POST(req: Request) {
   try {
+    const session = await getSession();
+    const activeMemberRole = await getActiveMemberRole();
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (activeMemberRole !== "trainer") {
+      return new Response(
+        JSON.stringify({
+          error: "You do not have the role of trainer to access this page.",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+
     const { name } = await req.json(); // parse JSON from request body
     if (!name) {
       return new Response(JSON.stringify([]), {

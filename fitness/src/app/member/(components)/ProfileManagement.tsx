@@ -20,11 +20,17 @@ import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 
 // Helper: Transform empty strings to undefined, then validate
-const optionalString = z.string().transform(val => val.trim() === "" ? undefined : val).optional();
-const optionalEmail = z.string().transform(val => val.trim() === "" ? undefined : val)
-  .refine(val => val === undefined || z.email().safeParse(val).success, {
+const optionalString = z
+  .string()
+  .transform((val) => (val.trim() === "" ? undefined : val))
+  .optional();
+const optionalEmail = z
+  .string()
+  .transform((val) => (val.trim() === "" ? undefined : val))
+  .refine((val) => val === undefined || z.email().safeParse(val).success, {
     message: "Invalid email address",
-  }).optional();
+  })
+  .optional();
 
 const formSchema = z.object({
   firstName: optionalString,
@@ -35,14 +41,25 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const fitnessFormSchema = z.object({
-  currWeight: z.number().min(1, { message: "Current weight is required" }).max(999, { message: "Current weight must be less than 999" }),
-  weightTarget: z.number().min(1, { message: "Weight target is required" }).max(999, { message: "Weight target must be less than 999" }),
+  currWeight: z
+    .number()
+    .min(1, { message: "Current weight is required" })
+    .max(999, { message: "Current weight must be less than 999" }),
+  weightTarget: z
+    .number()
+    .min(1, { message: "Weight target is required" })
+    .max(999, { message: "Weight target must be less than 999" }),
 });
 
 type FitnessFormData = z.infer<typeof fitnessFormSchema>;
 
-export const ProfileManagement = ({ userId, memberId }: { userId: string, memberId: number }) => {
-
+export const ProfileManagement = ({
+  userId,
+  memberId,
+}: {
+  userId: string;
+  memberId: number;
+}) => {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,7 +100,9 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
         form.setError("root.serverError", { message: error.message });
         toast.error(error.message);
       } else {
-        form.setError("root.serverError", { message: "Failed to update profile details" });
+        form.setError("root.serverError", {
+          message: "Failed to update profile details",
+        });
         toast.error("Failed to update profile details");
       }
     }
@@ -99,13 +118,14 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
     try {
       await updateMetrics(formData);
       toast.success("Fitness details updated successfully");
-      fitnessForm.reset();
     } catch (error: unknown) {
       if (error instanceof Error) {
         fitnessForm.setError("root.serverError", { message: error.message });
         toast.error(error.message);
       } else {
-        fitnessForm.setError("root.serverError", { message: "Failed to update fitness details" });
+        fitnessForm.setError("root.serverError", {
+          message: "Failed to update fitness details",
+        });
         toast.error("Failed to update fitness details");
       }
     }
@@ -115,12 +135,17 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
     <Card className="w-full xl:max-w-xl lg:max-w-md sm:max-w-sm max-w-xs mb-5">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+          <span
+            style={{ fontFamily: "var(--font-display)" }}
+            className="font-black uppercase tracking-wide text-2xl leading-none"
+          >
             Profile Management
           </span>
           <IconUserScan className="text-primary" />
         </CardTitle>
-        <CardDescription className="text-xs tracking-wider uppercase">Update your details/fitness goals</CardDescription>
+        <CardDescription className="text-xs tracking-wider uppercase">
+          Update your details/fitness goals
+        </CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -130,21 +155,37 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-3">
-                <span className="text-xs font-mono font-bold tracking-wider text-primary/60">01</span>
+                <span className="text-xs font-mono font-bold tracking-wider text-primary/60">
+                  01
+                </span>
                 <div className="h-px flex-1 bg-border/60" />
               </div>
-              <CardTitle className="text-sm font-bold tracking-widest uppercase">Personal Details</CardTitle>
-              <CardDescription>All fields optional - update what you want to change.</CardDescription>
+              <CardTitle className="text-sm font-bold tracking-widest uppercase">
+                Personal Details
+              </CardTitle>
+              <CardDescription>
+                All fields optional - update what you want to change.
+              </CardDescription>
             </div>
 
             {/* Error message for server errors (Personal Details)*/}
             {form.formState.errors.root?.serverError && (
-              <p className="text-xs text-red-500">{form.formState.errors.root.serverError.message}</p>
+              <p className="text-xs text-red-500">
+                {form.formState.errors.root.serverError.message}
+              </p>
             )}
 
-            <Input {...form.register("email")} id="email" type="email" name="email" placeholder="Email" />
+            <Input
+              {...form.register("email")}
+              id="email"
+              type="email"
+              name="email"
+              placeholder="Email"
+            />
             {form.formState.errors.email && (
-              <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+              <p className="text-xs text-red-500">
+                {form.formState.errors.email.message}
+              </p>
             )}
             <Input
               {...form.register("firstName")}
@@ -154,7 +195,9 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
               placeholder="First Name"
             />
             {form.formState.errors.firstName && (
-              <p className="text-xs text-red-500">{form.formState.errors.firstName.message}</p>
+              <p className="text-xs text-red-500">
+                {form.formState.errors.firstName.message}
+              </p>
             )}
             <Input
               {...form.register("lastName")}
@@ -164,10 +207,16 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
               placeholder="Last Name"
             />
             {form.formState.errors.lastName && (
-              <p className="text-xs text-red-500">{form.formState.errors.lastName.message}</p>
+              <p className="text-xs text-red-500">
+                {form.formState.errors.lastName.message}
+              </p>
             )}
           </div>
-          <Button type="submit" className="w-full mt-4 cursor-pointer" variant="secondary">
+          <Button
+            type="submit"
+            className="w-full mt-4 cursor-pointer"
+            variant="secondary"
+          >
             Update
             {form.formState.isSubmitting ? <Loader /> : null}
           </Button>
@@ -177,16 +226,24 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
           <div className="flex flex-col gap-4 my-4">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-3">
-                <span className="text-xs font-mono font-bold tracking-wider text-primary/60">02</span>
+                <span className="text-xs font-mono font-bold tracking-wider text-primary/60">
+                  02
+                </span>
                 <div className="h-px flex-1 bg-border/60" />
               </div>
-              <CardTitle className="text-sm font-bold tracking-widest uppercase">Fitness Details</CardTitle>
-              <CardDescription>All fields required - please enter both fields.</CardDescription>
+              <CardTitle className="text-sm font-bold tracking-widest uppercase">
+                Fitness Details
+              </CardTitle>
+              <CardDescription>
+                All fields required - please enter both fields.
+              </CardDescription>
             </div>
 
             {/* Error message for server errors (Fitness Details)*/}
             {fitnessForm.formState.errors.root?.serverError && (
-              <p className="text-xs text-red-500">{fitnessForm.formState.errors.root.serverError.message}</p>
+              <p className="text-xs text-red-500">
+                {fitnessForm.formState.errors.root.serverError.message}
+              </p>
             )}
 
             <Label htmlFor="currWeight">Current Weight</Label>
@@ -200,7 +257,9 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
               required={true}
             />
             {fitnessForm.formState.errors.currWeight && (
-              <p className="text-xs text-red-500">{fitnessForm.formState.errors.currWeight.message}</p>
+              <p className="text-xs text-red-500">
+                {fitnessForm.formState.errors.currWeight.message}
+              </p>
             )}
             <Label htmlFor="weightTarget"> Weight Target (lbs)</Label>
             <Input
@@ -213,7 +272,9 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
               required={true}
             />
             {fitnessForm.formState.errors.weightTarget && (
-              <p className="text-xs text-red-500">{fitnessForm.formState.errors.weightTarget.message}</p>
+              <p className="text-xs text-red-500">
+                {fitnessForm.formState.errors.weightTarget.message}
+              </p>
             )}
           </div>
           <Button type="submit" className="w-full cursor-pointer">
@@ -225,4 +286,4 @@ export const ProfileManagement = ({ userId, memberId }: { userId: string, member
       <CardFooter className="flex-col"></CardFooter>
     </Card>
   );
-}
+};

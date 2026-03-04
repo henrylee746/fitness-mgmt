@@ -380,6 +380,28 @@ export const updateMetrics = async (formData: FormData): Promise<void> => {
   const weightGoal = formData.get("weightTarget");
   const metricUpdateData: any = {};
 
+  const COOLDOWN_MINUTES = 1;
+
+  //Finds most recent metric for the member and grabs only the timestamp field
+  const lastMetric = await prisma.healthMetric.findFirst({
+    where: {
+      memberId: Number(memberId),
+    },
+    orderBy: {
+      timestamp: "desc",
+    },
+    select: {
+      timestamp: true,
+    },
+  });
+
+  if (lastMetric) {
+    const minutesSince = (Date.now() - lastMetric.timestamp.getTime()) / 60000;
+    if (minutesSince < COOLDOWN_MINUTES) {
+      throw new Error("You must wait 1 minute between updating your metrics");
+    }
+  }
+
   if (weight) metricUpdateData.weight = Number(weight);
   if (weightGoal) metricUpdateData.weightGoal = Number(weightGoal);
 
@@ -409,6 +431,30 @@ export const registerSessions = async (
 ): Promise<{ success: boolean; error?: string }> => {
   const ids = formData.getAll("sessionIds") as string[];
   const memberId = formData.get("memberId") as string;
+
+  const COOLDOWN_MINUTES = 1;
+
+  const lastBooking = await prisma.booking.findFirst({
+    where: {
+      memberId: Number(memberId),
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  if (lastBooking) {
+    const minutesSince = (Date.now() - lastBooking.createdAt.getTime()) / 60000;
+    if (minutesSince < COOLDOWN_MINUTES) {
+      return {
+        success: false,
+        error: "You must wait 1 minute between booking sessions",
+      };
+    }
+  }
 
   if (ids.length === 0) return { success: true };
   try {
