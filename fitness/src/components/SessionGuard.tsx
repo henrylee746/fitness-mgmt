@@ -15,8 +15,9 @@ export const SessionGuard = () => {
         if (error) {
             toast.error(`Failed to get session: ${error.message}`);
         }
-        // Only redirect after session check is complete
-        if (!isPending && !session) {
+        // Only redirect when the check definitively returned no session
+        // If there's an error (e.g. rate limit), don't assume unauthenticated
+        if (!isPending && !session && !error) {
             router.push("/signin");
         }
     }, [session, isPending, router, error]);

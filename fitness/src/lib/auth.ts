@@ -38,6 +38,38 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+  rateLimit: {
+    enabled: true,
+    max: 25, //25 requests per minute
+    window: 60, //1 min,
+    customRules: {
+      // Session checks happen on every page load - exempt from the low global limit
+      "/get-session": {
+        max: 150,
+        window: 60,
+      },
+      "/sign-in/social": {
+        max: 3,
+        window: 60,
+      },
+      "/sign-in/email": {
+        max: 3,
+        window: 60,
+      },
+      "/sign-up/email": {
+        max: 3,
+        window: 60,
+      },
+      "/send-verification-email": {
+        max: 3,
+        window: 60,
+      },
+      "/change-password": {
+        max: 3,
+        window: 60,
+      },
+    },
+  },
   //This links Google accounts to those who originally signed up with email and password
   account: {
     accountLinking: {
