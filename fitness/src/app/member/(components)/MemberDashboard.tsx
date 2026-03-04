@@ -109,13 +109,21 @@ export const MemberDashboard = async ({
             <p className="text-xs text-muted-foreground tracking-wider uppercase">
               Past Classes
             </p>
-            <ul className="list-disc pl-3">{pastClasses}</ul>
+            {pastClasses === "N/A" ? (
+              <p className="text-sm font-mono">{pastClasses}</p>
+            ) : (
+              <ul className="list-disc pl-3">{pastClasses}</ul>
+            )}
           </div>
           <div className="flex flex-col gap-1 p-3 bg-primary/5">
             <p className="text-xs text-muted-foreground tracking-wider uppercase">
               Upcoming
             </p>
-            <ul className="list-disc pl-3">{upcomingClasses}</ul>
+            {upcomingClasses === "N/A" ? (
+              <p className="text-sm font-mono">{upcomingClasses}</p>
+            ) : (
+              <ul className="list-disc pl-3">{upcomingClasses}</ul>
+            )}
           </div>
         </div>
       </CardContent>
@@ -123,4 +131,4 @@ export const MemberDashboard = async ({
       <CardFooter className="flex-col gap-2"></CardFooter>
     </Card>
   );
-}
+};
