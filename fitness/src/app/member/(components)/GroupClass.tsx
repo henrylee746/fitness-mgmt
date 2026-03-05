@@ -12,11 +12,7 @@ import {
 import { IconCalendarUser } from "@tabler/icons-react";
 import { DataTable } from "./data-table";
 import { sessionColumns } from "./columns";
-import {
-  MemberExtended,
-  ClassSession,
-  ClassSessionExtended,
-} from "@/lib/types";
+import { MemberExtended, ClassSessionExtended } from "@/lib/types";
 import { registerSessions } from "@/lib/actions";
 import { useState, useActionState } from "react";
 import { Booking } from "@/lib/types";
@@ -33,15 +29,20 @@ export const GroupClass = ({
     ? member.bookings.map((booking: Booking) => booking.classSessionId)
     : [];
   const filteredSessions = sessions.filter(
-    (session) => !sessionIds.includes(session.id)
+    (session) => !sessionIds.includes(session.id),
   );
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [state, formAction] = useActionState(registerSessions, { success: true });
+  const [state, formAction] = useActionState(registerSessions, {
+    success: true,
+  });
   return (
     <Card className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-md sm:max-w-sm max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+          <span
+            style={{ fontFamily: "var(--font-display)" }}
+            className="font-black uppercase tracking-wide text-2xl leading-none"
+          >
             Group Class Registration
           </span>
           <IconCalendarUser className="text-primary" />
@@ -64,9 +65,11 @@ export const GroupClass = ({
           {!state.success && state.error && (
             <p className="text-xs text-red-500 mt-2">{state.error}</p>
           )}
-          <Button className="w-full mt-6 cursor-pointer rounded-none font-bold tracking-widest uppercase">Register</Button>
+          <Button className="w-full mt-6 cursor-pointer rounded-none font-bold tracking-widest uppercase">
+            Register
+          </Button>
         </form>
       </CardContent>
     </Card>
   );
-}
+};

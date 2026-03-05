@@ -54,6 +54,22 @@ export async function getActiveMemberRole(): Promise<string | null> {
 
 /*
  * @param userId - The user id
+ * @returns True if a Member record exists, false otherwise
+ */
+export async function isMember(userId: string): Promise<boolean> {
+  try {
+    const member = await prisma.member.findUnique({
+      where: { userId },
+      select: { id: true },
+    });
+    return member !== null;
+  } catch {
+    return false;
+  }
+}
+
+/*
+ * @param userId - The user id
  * @returns The member object
  * @throws An error if the member cannot be fetched
  */
@@ -62,7 +78,10 @@ export async function getMember(userId: string) {
     const member = await prisma.member.findUnique({
       where: { userId },
       include: {
-        metrics: true,
+        metrics: {
+          orderBy: { timestamp: "desc" },
+          take: 1,
+        },
         bookings: {
           include: {
             classSession: true,

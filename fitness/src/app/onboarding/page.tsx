@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
-import { getMember, getSession } from "@/lib/actions";
+import { isMember, getSession } from "@/lib/actions";
 import { OnboardingForm } from "./OnboardingForm";
 import { SessionGuard } from "@/components/SessionGuard";
 
@@ -13,8 +13,7 @@ export default async function Onboarding() {
   }
 
   // If the user already has a Member record, they don't need onboarding
-  const member = await getMember(session.user.id);
-  if (member) {
+  if (await isMember(session.user.id)) {
     redirect("/member");
   }
 
