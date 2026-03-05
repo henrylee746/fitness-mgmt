@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export default async function Members() {
   try {
@@ -63,9 +64,10 @@ export default async function Members() {
       </>
     );
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     return (
       <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        Failed to get session: $
+        Failed to get session:
         {error instanceof Error ? error.message : "Unknown error"} Please
         contact if the issue persists.
       </div>
