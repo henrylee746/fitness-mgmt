@@ -29,7 +29,6 @@ export const Header = () => {
   useEffect(() => {
     const fetchRole = async () => {
       try {
-        // TODO(human): only show the loader when role hasn't been fetched yet
         if (role === undefined) {
           setRolesLoading(true);
         }
