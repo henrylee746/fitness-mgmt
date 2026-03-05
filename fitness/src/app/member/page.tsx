@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getSessions, getMember } from "@/lib/actions";
 import { ProfileManagement } from "./(components)/ProfileManagement";
 import { MemberDashboard } from "./(components)/MemberDashboard";
@@ -19,8 +21,8 @@ export default async function Members() {
   if (!member) {
     return (
       <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        Member not found. If you haven't chosen your roles, select them in
-        your onboarding page:
+        Member not found. If you haven't chosen your roles, select them in your
+        onboarding page:
         <Button asChild>
           <Link href="/onboarding">Onboarding</Link>
         </Button>
