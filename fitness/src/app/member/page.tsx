@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { getSessions, getMember } from "@/lib/actions";
+import { Suspense } from "react";
 import { ProfileManagement } from "./(components)/ProfileManagement";
 import { MemberDashboard } from "./(components)/MemberDashboard";
 import { GroupClass } from "./(components)/GroupClass";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
+import { SkeletonCard } from "@/components/SkeletonCard";
 
 export default async function Members() {
   const session = await getSession();
@@ -18,6 +20,7 @@ export default async function Members() {
   }
 
   const member = await getMember(session.user.id);
+
   if (!member) {
     return (
       <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
@@ -29,9 +32,12 @@ export default async function Members() {
       </div>
     );
   }
-
-  const sessions = await getSessions();
   const { user } = session; //Should never be null since we checked for session above
+
+  async function GroupClassLoader() {
+    const sessions = await getSessions();
+    return <GroupClass sessions={sessions} member={member} />;
+  }
 
   return (
     <>
@@ -58,7 +64,9 @@ export default async function Members() {
         <ProfileManagement userId={user.id} memberId={member.id} />
         <div className="flex flex-col items-center justify-center gap-6">
           <MemberDashboard member={member} />
-          <GroupClass sessions={sessions} member={member} />
+          <Suspense fallback={<SkeletonCard />}>
+            <GroupClassLoader />
+          </Suspense>
         </div>
       </div>
     </>
