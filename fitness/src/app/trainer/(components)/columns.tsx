@@ -2,11 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ClassSessionExtended } from "@/lib/types";
+import { TrainerSlim } from "@/lib/types";
 
 //Session type with room and trainer relations joined together
 
 interface WithTrainer {
-  trainer: { id: number; name: string };
+  trainer: TrainerSlim;
 }
 
 export const sessionColumns: ColumnDef<WithTrainer, ClassSessionExtended>[] = [

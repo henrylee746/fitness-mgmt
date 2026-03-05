@@ -8,7 +8,7 @@ import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole, getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { Loader } from "@/components/ui/loader";
+import { SkeletonCard } from "@/components/SkeletonCard";
 
 export default async function Trainer() {
   const [session, role] = await Promise.all([
@@ -53,7 +53,11 @@ export default async function Trainer() {
       </div>
       <div className="flex flex-wrap items-start justify-center font-sans gap-8 py-6 px-4">
         <SessionGuard />
-        <Suspense fallback={<Loader />}>
+        <Suspense
+          fallback={
+            <SkeletonCard className="w-full xl:max-w-xl md:max-w-lg max-w-xs" />
+          }
+        >
           <GroupClass />
         </Suspense>
         <MemberSearch />

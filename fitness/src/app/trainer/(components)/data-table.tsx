@@ -29,9 +29,10 @@ import {
 import React from "react";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
+import { TrainerSlim } from "@/lib/types";
 
 interface WithTrainer {
-  trainer: { id: number; name: string };
+  trainer: TrainerSlim;
 }
 
 //Two generic paramters: TData, TValue
@@ -41,7 +42,7 @@ interface WithTrainer {
 interface DataTableProps<TData extends WithTrainer, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  trainers: { id: number; name: string }[];
+  trainers: TrainerSlim[];
 }
 
 //You also need to extend WithTrainer in the function
@@ -103,7 +104,7 @@ export function DataTable<TData extends WithTrainer, TValue>({
             <SelectGroup>
               <SelectLabel>Trainers</SelectLabel>
               <SelectItem value="All">All</SelectItem>
-              {trainers.map((trainer: { id: number; name: string }) => (
+              {trainers.map((trainer: TrainerSlim) => (
                 <SelectItem key={trainer.id} value={String(trainer.id)}>
                   {trainer.name}
                 </SelectItem>

@@ -23,13 +23,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ClassManagementCalendar } from "@/components/ClassManagementCalendar";
 import { createSession } from "@/lib/actions";
-import { Room, Trainer } from "@/lib/types";
+import { Room, TrainerSlim } from "@/lib/types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { Loader } from "@/components/ui/loader";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const formSchema = z.object({
   sessionName: z.string().min(1, { message: "Session name is required" }),
@@ -51,10 +51,7 @@ export const ClassManagement = ({
   trainers,
   rooms,
 }: {
-  trainers: {
-    id: number;
-    name: string;
-  }[];
+  trainers: TrainerSlim[];
   rooms: Room[];
 }) => {
   const [calendarKey, setCalendarKey] = useState(0);
@@ -183,16 +180,14 @@ export const ClassManagement = ({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Trainers</SelectLabel>
-                        {trainers.map(
-                          (trainer: { id: number; name: string }) => (
-                            <SelectItem
-                              key={trainer.id}
-                              value={String(trainer.id)}
-                            >
-                              {trainer.name}
-                            </SelectItem>
-                          ),
-                        )}
+                        {trainers.map((trainer: TrainerSlim) => (
+                          <SelectItem
+                            key={trainer.id}
+                            value={String(trainer.id)}
+                          >
+                            {trainer.name}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
