@@ -4,7 +4,11 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { ClassSessionExtended, Room } from "@/lib/types";
+import {
+  ClassSessionWithRoomAndTrainer,
+  MemberWithBookingsAndMetrics,
+  Room,
+} from "@/lib/types";
 
 /*
  * @returns The session object
@@ -73,7 +77,9 @@ export async function isMember(userId: string): Promise<boolean> {
  * @returns The member object
  * @throws An error if the member cannot be fetched
  */
-export async function getMember(userId: string) {
+export async function getMember(
+  userId: string,
+): Promise<MemberWithBookingsAndMetrics | null> {
   try {
     const member = await prisma.member.findUnique({
       where: { userId },
@@ -96,10 +102,10 @@ export async function getMember(userId: string) {
 }
 
 /*
- * @returns The sessions object (ClassSessionExtended[])
+ * @returns The sessions object (ClassSessionWithRoomAndTrainer[])
  * @throws An error if the sessions cannot be fetched
  */
-export async function getSessions(): Promise<ClassSessionExtended[]> {
+export async function getSessions(): Promise<ClassSessionWithRoomAndTrainer[]> {
   try {
     const sessions = await prisma.classSession.findMany({
       where: {

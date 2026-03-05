@@ -9,13 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MemberExtended } from "@/lib/types";
+import { MemberWithBookingsAndMetrics } from "@/lib/types";
 import { Booking } from "@/lib/types";
 
 export const MemberDashboard = async ({
   member,
 }: {
-  member: MemberExtended | null;
+  member: MemberWithBookingsAndMetrics | null;
 }) => {
   const currWeight =
     member?.metrics && member?.metrics.length > 0
@@ -36,7 +36,9 @@ export const MemberDashboard = async ({
       ? member?.bookings.map((booking: Booking) => (
           <div key={booking.classSessionId}>
             {booking.classSession.dateTime < new Date() ? (
-              <li className="list-disc">{booking.classSession.name}</li>
+              <li className="list-disc text-muted-foreground text-sm">
+                {booking.classSession.name}
+              </li>
             ) : null}
           </div>
         ))
@@ -49,7 +51,9 @@ export const MemberDashboard = async ({
       ? member?.bookings.map((booking: Booking) => (
           <div key={booking.classSessionId}>
             {booking.classSession.dateTime > new Date() ? (
-              <li className="list-disc">{booking.classSession.name}</li>
+              <li className="list-disc text-primary font-semibold">
+                {booking.classSession.name}
+              </li>
             ) : null}
           </div>
         ))
@@ -90,13 +94,10 @@ export const MemberDashboard = async ({
             </p>
             <p className="text-muted-foreground text-xs mt-2 tracking-wider uppercase">
               Last updated:{" "}
-              {lastSubmitted?.toLocaleDateString("en-CA") ?? "N/A"}
+              {lastSubmitted?.toLocaleDateString("en-CA") ?? "Never"}
             </p>
           </div>
-        </div>
-        <Separator className="my-4" />
-        <div className="grid grid-cols-3 gap-3 text-sm">
-          <div className="flex flex-col gap-1 p-3 bg-primary/5">
+          <div className="flex flex-col gap-1 p-3">
             <p className="text-xs text-muted-foreground tracking-wider uppercase">
               Weight Target
             </p>
@@ -105,6 +106,9 @@ export const MemberDashboard = async ({
               <span className="text-xs font-normal">lbs</span>
             </p>
           </div>
+        </div>
+        <Separator className="my-4" />
+        <div className="flex flex-col gap-3 text-sm">
           <div className="flex flex-col gap-1 p-3 bg-primary/5">
             <p className="text-xs text-muted-foreground tracking-wider uppercase">
               Past Classes
