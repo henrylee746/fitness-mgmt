@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import Loading from "./loading";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import { Loader } from "@/components/ui/loader";
 
 const MemberIcon = () => <FaUser />;
 const TrainerIcon = () => <IoMdFitness />;
@@ -209,7 +210,9 @@ export const Homepage = () => {
               style={{ transitionDelay: "300ms" }}
             >
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12">
-                {!session && !isPending && isMounted ? (
+                {isPending || !isMounted ? (
+                  <Loader />
+                ) : !session ? (
                   <>
                     <Link href="/signup" className="w-full sm:w-auto">
                       <button className="w-full sm:w-auto group cursor-pointer inline-flex gap-3 items-center justify-center px-8 py-3.5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-sm tracking-widest uppercase transition-all duration-300 hover:shadow-xl hover:shadow-primary/25">
