@@ -121,4 +121,4 @@ export const MemberSearch = () => {
       </form>
     </Card>
   );
-}
+};

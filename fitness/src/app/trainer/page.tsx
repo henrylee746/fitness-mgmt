@@ -7,16 +7,18 @@ import Link from "next/link";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole, getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { SkeletonCard } from "@/components/SkeletonCard";
 
 export default async function Trainer() {
-  const session = await getSession();
+  const [session, role] = await Promise.all([
+    getSession(),
+    getActiveMemberRole(),
+  ]);
 
   if (!session) {
     redirect("/signin");
   }
-
-  // Use server-side auth to get organization role
-  const role = await getActiveMemberRole();
 
   if (role !== "trainer" || !role) {
     return (
@@ -51,7 +53,13 @@ export default async function Trainer() {
       </div>
       <div className="flex flex-wrap items-start justify-center font-sans gap-8 py-6 px-4">
         <SessionGuard />
-        <GroupClass />
+        <Suspense
+          fallback={
+            <SkeletonCard className="w-full xl:max-w-xl md:max-w-lg max-w-xs" />
+          }
+        >
+          <GroupClass />
+        </Suspense>
         <MemberSearch />
       </div>
     </>

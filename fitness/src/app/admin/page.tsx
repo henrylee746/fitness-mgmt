@@ -9,16 +9,17 @@ import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole } from "@/lib/actions";
 import { getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
+import { getRooms } from "@/lib/actions";
 
 export default async function Admin() {
-  const session = await getSession();
+  const [session, role] = await Promise.all([
+    getSession(),
+    getActiveMemberRole(),
+  ]);
 
   if (!session) {
     redirect("/signin");
   }
-
-  // Use server-side auth to get organization role
-  const role = await getActiveMemberRole();
 
   if (role !== "admin" || !role) {
     return (
@@ -31,7 +32,7 @@ export default async function Admin() {
     );
   }
 
-  const [sessions, trainers] = await Promise.all([
+  const [sessions, trainers, rooms] = await Promise.all([
     prisma.classSession.findMany({
       where: {
         dateTime: {
@@ -44,7 +45,13 @@ export default async function Admin() {
         trainer: true,
       },
     }),
-    prisma.trainer.findMany(),
+    prisma.trainer.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    }),
+    getRooms(),
   ]);
 
   return (
@@ -72,7 +79,7 @@ export default async function Admin() {
         <div className="flex flex-col gap-8 justify-center items-center">
           <RoomBooking sessions={sessions} />
         </div>
-        <ClassManagement trainers={trainers} />
+        <ClassManagement trainers={trainers} rooms={rooms} />
       </div>
     </>
   );

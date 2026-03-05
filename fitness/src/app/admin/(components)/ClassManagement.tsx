@@ -23,14 +23,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ClassManagementCalendar } from "@/components/ClassManagementCalendar";
 import { createSession } from "@/lib/actions";
-import { Room, Trainer } from "@/lib/types";
+import { Room, TrainerSlim } from "@/lib/types";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { Loader } from "@/components/ui/loader";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { getRooms } from "@/lib/actions";
+import { useState } from "react";
 
 const formSchema = z.object({
   sessionName: z.string().min(1, { message: "Session name is required" }),
@@ -48,17 +47,14 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export const ClassManagement = ({ trainers }: { trainers: Trainer[] }) => {
-  const [rooms, setRooms] = useState<Room[]>([]);
+export const ClassManagement = ({
+  trainers,
+  rooms,
+}: {
+  trainers: TrainerSlim[];
+  rooms: Room[];
+}) => {
   const [calendarKey, setCalendarKey] = useState(0);
-
-  useEffect(() => {
-    const getSessionRooms = async () => {
-      const sessionRooms = await getRooms();
-      setRooms(sessionRooms);
-    };
-    getSessionRooms();
-  }, []);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -184,7 +180,7 @@ export const ClassManagement = ({ trainers }: { trainers: Trainer[] }) => {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Trainers</SelectLabel>
-                        {trainers.map((trainer: Trainer) => (
+                        {trainers.map((trainer: TrainerSlim) => (
                           <SelectItem
                             key={trainer.id}
                             value={String(trainer.id)}

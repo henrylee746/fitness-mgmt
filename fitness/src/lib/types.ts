@@ -38,6 +38,12 @@ export type Trainer = {
   name: string;
 };
 
+//Slimmed down trainer type for use in GroupClass.tsx and ClassManagement.tsx
+export type TrainerSlim = {
+  id: number;
+  name: string;
+};
+
 export type HealthMetric = {
   weightGoal: number;
   weight: number;
