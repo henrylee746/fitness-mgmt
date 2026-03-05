@@ -28,14 +28,22 @@ export const GroupClass = async () => {
         trainer: true,
       },
     }),
-    prisma.trainer.findMany(),
+    prisma.trainer.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    }),
   ]);
 
   return (
     <Card className="w-full xl:max-w-xl md:max-w-lg max-w-xs">
       <CardHeader>
         <CardTitle className="flex gap-2 items-center">
-          <span style={{ fontFamily: "var(--font-display)" }} className="font-black uppercase tracking-wide text-2xl leading-none">
+          <span
+            style={{ fontFamily: "var(--font-display)" }}
+            className="font-black uppercase tracking-wide text-2xl leading-none"
+          >
             Upcoming Group Classes
           </span>
           <IconCalendarUser className="text-primary" />
@@ -53,4 +61,4 @@ export const GroupClass = async () => {
       </CardContent>
     </Card>
   );
-}
+};

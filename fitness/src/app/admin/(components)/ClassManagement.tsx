@@ -30,7 +30,6 @@ import { useForm, Controller } from "react-hook-form";
 import { Loader } from "@/components/ui/loader";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { getRooms } from "@/lib/actions";
 
 const formSchema = z.object({
   sessionName: z.string().min(1, { message: "Session name is required" }),
@@ -48,17 +47,17 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export const ClassManagement = ({ trainers }: { trainers: Trainer[] }) => {
-  const [rooms, setRooms] = useState<Room[]>([]);
+export const ClassManagement = ({
+  trainers,
+  rooms,
+}: {
+  trainers: {
+    id: number;
+    name: string;
+  }[];
+  rooms: Room[];
+}) => {
   const [calendarKey, setCalendarKey] = useState(0);
-
-  useEffect(() => {
-    const getSessionRooms = async () => {
-      const sessionRooms = await getRooms();
-      setRooms(sessionRooms);
-    };
-    getSessionRooms();
-  }, []);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -184,14 +183,16 @@ export const ClassManagement = ({ trainers }: { trainers: Trainer[] }) => {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Trainers</SelectLabel>
-                        {trainers.map((trainer: Trainer) => (
-                          <SelectItem
-                            key={trainer.id}
-                            value={String(trainer.id)}
-                          >
-                            {trainer.name}
-                          </SelectItem>
-                        ))}
+                        {trainers.map(
+                          (trainer: { id: number; name: string }) => (
+                            <SelectItem
+                              key={trainer.id}
+                              value={String(trainer.id)}
+                            >
+                              {trainer.name}
+                            </SelectItem>
+                          ),
+                        )}
                       </SelectGroup>
                     </SelectContent>
                   </Select>

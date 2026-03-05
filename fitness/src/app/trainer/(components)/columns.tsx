@@ -6,7 +6,7 @@ import { ClassSessionExtended } from "@/lib/types";
 //Session type with room and trainer relations joined together
 
 interface WithTrainer {
-  trainer: { name: string };
+  trainer: { id: number; name: string };
 }
 
 export const sessionColumns: ColumnDef<WithTrainer, ClassSessionExtended>[] = [

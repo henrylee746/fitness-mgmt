@@ -26,13 +26,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trainer } from "@/lib/types";
 import React from "react";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
 
 interface WithTrainer {
-  trainer: { name: string };
+  trainer: { id: number; name: string };
 }
 
 //Two generic paramters: TData, TValue
@@ -42,7 +41,7 @@ interface WithTrainer {
 interface DataTableProps<TData extends WithTrainer, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  trainers: Trainer[];
+  trainers: { id: number; name: string }[];
 }
 
 //You also need to extend WithTrainer in the function
@@ -54,7 +53,7 @@ export function DataTable<TData extends WithTrainer, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [filteredData, setFilteredData] = React.useState(data);
   const [loading, setLoading] = React.useState(false);
@@ -71,7 +70,8 @@ export function DataTable<TData extends WithTrainer, TValue>({
       const data = await res.json();
       setFilteredData(data);
     } catch (error) {
-      toast.error(`Failed to filter sessions: ${error instanceof Error ? error.message : "Unknown error"}`
+      toast.error(
+        `Failed to filter sessions: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     } finally {
       setLoading(false);
@@ -103,7 +103,7 @@ export function DataTable<TData extends WithTrainer, TValue>({
             <SelectGroup>
               <SelectLabel>Trainers</SelectLabel>
               <SelectItem value="All">All</SelectItem>
-              {trainers.map((trainer) => (
+              {trainers.map((trainer: { id: number; name: string }) => (
                 <SelectItem key={trainer.id} value={String(trainer.id)}>
                   {trainer.name}
                 </SelectItem>
@@ -123,9 +123,9 @@ export function DataTable<TData extends WithTrainer, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -143,7 +143,7 @@ export function DataTable<TData extends WithTrainer, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
