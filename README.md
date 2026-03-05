@@ -12,9 +12,9 @@ A modern, full-stack gym management system supporting members, trainers, booking
 [Live Demo](https://comp-3005-fp.vercel.app/)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=flat-square&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
-![Prisma](https://img.shields.io/badge/Prisma-7.2-2D3748?style=flat-square&logo=prisma)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-316192?style=flat-square&logo=postgresql)
+![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue?style=flat-square&logo=typescript)
+![Prisma](https://img.shields.io/badge/Prisma-7.4-2D3748?style=flat-square&logo=prisma)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-316192?style=flat-square&logo=postgresql)
 
 </div>
 
@@ -35,10 +35,10 @@ A modern, full-stack gym management system supporting members, trainers, booking
 | Category            | Technology                              |
 | ------------------- | --------------------------------------- |
 | **Framework**       | Next.js 16.1 (App Router)               |
-| **Language**        | TypeScript 5                            |
-| **Database**        | PostgreSQL 16                           |
-| **ORM**             | Prisma 7.2                              |
-| **Auth**            | Better Auth 1.4                         |
+| **Language**        | TypeScript 6.0 beta                     |
+| **Database**        | PostgreSQL 18                           |
+| **ORM**             | Prisma 7.4                              |
+| **Auth**            | Better Auth 1.5                         |
 | **Styling**         | Tailwind CSS 4 + shadcn/ui              |
 | **Icons**           | Lucide React, React Icons, Tabler Icons |
 | **Package Manager** | pnpm                                    |
