@@ -82,6 +82,8 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  //Fetches related data from multiple tables (e.g. /get-session)
+  experimental: { joins: true },
   session: {
     /*
     Tradeoffs:
