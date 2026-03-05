@@ -7,82 +7,71 @@ import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole } from "@/lib/actions";
 import { getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export default async function Admin() {
-  try {
-    const session = await getSession();
+  const session = await getSession();
 
-    if (!session) {
-      redirect("/signin");
-    }
+  if (!session) {
+    redirect("/signin");
+  }
 
-    // Use server-side auth to get organization role
-    const role = await getActiveMemberRole();
+  // Use server-side auth to get organization role
+  const role = await getActiveMemberRole();
 
-    if (role !== "admin" || !role) {
-      return (
-        <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-          You do not have the role of admin to access this page.
-          <Button asChild>
-            <Link href="/account">Select role in your accounts page</Link>
-          </Button>
-        </div>
-      );
-    }
-
-    const [sessions, trainers] = await Promise.all([
-      prisma.classSession.findMany({
-        where: {
-          dateTime: {
-            gte: new Date(),
-          },
-        },
-        include: {
-          //Joins with room and trainer tables
-          room: true,
-          trainer: true,
-        },
-      }),
-      prisma.trainer.findMany(),
-    ]);
-
+  if (role !== "admin" || !role) {
     return (
-      <>
-        <div className="my-6 text-center">
-          <div className="inline-flex items-center gap-3 justify-center mb-1">
-            <div className="h-px w-8 bg-primary/50" />
-            <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">
-              Admin
-            </span>
-            <div className="h-px w-8 bg-primary/50" />
-          </div>
-          <h1
-            className="font-black uppercase leading-none text-foreground"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.2rem, 6vw, 4rem)",
-            }}
-          >
-            Admin Portal
-          </h1>
-        </div>
-        <div className="flex flex-wrap items-start justify-center font-sans gap-8 py-6 px-4">
-          <SessionGuard />
-          <div className="flex flex-col gap-8 justify-center items-center">
-            <RoomBooking sessions={sessions} />
-          </div>
-          <ClassManagement trainers={trainers} />
-        </div>
-      </>
-    );
-  } catch (error) {
-    if (isRedirectError(error)) throw error;
-    return (
-      <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        {error instanceof Error ? error.message : "Something went wrong."}{" "}
-        Please contact support if the issue persists.
+      <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
+        You do not have the role of admin to access this page.
+        <Button asChild>
+          <Link href="/account">Select role in your accounts page</Link>
+        </Button>
       </div>
     );
   }
+
+  const [sessions, trainers] = await Promise.all([
+    prisma.classSession.findMany({
+      where: {
+        dateTime: {
+          gte: new Date(),
+        },
+      },
+      include: {
+        //Joins with room and trainer tables
+        room: true,
+        trainer: true,
+      },
+    }),
+    prisma.trainer.findMany(),
+  ]);
+
+  return (
+    <>
+      <div className="my-6 text-center">
+        <div className="inline-flex items-center gap-3 justify-center mb-1">
+          <div className="h-px w-8 bg-primary/50" />
+          <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">
+            Admin
+          </span>
+          <div className="h-px w-8 bg-primary/50" />
+        </div>
+        <h1
+          className="font-black uppercase leading-none text-foreground"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2.2rem, 6vw, 4rem)",
+          }}
+        >
+          Admin Portal
+        </h1>
+      </div>
+      <div className="flex flex-wrap items-start justify-center font-sans gap-8 py-6 px-4">
+        <SessionGuard />
+        <div className="flex flex-col gap-8 justify-center items-center">
+          <RoomBooking sessions={sessions} />
+        </div>
+        <ClassManagement trainers={trainers} />
+      </div>
+    </>
+  );
 }

@@ -8,7 +8,7 @@ import { ClassSessionExtended, Room } from "@/lib/types";
 
 /*
  * @returns The session object
- * @throws An error if the session cannot be fetched
+ * @throws An error if the session cannot be loaded
  */
 export async function getSession() {
   try {
@@ -17,7 +17,7 @@ export async function getSession() {
     });
     return session;
   } catch (error) {
-    throw new Error("Failed to get session");
+    throw new Error("Failed to load session");
   }
 }
 
