@@ -2,11 +2,9 @@ export const dynamic = "force-dynamic";
 
 import { GroupClass } from "./(components)/GroupClass";
 import { MemberSearch } from "./(components)/MemberSearch";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole, getSession } from "@/lib/actions";
-import { redirect } from "next/navigation";
+import { forbidden, unauthorized } from "next/navigation";
 import { Suspense } from "react";
 import { SkeletonCard } from "@/components/SkeletonCard";
 
@@ -16,20 +14,10 @@ export default async function Trainer() {
     getActiveMemberRole(),
   ]);
 
-  if (!session) {
-    redirect("/signin");
-  }
+  if (!session) unauthorized();
 
-  if (role !== "trainer" || !role) {
-    return (
-      <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        You do not have the role of trainer to access this page.
-        <Button asChild>
-          <Link href="/account">Select role in your accounts page</Link>
-        </Button>
-      </div>
-    );
-  }
+  //Forbidden if user is not a trainer
+  if (role !== "trainer" || !role) forbidden();
 
   return (
     <>

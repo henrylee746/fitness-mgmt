@@ -2,16 +2,14 @@ export const dynamic = "force-dynamic";
 import { AccountPage } from "./AccountPage";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getSession } from "@/lib/actions";
-import { redirect } from "next/navigation";
+import { unauthorized } from "next/navigation";
 import { RoleSelect } from "./RoleSelect";
 import { DeleteAccount } from "./DeleteAccount";
 
 export default async function Account() {
   const session = await getSession();
 
-  if (!session) {
-    redirect("/signin");
-  }
+  if (!session) unauthorized();
 
   return (
     <div className="h-full w-full">

@@ -9,16 +9,14 @@ import { SessionGuard } from "@/components/SessionGuard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getSession } from "@/lib/actions";
-import { redirect } from "next/navigation";
+import { unauthorized } from "next/navigation";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import { ClassSessionExtended } from "@/lib/types";
 
 export default async function Members() {
   const session = await getSession();
 
-  if (!session) {
-    redirect("/signin");
-  }
+  if (!session) unauthorized();
 
   const member = await getMember(session.user.id);
 

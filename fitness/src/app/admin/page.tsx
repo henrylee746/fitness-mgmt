@@ -3,12 +3,10 @@ export const dynamic = "force-dynamic";
 import prisma from "@/lib/prisma";
 import { RoomBooking } from "./(components)/RoomBooking";
 import { ClassManagement } from "./(components)/ClassManagement";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole } from "@/lib/actions";
 import { getSession } from "@/lib/actions";
-import { redirect } from "next/navigation";
+import { forbidden, unauthorized } from "next/navigation";
 import { getRooms } from "@/lib/actions";
 
 export default async function Admin() {
@@ -17,20 +15,10 @@ export default async function Admin() {
     getActiveMemberRole(),
   ]);
 
-  if (!session) {
-    redirect("/signin");
-  }
+  if (!session) unauthorized();
 
-  if (role !== "admin" || !role) {
-    return (
-      <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        You do not have the role of admin to access this page.
-        <Button asChild>
-          <Link href="/account">Select role in your accounts page</Link>
-        </Button>
-      </div>
-    );
-  }
+  //Redirect to forbidden.tsx if user is not an admin
+  if (role !== "admin" || !role) forbidden();
 
   const [sessions, trainers, rooms] = await Promise.all([
     prisma.classSession.findMany({
