@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { GroupClass } from "./(components)/GroupClass";
 import { MemberSearch } from "./(components)/MemberSearch";
 import { Button } from "@/components/ui/button";
@@ -5,35 +7,24 @@ import Link from "next/link";
 import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole, getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
-import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export default async function Trainer() {
-  try {
-    const session = await getSession();
+  const session = await getSession();
 
-    if (!session) {
-      redirect("/signin");
-    }
+  if (!session) {
+    redirect("/signin");
+  }
 
-    // Use server-side auth to get organization role
-    const role = await getActiveMemberRole();
+  // Use server-side auth to get organization role
+  const role = await getActiveMemberRole();
 
-    if (role !== "trainer" || !role) {
-      return (
-        <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-          You do not have the role of trainer to access this page.
-          <Button asChild>
-            <Link href="/account">Select role in your accounts page</Link>
-          </Button>
-        </div>
-      );
-    }
-  } catch (error) {
-    if (isRedirectError(error)) throw error;
+  if (role !== "trainer" || !role) {
     return (
-      <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        {error instanceof Error ? error.message : "Something went wrong."}{" "}
-        Please contact support if the issue persists.
+      <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
+        You do not have the role of trainer to access this page.
+        <Button asChild>
+          <Link href="/account">Select role in your accounts page</Link>
+        </Button>
       </div>
     );
   }
