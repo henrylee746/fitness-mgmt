@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { ClassSessionExtended, Room } from "@/lib/types";
+import { ClassSessionWithRoomAndTrainer, Room } from "@/lib/types";
 import { updateSessionRoom } from "@/lib/actions";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -39,7 +39,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export const sessionColumns: ColumnDef<ClassSessionExtended>[] = [
+export const sessionColumns: ColumnDef<ClassSessionWithRoomAndTrainer>[] = [
   {
     id: "actions",
     cell: ({ row }) => {

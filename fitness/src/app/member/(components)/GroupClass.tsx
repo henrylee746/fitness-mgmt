@@ -12,7 +12,10 @@ import {
 import { IconCalendarUser } from "@tabler/icons-react";
 import { DataTable } from "./data-table";
 import { sessionColumns } from "./columns";
-import { MemberExtended, ClassSessionExtended } from "@/lib/types";
+import {
+  MemberWithBookingsAndMetrics,
+  ClassSessionWithRoomAndTrainer,
+} from "@/lib/types";
 import { registerSessions } from "@/lib/actions";
 import { useState, useActionState } from "react";
 import { Booking } from "@/lib/types";
@@ -21,8 +24,8 @@ export const GroupClass = ({
   sessions,
   member,
 }: {
-  sessions: ClassSessionExtended[];
-  member: MemberExtended | null;
+  sessions: ClassSessionWithRoomAndTrainer[];
+  member: MemberWithBookingsAndMetrics | null;
 }) => {
   /*Filters only sessions that the member has not registered for yet*/
   const sessionIds = member

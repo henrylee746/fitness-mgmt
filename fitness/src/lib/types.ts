@@ -1,33 +1,47 @@
-export type Room = {
-  capacity: number;
-  id: number;
+export type User = {
+  id: string;
   name: string;
+  email: string;
+  image?: string | null | undefined;
+  emailVerified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type ClassSessionExtended = {
-  capacity: number;
-  dateTime: Date;
+export type Member = {
   id: number;
-  name: string;
-  room: Room;
-  trainer: Trainer;
-  roomId: number;
-  trainerId: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  registeredAt: Date;
 };
 
-export type ClassSession = {
-  capacity: number;
-  dateTime: Date;
+//Used for displaying member information in the member dashboard
+export type MemberInfo = {
+  weight: number;
+  weightGoal: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+};
+
+export type MemberWithBookingsAndMetrics = Member & {
+  bookings: Booking[];
+  metrics: HealthMetric[];
+};
+
+export type HealthMetric = {
+  weightGoal: number;
+  weight: number;
+  memberId: number;
   id: number;
-  name: string;
-  roomId: number;
-  trainerId: number;
+  timestamp: Date;
 };
 
 export type Booking = {
   classSessionId: number;
   memberId: number;
-  classSession: ClassSession | ClassSessionExtended;
+  classSession: ClassSession;
   id: number;
   createdAt: Date;
 };
@@ -39,54 +53,24 @@ export type Trainer = {
 };
 
 //Slimmed down trainer type for use in GroupClass.tsx and ClassManagement.tsx
-export type TrainerSlim = {
+export type TrainerSlim = Omit<Trainer, "email">;
+
+export type Room = {
+  capacity: number;
   id: number;
   name: string;
 };
 
-export type HealthMetric = {
-  weightGoal: number;
-  weight: number;
-  memberId: number;
-  id: number;
-  timestamp: Date;
+export type ClassSessionWithRoomAndTrainer = ClassSession & {
+  room: Room;
+  trainer: Trainer;
 };
 
-export type Member = {
+export type ClassSession = {
+  capacity: number;
+  dateTime: Date;
   id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  registeredAt: Date;
-};
-
-export type User = {
-  id: string;
   name: string;
-  email: string;
-  image?: string | null | undefined;
-  emailVerified: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type MemberInfo = {
-  weight: number;
-  weightGoal: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-};
-
-export type MemberExtended = Member & {
-  bookings: Booking[] | [];
-  metrics: HealthMetric[] | [];
-};
-
-export type MemberExtendedMetrics = Member & {
-  metrics: HealthMetric[] | [];
-};
-
-export type MemberExtendedBookings = Member & {
-  bookings: Booking[] | [];
+  roomId: number;
+  trainerId: number;
 };

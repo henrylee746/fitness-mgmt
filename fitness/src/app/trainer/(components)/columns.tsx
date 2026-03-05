@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ClassSessionExtended } from "@/lib/types";
+import { ClassSessionWithRoomAndTrainer } from "@/lib/types";
 import { TrainerSlim } from "@/lib/types";
 
 //Session type with room and trainer relations joined together
@@ -10,7 +10,10 @@ interface WithTrainer {
   trainer: TrainerSlim;
 }
 
-export const sessionColumns: ColumnDef<WithTrainer, ClassSessionExtended>[] = [
+export const sessionColumns: ColumnDef<
+  WithTrainer,
+  ClassSessionWithRoomAndTrainer
+>[] = [
   {
     accessorKey: "name",
     header: "Session",

@@ -11,14 +11,19 @@ import Link from "next/link";
 import { getSession } from "@/lib/actions";
 import { unauthorized } from "next/navigation";
 import { SkeletonCard } from "@/components/SkeletonCard";
-import { ClassSessionExtended } from "@/lib/types";
+import {
+  ClassSessionWithRoomAndTrainer,
+  MemberWithBookingsAndMetrics,
+} from "@/lib/types";
 
 export default async function Members() {
   const session = await getSession();
 
   if (!session) unauthorized();
 
-  const member = await getMember(session.user.id);
+  const member: MemberWithBookingsAndMetrics | null = await getMember(
+    session.user.id,
+  );
 
   if (!member) {
     return (
@@ -34,7 +39,7 @@ export default async function Members() {
   const { user } = session; //Should never be null since we checked for session above
 
   async function GroupClassLoader() {
-    const sessions: ClassSessionExtended[] = await getSessions();
+    const sessions: ClassSessionWithRoomAndTrainer[] = await getSessions();
     return <GroupClass sessions={sessions} member={member} />;
   }
 
