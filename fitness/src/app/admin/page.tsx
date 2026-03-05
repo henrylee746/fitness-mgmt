@@ -7,6 +7,7 @@ import { SessionGuard } from "@/components/SessionGuard";
 import { getActiveMemberRole } from "@/lib/actions";
 import { getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 export default async function Admin() {
   try {
@@ -76,6 +77,7 @@ export default async function Admin() {
       </>
     );
   } catch (error) {
+    if (isRedirectError(error)) throw error;
     return (
       <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
         {error instanceof Error ? error.message : "Something went wrong."}{" "}
