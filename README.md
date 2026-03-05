@@ -9,7 +9,7 @@
 
 A modern, full-stack gym management system supporting members, trainers, bookings, sessions, and health metrics with authentication.
 
-[Live Demo](https://comp-3005-fp.vercel.app/)
+[Live Demo](https://www.fitnessmgmt.tech/)
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue?style=flat-square&logo=typescript)
