@@ -18,7 +18,7 @@ export default async function Admin() {
   if (!session) unauthorized();
 
   //Redirect to forbidden.tsx if user is not an admin
-  if (role !== "admin" || !role) forbidden();
+  if (role !== "admin") forbidden();
 
   const [sessions, trainers, rooms] = await Promise.all([
     prisma.classSession.findMany({
