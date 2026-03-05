@@ -11,6 +11,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/actions";
 import { redirect } from "next/navigation";
 import { SkeletonCard } from "@/components/SkeletonCard";
+import { ClassSessionExtended } from "@/lib/types";
 
 export default async function Members() {
   const session = await getSession();
@@ -35,7 +36,7 @@ export default async function Members() {
   const { user } = session; //Should never be null since we checked for session above
 
   async function GroupClassLoader() {
-    const sessions = await getSessions();
+    const sessions: ClassSessionExtended[] = await getSessions();
     return <GroupClass sessions={sessions} member={member} />;
   }
 
@@ -64,7 +65,11 @@ export default async function Members() {
         <ProfileManagement userId={user.id} memberId={member.id} />
         <div className="flex flex-col items-center justify-center gap-6">
           <MemberDashboard member={member} />
-          <Suspense fallback={<SkeletonCard />}>
+          <Suspense
+            fallback={
+              <SkeletonCard className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-md sm:max-w-sm max-w-xs" />
+            }
+          >
             <GroupClassLoader />
           </Suspense>
         </div>
