@@ -1,48 +1,49 @@
-"use client";
-import { motion } from "motion/react";
-
-export const Loader = () => {
-  const transition: any = (x: number) => {
-    return {
-      duration: 2,
-      repeat: Infinity,
-      repeatType: "loop" as const,
-      delay: x * 0.2,
-      ease: "easeInOut",
-    };
-  };
+const Ellipsis = ({ ...props }: React.ComponentProps<"svg">) => {
   return (
-    <div className="flex items-center">
-      <motion.div
-        transition={transition(0)}
-        initial={{
-          x: 0,
-        }}
-        animate={{
-          x: [0, 20, 0],
-        }}
-        className="h-4 w-4 rounded-full bg-neutral-200 shadow-md dark:bg-neutral-500"
-      />
-      <motion.div
-        initial={{
-          x: 0,
-        }}
-        animate={{
-          x: [0, 20, 0],
-        }}
-        transition={transition(0.4)}
-        className="h-4 w-4 -translate-x-2 rounded-full bg-neutral-200 shadow-md dark:bg-neutral-500"
-      />
-      <motion.div
-        initial={{
-          x: 0,
-        }}
-        animate={{
-          x: [0, 20, 0],
-        }}
-        transition={transition(0.8)}
-        className="h-4 w-4 -translate-x-4 rounded-full bg-neutral-200 shadow-md dark:bg-neutral-500"
-      />
-    </div>
+    <svg
+      height={24}
+      viewBox="0 0 24 24"
+      width={24}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <title>Loading...</title>
+      <circle cx="4" cy="12" fill="currentColor" r="2">
+        <animate
+          attributeName="cy"
+          begin="0;ellipsis3.end+0.25s"
+          calcMode="spline"
+          dur="0.6s"
+          id="ellipsis1"
+          keySplines=".33,.66,.66,1;.33,0,.66,.33"
+          values="12;6;12"
+        />
+      </circle>
+      <circle cx="12" cy="12" fill="currentColor" r="2">
+        <animate
+          attributeName="cy"
+          begin="ellipsis1.begin+0.1s"
+          calcMode="spline"
+          dur="0.6s"
+          keySplines=".33,.66,.66,1;.33,0,.66,.33"
+          values="12;6;12"
+        />
+      </circle>
+      <circle cx="20" cy="12" fill="currentColor" r="2">
+        <animate
+          attributeName="cy"
+          begin="ellipsis1.begin+0.2s"
+          calcMode="spline"
+          dur="0.6s"
+          id="ellipsis3"
+          keySplines=".33,.66,.66,1;.33,0,.66,.33"
+          values="12;6;12"
+        />
+      </circle>
+    </svg>
   );
+};
+
+export const Loader = ({ ...props }: React.ComponentProps<"svg">) => {
+  return <Ellipsis {...props} className="size-6" />;
 };

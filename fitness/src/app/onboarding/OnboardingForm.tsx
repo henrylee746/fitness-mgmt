@@ -22,7 +22,12 @@ interface OnboardingFormProps {
   lastName: string;
 }
 
-export const OnboardingForm = ({ userId, email, firstName, lastName }: OnboardingFormProps) => {
+export const OnboardingForm = ({
+  userId,
+  email,
+  firstName,
+  lastName,
+}: OnboardingFormProps) => {
   const router = useRouter();
 
   const form = useForm<FormData>({
@@ -47,9 +52,12 @@ export const OnboardingForm = ({ userId, email, firstName, lastName }: Onboardin
       router.push("/member");
     } catch (error) {
       form.setError("root.serverError", {
-        message: error instanceof Error ? error.message : "Failed to register member",
+        message:
+          error instanceof Error ? error.message : "Failed to register member",
       });
-      toast.error(error instanceof Error ? error.message : "Failed to register member");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to register member",
+      );
     }
   };
 
@@ -58,12 +66,17 @@ export const OnboardingForm = ({ userId, email, firstName, lastName }: Onboardin
       <div className="w-full max-w-md">
         <div className="relative bg-white dark:bg-zinc-900 border border-border rounded-lg p-6 shadow-sm">
           <div className="flex flex-col space-y-2 text-center mb-6">
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground"
-            style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.6rem, 4vw, 2.2rem)" }}>
+            <h1
+              className="text-2xl font-semibold tracking-tight text-foreground"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+              }}
+            >
               Welcome, {firstName}!
             </h1>
-           <p className="text-xs text-muted-foreground tracking-wider uppercase pt-1">
-            Choose your role to get started
+            <p className="text-xs text-muted-foreground tracking-wider uppercase pt-1">
+              Choose your role to get started
             </p>
           </div>
 
@@ -73,7 +86,10 @@ export const OnboardingForm = ({ userId, email, firstName, lastName }: Onboardin
             </p>
           )}
 
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             <RoleRadioGroup control={form.control} />
 
             <div className="flex items-center justify-center">
@@ -91,4 +107,4 @@ export const OnboardingForm = ({ userId, email, firstName, lastName }: Onboardin
       </div>
     </div>
   );
-}
+};
