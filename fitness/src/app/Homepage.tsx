@@ -70,12 +70,10 @@ export const Homepage = () => {
   const isDark = resolvedTheme === "dark";
   const { data: session, isPending } = authClient.useSession();
   const [isVisible, setIsVisible] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const [selectedPill, setSelectedPill] =
     useState<keyof typeof iconMap>("member");
 
   useEffect(() => {
-    setIsMounted(true);
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
@@ -99,7 +97,7 @@ export const Homepage = () => {
     });
   };
 
-  if (!isMounted) return <Loading />;
+  if (isPending) return <Loading />;
 
   return (
     <div className="relative w-full group overflow-hidden">
@@ -210,7 +208,7 @@ export const Homepage = () => {
               style={{ transitionDelay: "300ms" }}
             >
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-12">
-                {isPending || !isMounted ? (
+                {isPending ? (
                   <Loader />
                 ) : !session ? (
                   <>

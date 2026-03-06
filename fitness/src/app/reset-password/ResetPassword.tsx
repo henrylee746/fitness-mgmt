@@ -22,7 +22,6 @@ export const ResetPasswordForm = () => {
 
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const formSchema = z
@@ -53,13 +52,8 @@ export const ResetPasswordForm = () => {
   //User shouldn't be able to access this page directly,
   // so we check for the token in the URL
   useEffect(() => {
-    if (typeof window === "undefined") return;
     const token = new URLSearchParams(window.location.search).get("token");
-    if (!token) {
-      return;
-    }
-    setToken(token);
-    setIsMounted(true);
+    if (token) setToken(token);
   }, []);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -81,7 +75,7 @@ export const ResetPasswordForm = () => {
     );
   };
 
-  if (!token || !isMounted) {
+  if (!token) {
     return (
       <div className="min-h-[80vh] flex flex-col justify-center items-center p-6">
         <h1 className="font-black uppercase leading-none text-foreground text-center my-4">

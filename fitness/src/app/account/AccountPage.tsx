@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { Loader } from "@/components/ui/loader";
 import { EyeOffIcon, EyeIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const formSchema = z
   .object({
@@ -34,15 +34,10 @@ const formSchema = z
 //BetterAuth will check old password, so we don't need to check it here
 
 export const AccountPage = () => {
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [updatedPassword, setUpdatedPassword] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -73,11 +68,11 @@ export const AccountPage = () => {
     );
   };
 
-  if (!isMounted) {
+  if (isPending) {
     return <Loader />;
   }
 
-  if (!session || !isMounted) {
+  if (!session) {
     return (
       <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
         You are not logged in to view this page.
