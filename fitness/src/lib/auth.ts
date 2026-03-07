@@ -103,7 +103,7 @@ export const auth = betterAuth({
   user: {
     deleteUser: {
       enabled: true,
-      sendDeleteAccountVerification: async ({ user, url, token }, request) => {
+      sendDeleteAccountVerification: async ({ user, url }) => {
         const name = user.name.split(" ")[0];
         resend.emails
           .send({
@@ -130,7 +130,7 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     //Users must verify their email after signing up before logging in
-    sendResetPassword: async ({ user, url, token }, request) => {
+    sendResetPassword: async ({ user, url }) => {
       const name = user.name.split(" ")[0];
       resend.emails
         .send({
@@ -151,7 +151,7 @@ export const auth = betterAuth({
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
   emailVerification: {
-    sendVerificationEmail: async ({ user, url, token }, request) => {
+    sendVerificationEmail: async ({ user, url }) => {
       const name = user.name.split(" ")[0];
 
       // Don't await - prevents timing attacks and allows signup to complete even if email fails

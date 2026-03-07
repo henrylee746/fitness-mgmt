@@ -20,7 +20,7 @@ export async function getSession() {
       headers: await headers(),
     });
     return session;
-  } catch (error) {
+  } catch {
     throw new Error("Failed to load session");
   }
 }
@@ -37,7 +37,7 @@ export async function getRooms(): Promise<Room[]> {
       },
     });
     return rooms;
-  } catch (error) {
+  } catch {
     throw new Error("Failed to get rooms");
   }
 }
@@ -96,7 +96,7 @@ export async function getMember(
       },
     });
     return member;
-  } catch (error) {
+  } catch {
     throw new Error("Failed to get member");
   }
 }
@@ -119,7 +119,7 @@ export async function getSessions(): Promise<ClassSessionWithRoomAndTrainer[]> {
       },
     });
     return sessions;
-  } catch (error) {
+  } catch {
     throw new Error("Failed to get sessions");
   }
 }
@@ -145,7 +145,7 @@ export async function updateRole(
       data: { role },
     });
     return { success: true };
-  } catch (error) {
+  } catch {
     return { success: false, error: "Failed to update role" };
   }
 }
@@ -181,7 +181,7 @@ export async function updateSessionRoom(
       where: { id: Number(roomId) },
       select: { capacity: true },
     });
-  } catch (error) {
+  } catch {
     throw new Error("Failed to update session room");
   }
 
@@ -207,7 +207,7 @@ export async function updateSessionRoom(
     });
     // Re-fetch the table data after updating
     revalidatePath("/admin");
-  } catch (error) {
+  } catch {
     throw new Error("Failed to update session room");
   }
 
@@ -239,7 +239,7 @@ export async function createSession(
       where: { id: Number(roomId) },
       select: { capacity: true },
     });
-  } catch (error) {
+  } catch {
     throw new Error("Failed to create session");
   }
 
@@ -269,7 +269,7 @@ export async function createSession(
       },
     });
     revalidatePath("/admin");
-  } catch (error) {
+  } catch {
     throw new Error("Failed to create session");
   }
 
@@ -335,7 +335,7 @@ export const registerMember = async (formData: FormData): Promise<string> => {
 
     revalidatePath("/member", "page");
     return organization.id;
-  } catch (error) {
+  } catch {
     throw new Error("Failed to register member");
   }
 };
@@ -351,8 +351,8 @@ export const updateMember = async (formData: FormData): Promise<void> => {
   const firstName = formData.get("firstName") as string | null;
   const lastName = formData.get("lastName") as string | null;
 
-  const memberUpdateData: any = {};
-  const userUpdateData: any = {};
+  const memberUpdateData: Record<string, unknown> = {};
+  const userUpdateData: Record<string, unknown> = {};
 
   if (!email && !firstName && !lastName) return;
 
@@ -389,7 +389,7 @@ export const updateMember = async (formData: FormData): Promise<void> => {
       });
     });
     revalidatePath("/member", "page");
-  } catch (error) {
+  } catch {
     throw new Error("Failed to update member profile");
   }
 };
@@ -403,7 +403,7 @@ export const updateMetrics = async (formData: FormData): Promise<void> => {
   const memberId = formData.get("memberId");
   const weight = formData.get("currWeight");
   const weightGoal = formData.get("weightTarget");
-  const metricUpdateData: any = {};
+  const metricUpdateData: Record<string, unknown> = {};
 
   const COOLDOWN_MINUTES = 1;
 
@@ -440,7 +440,7 @@ export const updateMetrics = async (formData: FormData): Promise<void> => {
       data: metricUpdateData,
     });
     revalidatePath("/member", "page");
-  } catch (error) {
+  } catch {
     throw new Error("Failed to create health metric");
   }
 };

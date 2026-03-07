@@ -1,8 +1,10 @@
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> { }
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
 
 export function AnimatedCard({ className, ...props }: CardProps) {
   return (
@@ -12,60 +14,63 @@ export function AnimatedCard({ className, ...props }: CardProps) {
       aria-describedby="card-description"
       className={cn(
         "group/animated-card relative w-[280px] sm:w-[320px] md:w-[356px] overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 export function CardBody({ className, ...props }: CardProps) {
   return (
     <div
       role="group"
-      className={cn(
-        "flex flex-col space-y-1.5 border-t p-4",
-        className
-      )}
+      className={cn("flex flex-col space-y-1.5 border-t p-4", className)}
       {...props}
     />
-  )
+  );
 }
 
-interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> { }
+interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  className?: string;
+}
 
 export function CardTitle({ className, ...props }: CardTitleProps) {
   return (
     <h3
       className={cn(
         "text-lg leading-none font-semibold tracking-tight text-black dark:text-white",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
-interface CardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> { }
+interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
+  className?: string;
+}
 
 export function CardDescription({ className, ...props }: CardDescriptionProps) {
   return (
     <p
       className={cn(
         "text-sm text-neutral-500 dark:text-neutral-400",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 export function CardVisual({ className, ...props }: CardProps) {
   return (
     <div
-      className={cn("h-[150px] w-[280px] sm:h-[165px] sm:w-[320px] md:h-[180px] md:w-[356px] overflow-hidden", className)}
+      className={cn(
+        "h-[150px] w-[280px] sm:h-[165px] sm:w-[320px] md:h-[180px] md:w-[356px] overflow-hidden",
+        className,
+      )}
       {...props}
     />
-  )
+  );
 }

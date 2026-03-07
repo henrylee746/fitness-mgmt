@@ -4,25 +4,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-  InputGroupText,
 } from "@/components/ui/input-group";
 
 export const ResetPasswordForm = () => {
   const { data: session } = authClient.useSession();
 
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const [showPassword, setShowPassword] = useState(false);
 
   const formSchema = z
@@ -50,18 +48,6 @@ export const ResetPasswordForm = () => {
     mode: "onBlur",
   });
 
-  //User shouldn't be able to access this page directly,
-  // so we check for the token in the URL
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const token = new URLSearchParams(window.location.search).get("token");
-    if (!token) {
-      return;
-    }
-    setToken(token);
-    setIsMounted(true);
-  }, []);
-
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     // BetterAuth appends ?token=<value> from the reset email link
     await authClient.resetPassword(
@@ -81,7 +67,7 @@ export const ResetPasswordForm = () => {
     );
   };
 
-  if (!token || !isMounted) {
+  if (!token) {
     return (
       <div className="min-h-[80vh] flex flex-col justify-center items-center p-6">
         <h1 className="font-black uppercase leading-none text-foreground text-center my-4">

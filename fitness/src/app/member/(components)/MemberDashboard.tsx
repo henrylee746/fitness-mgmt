@@ -2,7 +2,6 @@ import { Separator } from "@/components/ui/separator";
 import { IconDashboardFilled } from "@tabler/icons-react";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,

@@ -1,14 +1,11 @@
 "use client";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { IconDoor } from "@tabler/icons-react";
 import { sessionColumns } from "./columns";
 import { ClassSessionWithRoomAndTrainer } from "@/lib/types";

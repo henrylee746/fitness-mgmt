@@ -2,7 +2,6 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -22,7 +21,7 @@ export const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   //useSession triggers on window focus (or page refresh)
-  const { data: session, isPending, error } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const [role, setRole] = useState<string | undefined | null>(undefined);
   const [rolesLoading, setRolesLoading] = useState(false);
 
@@ -34,10 +33,8 @@ export const Header = () => {
         }
         const activeRole = await getActiveMemberRole();
         setRole(activeRole);
-      } catch (error) {
-        toast.error(
-          `Failed to fetch role: ${error instanceof Error ? error.message : "Unknown error"}`,
-        );
+      } catch {
+        toast.error(`Failed to fetch role: Unknown error`);
       } finally {
         setRolesLoading(false);
       }
@@ -45,7 +42,7 @@ export const Header = () => {
     if (session) {
       fetchRole();
     }
-  }, [session, pathname]);
+  }, [session, pathname, role]);
 
   const handleSignOut = async () => {
     await authClient.signOut({

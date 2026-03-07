@@ -40,7 +40,7 @@ export const RoleSelect = ({ userId }: { userId: string }) => {
       } else {
         router.push("/admin");
       }
-    } catch (error: unknown) {
+    } catch {
       form.setError("root.serverError", { message: "Failed to update role" });
     }
   };
