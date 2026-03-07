@@ -403,7 +403,10 @@ export const updateMetrics = async (formData: FormData): Promise<void> => {
   const memberId = formData.get("memberId");
   const weight = formData.get("currWeight");
   const weightGoal = formData.get("weightTarget");
-  const metricUpdateData: Record<string, unknown> = {};
+
+  if (!memberId || !weight || !weightGoal) {
+    throw new Error("Missing required fields");
+  }
 
   const COOLDOWN_MINUTES = 1;
 
@@ -427,17 +430,13 @@ export const updateMetrics = async (formData: FormData): Promise<void> => {
     }
   }
 
-  if (weight) metricUpdateData.weight = Number(weight);
-  if (weightGoal) metricUpdateData.weightGoal = Number(weightGoal);
-
-  if (weight || weightGoal) {
-    metricUpdateData.timestamp = new Date();
-    metricUpdateData.memberId = Number(memberId);
-  }
-
   try {
     await prisma.healthMetric.create({
-      data: metricUpdateData,
+      data: {
+        weight: Number(weight),
+        weightGoal: Number(weightGoal),
+        memberId: Number(memberId),
+      },
     });
     revalidatePath("/member", "page");
   } catch {
