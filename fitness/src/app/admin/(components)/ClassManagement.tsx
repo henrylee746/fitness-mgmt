@@ -90,7 +90,7 @@ export const ClassManagement = ({
       toast.success("Session created successfully");
       form.reset();
       setCalendarKey((prev) => prev + 1);
-    } catch (error: unknown) {
+    } catch {
       form.setError("root.serverError", {
         message: "Failed to create session",
       });

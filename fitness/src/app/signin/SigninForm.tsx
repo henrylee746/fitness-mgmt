@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { LuUser, LuEye, LuEyeOff } from "react-icons/lu";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 import { FaGoogle } from "react-icons/fa";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
@@ -10,12 +10,6 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
-const UserIcon = () => (
-  <span className="h-5 w-5 text-muted-foreground inline-flex items-center">
-    <LuUser size={20} />
-  </span>
-);
 
 const EyeIcon = () => (
   <span className="h-4 w-4 text-muted-foreground inline-flex items-center">
@@ -263,4 +257,4 @@ export const Login = () => {
       </div>
     </div>
   );
-}
+};

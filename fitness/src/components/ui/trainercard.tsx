@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useEffect, useState } from "react"
+import * as React from "react";
+import { useEffect, useState } from "react";
 
 interface TrainerCardProps {
-  mainColor?: string
-  secondaryColor?: string
-  gridColor?: string
+  mainColor?: string;
+  secondaryColor?: string;
+  gridColor?: string;
 }
 
 export function TrainerCard({
@@ -14,7 +14,7 @@ export function TrainerCard({
   secondaryColor = "#fbbf24",
   gridColor = "#80808015",
 }: TrainerCardProps) {
-  const [hovered, setHovered] = useState(false)
+  const [hovered, setHovered] = useState(false);
 
   return (
     <>
@@ -45,16 +45,14 @@ export function TrainerCard({
         <GridLayer color={gridColor} />
       </div>
     </>
-  )
+  );
 }
 
 interface LayerProps {
-  color: string
-  secondaryColor?: string
-  hovered?: boolean
+  color: string;
+  secondaryColor?: string;
+  hovered?: boolean;
 }
-
-
 
 const GridLayer: React.FC<{ color: string }> = ({ color }) => {
   return (
@@ -62,36 +60,38 @@ const GridLayer: React.FC<{ color: string }> = ({ color }) => {
       style={{ "--grid-color": color } as React.CSSProperties}
       className="pointer-events-none absolute inset-0 z-[4] h-full w-full bg-transparent bg-[linear-gradient(to_right,var(--grid-color)_1px,transparent_1px),linear-gradient(to_bottom,var(--grid-color)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)] bg-[size:20px_20px] bg-center opacity-70"
     />
-  )
-}
+  );
+};
 
 const Layer1: React.FC<LayerProps> = ({ hovered, color, secondaryColor }) => {
-  const [mainProgress, setMainProgress] = useState(12.5)
-  const [secondaryProgress, setSecondaryProgress] = useState(0)
+  const [mainProgress, setMainProgress] = useState(12.5);
+  const [secondaryProgress, setSecondaryProgress] = useState(0);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout
+    let timeout: NodeJS.Timeout;
 
     if (hovered) {
       timeout = setTimeout(() => {
-        setMainProgress(66)
-        setSecondaryProgress(100)
-      }, 200)
+        setMainProgress(66);
+        setSecondaryProgress(100);
+      }, 200);
     } else {
-      setMainProgress(12.5)
-      setSecondaryProgress(0)
+      timeout = setTimeout(() => {
+        setMainProgress(12.5);
+        setSecondaryProgress(0);
+      }, 0);
     }
 
     return () => {
-      clearTimeout(timeout)
-    }
-  }, [hovered])
+      clearTimeout(timeout);
+    };
+  }, [hovered]);
 
-  const radius = 40
-  const circumference = 2 * Math.PI * radius
-  const mainDashoffset = circumference - (mainProgress / 100) * circumference
+  const radius = 40;
+  const circumference = 2 * Math.PI * radius;
+  const mainDashoffset = circumference - (mainProgress / 100) * circumference;
   const secondaryDashoffset =
-    circumference - (secondaryProgress / 100) * circumference
+    circumference - (secondaryProgress / 100) * circumference;
 
   return (
     <div className="ease-[cubic-bezier(0.6, 0.6, 0, 1)] absolute top-0 left-0 z-[7] flex h-[360px] w-[280px] sm:w-[320px] md:w-[356px] transform items-center justify-center transition-transform duration-500 group-hover/animated-card:-translate-y-[90px] group-hover/animated-card:scale-110">
@@ -151,8 +151,8 @@ const Layer1: React.FC<LayerProps> = ({ hovered, color, secondaryColor }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Layer2: React.FC<{ color: string }> = ({ color }) => {
   return (
@@ -174,8 +174,8 @@ const Layer2: React.FC<{ color: string }> = ({ color }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Layer3: React.FC<{ color: string }> = ({ color }) => {
   return (
@@ -204,8 +204,8 @@ const Layer3: React.FC<{ color: string }> = ({ color }) => {
         </defs>
       </svg>
     </div>
-  )
-}
+  );
+};
 
 const Layer4: React.FC<LayerProps> = ({ color, secondaryColor, hovered }) => {
   const items = [
@@ -215,7 +215,7 @@ const Layer4: React.FC<LayerProps> = ({ color, secondaryColor, hovered }) => {
     { id: 4, translateX: "-125", translateY: "0", text: "Pilates" },
     { id: 5, translateX: "-100", translateY: "50", text: "Meditation" },
     { id: 6, translateX: "-100", translateY: "-50", text: "Nutrition" },
-  ]
+  ];
 
   return (
     <div className="ease-[cubic-bezier(0.6, 0.6, 0, 1)] absolute inset-0 z-[7] flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover/animated-card:opacity-100">
@@ -239,5 +239,5 @@ const Layer4: React.FC<LayerProps> = ({ color, secondaryColor, hovered }) => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};

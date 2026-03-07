@@ -2,10 +2,8 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -38,6 +36,7 @@ export const GroupClass = ({
   const [state, formAction] = useActionState(registerSessions, {
     success: true,
   });
+
   return (
     <Card className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-md sm:max-w-sm max-w-xs">
       <CardHeader>

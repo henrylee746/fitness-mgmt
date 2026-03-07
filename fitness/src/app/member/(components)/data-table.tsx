@@ -45,9 +45,10 @@ export function DataTable<TData extends { id: number }, TValue>({
     onSelectionChange(
       table
         .getFilteredSelectedRowModel()
-        .rows.map((row) => String(row.original.id))
+        .rows.map((row) => String(row.original.id)),
     );
-  }, [rowSelection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rowSelection, onSelectionChange]); // table excluded: new ref every render would loop
 
   return (
     <div className="overflow-hidden rounded-md border">
@@ -62,7 +63,7 @@ export function DataTable<TData extends { id: number }, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );

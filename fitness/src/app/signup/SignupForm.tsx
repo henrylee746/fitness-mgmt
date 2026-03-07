@@ -8,7 +8,7 @@ import { Loader } from "@/components/ui/loader";
 import { Verify } from "./Verify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import Link from "next/link";
 
 const UserIcon: React.FC = () => <LuUser size={16} />;
@@ -80,10 +80,11 @@ const FloatingLabelInput = ({
       />
       <label
         htmlFor={id}
-        className={`absolute left-10 transition-all duration-200 pointer-events-none text-sm font-medium ${isFocused || inputValue
-          ? "-top-2 text-xs bg-card px-2 text-foreground"
-          : "top-2.5 text-muted-foreground"
-          }`}
+        className={`absolute left-10 transition-all duration-200 pointer-events-none text-sm font-medium ${
+          isFocused || inputValue
+            ? "-top-2 text-xs bg-card px-2 text-foreground"
+            : "top-2.5 text-muted-foreground"
+        }`}
       >
         {placeholder}
       </label>
@@ -104,14 +105,15 @@ const formSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.email({ message: "Invalid email address" }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" }),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 // Main Component with shadcn/ui styling
 export const SignupForm: React.FC = () => {
-
   //Get session from Better Auth in case user is signed in and tries to access signup page
   const { data: session } = authClient.useSession();
 
@@ -126,6 +128,11 @@ export const SignupForm: React.FC = () => {
     mode: "onBlur",
   });
 
+  const [firstName, lastName, email, password] = useWatch({
+    control: form.control,
+    name: ["firstName", "lastName", "email", "password"],
+  });
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [verificationSent, setVerificationSent] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -135,37 +142,47 @@ export const SignupForm: React.FC = () => {
   };
 
   const handleSubmit = async (data: FormData) => {
-    await authClient.signUp.email({
-      email: data.email,
-      password: data.password,
-      name: `${data.firstName} ${data.lastName}`,
-      callbackURL: "/onboarding", // Redirect here after email verification
-    }, {
-      onRequest: () => {
-        form.clearErrors();
+    await authClient.signUp.email(
+      {
+        email: data.email,
+        password: data.password,
+        name: `${data.firstName} ${data.lastName}`,
+        callbackURL: "/onboarding", // Redirect here after email verification
       },
-      onSuccess: () => {
-        toast.info(`Please check your email for a verification link.`);
-        setVerificationSent(true);
+      {
+        onRequest: () => {
+          form.clearErrors();
+        },
+        onSuccess: () => {
+          toast.info(`Please check your email for a verification link.`);
+          setVerificationSent(true);
+        },
+        onError: (ctx) => {
+          form.setError("root.serverError", {
+            message: ctx.error.message || "Something went wrong",
+          });
+        },
       },
-      onError: (ctx) => {
-        form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
-      },
-    });
+    );
   };
 
   const handleGoogleSubmit = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/onboarding",
-    }, {
-      onRequest: () => {
-        form.clearErrors();
+    await authClient.signIn.social(
+      {
+        provider: "google",
+        callbackURL: "/onboarding",
       },
-      onError: (ctx) => {
-        form.setError("root.serverError", { message: ctx.error.message || "Something went wrong" });
+      {
+        onRequest: () => {
+          form.clearErrors();
+        },
+        onError: (ctx) => {
+          form.setError("root.serverError", {
+            message: ctx.error.message || "Something went wrong",
+          });
+        },
       },
-    });
+    );
   };
 
   if (verificationSent) {
@@ -173,7 +190,11 @@ export const SignupForm: React.FC = () => {
   }
 
   if (session) {
-    return <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">You are already logged in as {session.user?.name}</div>;
+    return (
+      <div className="text-center text-2xl min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
+        You are already logged in as {session.user?.name}
+      </div>
+    );
   }
 
   return (
@@ -192,12 +213,17 @@ export const SignupForm: React.FC = () => {
             <div className="flex flex-col space-y-1 text-center mb-6 mt-2">
               <div className="inline-flex items-center gap-3 justify-center mb-2">
                 <div className="h-px w-6 bg-primary/50" />
-                <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">New Account</span>
+                <span className="text-xs font-mono font-bold tracking-[0.2em] uppercase text-primary/70">
+                  New Account
+                </span>
                 <div className="h-px w-6 bg-primary/50" />
               </div>
               <h1
                 className="font-black uppercase leading-none text-foreground"
-                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.6rem, 4vw, 2.2rem)" }}
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(1.6rem, 4vw, 2.2rem)",
+                }}
               >
                 Become a member
               </h1>
@@ -206,10 +232,16 @@ export const SignupForm: React.FC = () => {
               </p>
             </div>
             {form.formState.errors.root?.serverError && (
-              <p className="text-center mb-6 text-red-500 text-sm max-w-sm">{form.formState.errors.root.serverError.message}</p>
+              <p className="text-center mb-6 text-red-500 text-sm max-w-sm">
+                {form.formState.errors.root.serverError.message}
+              </p>
             )}
 
-            <form className="space-y-4 " onSubmit={form.handleSubmit(handleSubmit)} noValidate>
+            <form
+              className="space-y-4 "
+              onSubmit={form.handleSubmit(handleSubmit)}
+              noValidate
+            >
               {/* First Name Input */}
               <div className="flex flex-wrap items-center justify-center gap-4">
                 <div className="flex flex-col gap-4 w-full max-w-sm">
@@ -218,12 +250,14 @@ export const SignupForm: React.FC = () => {
                       id="firstName"
                       type="text"
                       {...form.register("firstName")}
-                      inputValue={form.watch("firstName")}
+                      inputValue={firstName ?? ""}
                       placeholder="First Name"
                       icon={<UserIcon />}
                     />
                     {form.formState.errors.firstName && (
-                      <p className="text-xs text-red-500">{form.formState.errors.firstName.message}</p>
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.firstName.message}
+                      </p>
                     )}
                   </div>
                   <div className="space-y-2">
@@ -231,12 +265,14 @@ export const SignupForm: React.FC = () => {
                       id="lastName"
                       type="text"
                       {...form.register("lastName")}
-                      inputValue={form.watch("lastName")}
+                      inputValue={lastName ?? ""}
                       placeholder="Last Name"
                       icon={<UserIcon />}
                     />
                     {form.formState.errors.lastName && (
-                      <p className="text-xs text-red-500">{form.formState.errors.lastName.message}</p>
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.lastName.message}
+                      </p>
                     )}
                   </div>
 
@@ -246,12 +282,14 @@ export const SignupForm: React.FC = () => {
                       id="email"
                       type="email"
                       {...form.register("email")}
-                      inputValue={form.watch("email")}
+                      inputValue={email ?? ""}
                       placeholder="Email"
                       icon={<MailIcon />}
                     />
                     {form.formState.errors.email && (
-                      <p className="text-xs text-red-500">{form.formState.errors.email.message}</p>
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.email.message}
+                      </p>
                     )}
                   </div>
 
@@ -261,14 +299,16 @@ export const SignupForm: React.FC = () => {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       {...form.register("password")}
-                      inputValue={form.watch("password")}
+                      inputValue={password ?? ""}
                       placeholder="Password"
                       icon={<LockIcon />}
                       rightIcon={showPassword ? <EyeOffIcon /> : <EyeIcon />}
                       onRightIconClick={togglePasswordVisibility}
                     />
                     {form.formState.errors.password && (
-                      <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.password.message}
+                      </p>
                     )}
                   </div>
                 </div>

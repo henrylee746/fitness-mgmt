@@ -21,8 +21,8 @@ export default function Forbidden() {
         Forbidden
       </h1>
       <p className="text-sm text-muted-foreground max-w-sm">
-        You don't have permission to access this page. If you think this is a
-        mistake, check your role in your account settings.
+        You don&apos;t have permission to access this page. If you think this is
+        a mistake, check your role in your account settings.
       </p>
       <div className="flex gap-3">
         <Button asChild variant="outline">

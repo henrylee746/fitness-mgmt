@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoMdFitness } from "react-icons/io";
 import { RiAdminFill } from "react-icons/ri";
@@ -70,12 +70,22 @@ export const Homepage = () => {
   const isDark = resolvedTheme === "dark";
   const { data: session, isPending } = authClient.useSession();
   const [isVisible, setIsVisible] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+
+  /*
+   * @ param subscribe - A function to subscribe to the external store (not subscring to anything here, so return empty function)
+   * @ param getSnapshot- A funciton returning a snapshot of the data in the store (client)
+   * @ param getServerSnapshot- A funciton returning a snapshot of the data in the store (server)
+   */
+  const isMounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+
   const [selectedPill, setSelectedPill] =
     useState<keyof typeof iconMap>("member");
 
   useEffect(() => {
-    setIsMounted(true);
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);

@@ -16,6 +16,15 @@ import {
   MemberWithBookingsAndMetrics,
 } from "@/lib/types";
 
+async function GroupClassLoader({
+  member,
+}: {
+  member: MemberWithBookingsAndMetrics | null;
+}) {
+  const sessions: ClassSessionWithRoomAndTrainer[] = await getSessions();
+  return <GroupClass sessions={sessions} member={member} />;
+}
+
 export default async function Members() {
   const session = await getSession();
 
@@ -28,8 +37,8 @@ export default async function Members() {
   if (!member) {
     return (
       <div className="min-h-[80vh] flex flex-col gap-2 items-center justify-center p-6 text-center text-2xl font-semibold leading-10 tracking-tight text-foreground">
-        Member not found. If you haven't chosen your roles, select them in your
-        onboarding page:
+        Member not found. If you haven&apos;t chosen your roles, select them in
+        your onboarding page:
         <Button asChild>
           <Link href="/onboarding">Onboarding</Link>
         </Button>
@@ -37,11 +46,6 @@ export default async function Members() {
     );
   }
   const { user } = session; //Should never be null since we checked for session above
-
-  async function GroupClassLoader() {
-    const sessions: ClassSessionWithRoomAndTrainer[] = await getSessions();
-    return <GroupClass sessions={sessions} member={member} />;
-  }
 
   return (
     <>
@@ -61,7 +65,7 @@ export default async function Members() {
             fontSize: "clamp(2.2rem, 6vw, 4rem)",
           }}
         >
-          Member's Hub
+          Member&apos;s Hub
         </h1>
       </div>
       <div className="flex justify-center items-start flex-wrap gap-6 lg:gap-8 font-sans py-6 px-4">
@@ -73,7 +77,7 @@ export default async function Members() {
               <SkeletonCard className="w-full xl:max-w-2xl lg:max-w-lg md:max-w-md sm:max-w-md sm:max-w-sm max-w-xs" />
             }
           >
-            <GroupClassLoader />
+            <GroupClassLoader member={member} />
           </Suspense>
         </div>
       </div>
