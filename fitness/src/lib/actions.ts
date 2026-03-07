@@ -316,7 +316,6 @@ export const registerMember = async (formData: FormData): Promise<string> => {
           id: `org_${Date.now()}`,
           name: "Default Organization",
           slug: "default-org",
-          createdAt: new Date(),
         },
       });
     }
@@ -329,7 +328,6 @@ export const registerMember = async (formData: FormData): Promise<string> => {
         lastName,
         organizationId: organization.id,
         role,
-        createdAt: new Date(),
       },
     });
 
