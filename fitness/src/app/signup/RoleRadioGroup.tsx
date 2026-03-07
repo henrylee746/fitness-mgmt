@@ -13,7 +13,7 @@ import { RiAdminFill } from "react-icons/ri";
 export function RoleRadioGroup({
   control,
 }: {
-  control: Control<{ role: string }>;
+  control: Control<{ role: "member" | "trainer" | "admin" }>;
 }) {
   return (
     // Control is the form control from react-hook-form
