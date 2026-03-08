@@ -1,6 +1,7 @@
 # Health and Fitness Club Management System
 
-<img width="939" height="690" alt="image" src="https://github.com/user-attachments/assets/48bcce49-313e-469d-a008-63867c708498" />
+<img width="921" height="912" alt="image" src="https://github.com/user-attachments/assets/b5a3948c-5816-4d1d-8307-ac85320b7398" />
+
 
 
 <div align="center">
