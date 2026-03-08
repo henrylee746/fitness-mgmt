@@ -47,10 +47,13 @@ export async function getRooms(): Promise<Room[]> {
  */
 export async function getActiveMemberRole(): Promise<string | null> {
   try {
-    const roleData = await auth.api.getActiveMemberRole({
-      headers: await headers(),
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user?.id) return null;
+    const member = await prisma.member.findUnique({
+      where: { userId: session.user.id },
+      select: { role: true },
     });
-    return roleData?.role ?? null;
+    return member?.role ?? null;
   } catch {
     return null;
   }
@@ -278,10 +281,12 @@ export async function createSession(
 
 /*
  * @param formData - The form data
- * @returns The organization id
+ * @returns The organization id and role
  * @throws An error if the member cannot be registered
  */
-export const registerMember = async (formData: FormData): Promise<string> => {
+export const registerMember = async (
+  formData: FormData,
+): Promise<{ organizationId: string; role: string }> => {
   const userId = formData.get("userId") as string;
   const email = formData.get("email") as string;
   const firstName = formData.get("firstName") as string;
@@ -332,7 +337,7 @@ export const registerMember = async (formData: FormData): Promise<string> => {
     });
 
     revalidatePath("/member", "page");
-    return organization.id;
+    return { organizationId: organization.id, role };
   } catch {
     throw new Error("Failed to register member");
   }

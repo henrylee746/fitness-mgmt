@@ -67,7 +67,7 @@ export const HeaderDock = ({
         <Dock direction="middle" disableMagnification>
           <ToggleTheme
             duration={600}
-            animationType="swipe-up"
+            animationType="none"
             className="mx-auto cursor-pointer"
           />
           <DockIcon key={DATA.pages.home.label}>
