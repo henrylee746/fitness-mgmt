@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useSyncExternalStore } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoMdFitness } from "react-icons/io";
 import { RiAdminFill } from "react-icons/ri";
@@ -48,15 +48,17 @@ const UserPill = ({ user, text, selected, onClick, index }: userPillProps) => {
         ${
           selected
             ? "bg-primary border-primary text-primary-foreground"
-            : "bg-transparent border-border/60 text-muted-foreground hover:border-primary/60 hover:text-foreground"
+            : "bg-transparent border-border/60  hover:border-primary/60 hover:text-foreground"
         }
       `}
     >
-      <span className="text-xs font-mono font-bold tracking-wider text-white">
+      <span className={`text-xs font-mono font-bold tracking-wider`}>
         0{index + 1}
       </span>
       <Icon />
-      <span className="text-white text-xs sm:text-sm font-bold tracking-widest uppercase whitespace-nowrap">
+      <span
+        className={`text-xs sm:text-sm font-bold tracking-widest uppercase whitespace-nowrap`}
+      >
         {text}
       </span>
     </button>

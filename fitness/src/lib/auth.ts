@@ -89,13 +89,12 @@ export const auth = betterAuth({
     Tradeoffs:
     - Don't need to hit the database everytime for session data
     - However, no immediate invalidation of sessions
-    
+    */
     cookieCache: {
       enabled: true,
       maxAge: 60, //1 minute
-      strategy: "jwt",
+      strategy: "compact",
     },
-    */
     // 1 day
     expiresIn: 60 * 60 * 24,
     updateAge: 60 * 60 * 24, // Extend session by 1 day
