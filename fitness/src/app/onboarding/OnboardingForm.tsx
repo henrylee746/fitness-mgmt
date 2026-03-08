@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { registerMember } from "@/lib/actions";
-import { authClient } from "@/lib/auth-client";
 import { RoleRadioGroup } from "../signup/RoleRadioGroup";
 import { Loader } from "@/components/ui/loader";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
   role: z.enum(["member", "trainer", "admin"], { message: "Invalid role" }),
@@ -44,12 +44,17 @@ export const OnboardingForm = ({
     formData.append("role", data.role);
 
     try {
-      const organizationId = await registerMember(formData);
+      const { role, organizationId } = await registerMember(formData);
       if (organizationId) {
-        //Invalidates session cache
         await authClient.organization.setActive({ organizationId });
       }
-      router.push("/member");
+      const destination =
+        role === "admin"
+          ? "/admin"
+          : role === "trainer"
+            ? "/trainer"
+            : "/member";
+      router.push(destination);
     } catch (error) {
       form.setError("root.serverError", {
         message:
