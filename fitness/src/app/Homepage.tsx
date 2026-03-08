@@ -52,13 +52,11 @@ const UserPill = ({ user, text, selected, onClick, index }: userPillProps) => {
         }
       `}
     >
-      <span
-        className={`text-secondary-foreground text-xs font-mono font-bold tracking-wider ${selected ? "opacity-60" : "opacity-30"}`}
-      >
+      <span className="text-xs font-mono font-bold tracking-wider text-white">
         0{index + 1}
       </span>
       <Icon />
-      <span className="text-slate-100 dark:text-foreground text-xs sm:text-sm font-bold tracking-widest uppercase whitespace-nowrap">
+      <span className="text-white text-xs sm:text-sm font-bold tracking-widest uppercase whitespace-nowrap">
         {text}
       </span>
     </button>
@@ -93,7 +91,7 @@ export const Homepage = () => {
   const users: Array<{ id: keyof typeof iconMap; name: string }> = [
     { id: "member", name: "Members" },
     { id: "trainer", name: "Trainers" },
-    { id: "admin", name: "Admin" },
+    { id: "admin", name: "Admins" },
   ];
 
   const handleSignOut = async () => {
@@ -163,7 +161,7 @@ export const Homepage = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span className="text-indigo-900 dark:text-primary text-xs font-bold tracking-[0.2em] uppercase">
+                <span className="dark:text-primary text-xs font-bold tracking-[0.2em] uppercase">
                   Fitness Management Platform
                 </span>
               </div>
@@ -185,13 +183,13 @@ export const Homepage = () => {
                   Hassle-free
                 </span>
                 <span
-                  className="block font-black uppercase leading-none text-violet-900 dark:text-primary sm:wrap-normal wrap-break-word"
+                  className="block font-black uppercase leading-none dark:text-primary sm:wrap-normal wrap-break-word"
                   style={{ fontSize: "clamp(2.15rem, 11vw, 8.5rem)" }}
                 >
                   Management
                 </span>
                 <span
-                  className="block font-bold tracking-[0.35em] uppercase mt-3 text-muted-foreground"
+                  className="block font-bold tracking-[0.35em] uppercase mt-3 dark:text-muted-foreground"
                   style={{
                     fontSize: "clamp(0.6rem, 1.4vw, 0.8rem)",
                     fontFamily: "var(--font-sans)",
@@ -279,7 +277,7 @@ export const Homepage = () => {
           >
             <Marquee
               autoFill={true}
-              gradientColor={isDark ? "black" : "#fbf9fc"}
+              gradientColor={isDark ? "#141414" : "#fcfcfc"}
             >
               {selectedPill === "member" ? (
                 <MemberCards />
