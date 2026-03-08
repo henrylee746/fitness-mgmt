@@ -36,7 +36,7 @@ export default async function Account() {
           Manage your account settings and preferences.
         </p>
       </div>
-      <div className="flex flex-wrap gap-8 justify-center items-center">
+      <div className="flex flex-wrap gap-8 justify-center items-center mx-4 md:mx-0">
         <AccountPage />
         <div className="flex flex-col gap-8">
           <RoleSelect userId={session.user.id} />

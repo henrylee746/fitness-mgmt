@@ -85,25 +85,26 @@ export const ProfileManagement = ({
     form.clearErrors();
     const formData = new FormData();
     formData.append("userId", userId);
+    formData.append("memberId", memberId.toString());
     // Only append fields that have values (since they're optional)
     if (data.email) formData.append("email", data.email);
     if (data.firstName) formData.append("firstName", data.firstName);
     if (data.lastName) formData.append("lastName", data.lastName);
 
     try {
-      await updateMember(formData);
+      const result = await updateMember(formData);
+      if (!result.success && result.error) {
+        form.setError("root.serverError", { message: result.error });
+        toast.error(result.error);
+        return;
+      }
       toast.success("Profile details updated successfully");
       form.reset();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        form.setError("root.serverError", { message: error.message });
-        toast.error(error.message);
-      } else {
-        form.setError("root.serverError", {
-          message: "Failed to update profile details",
-        });
-        toast.error("Failed to update profile details");
-      }
+    } catch {
+      form.setError("root.serverError", {
+        message: "Failed to update profile details",
+      });
+      toast.error("Failed to update profile details");
     }
   };
 
@@ -115,18 +116,19 @@ export const ProfileManagement = ({
     formData.append("currWeight", data.currWeight.toString());
     formData.append("weightTarget", data.weightTarget.toString());
     try {
-      await updateMetrics(formData);
-      toast.success("Fitness details updated successfully");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        fitnessForm.setError("root.serverError", { message: error.message });
-        toast.error(error.message);
-      } else {
-        fitnessForm.setError("root.serverError", {
-          message: "Failed to update fitness details",
-        });
-        toast.error("Failed to update fitness details");
+      const result = await updateMetrics(formData);
+      if (!result.success && result.error) {
+        fitnessForm.setError("root.serverError", { message: result.error });
+        toast.error(result.error);
+        return;
       }
+      toast.success("Fitness details updated successfully");
+      fitnessForm.reset();
+    } catch {
+      fitnessForm.setError("root.serverError", {
+        message: "Failed to update fitness details",
+      });
+      toast.error("Failed to update fitness details");
     }
   };
 

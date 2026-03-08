@@ -13,7 +13,8 @@ export type Member = {
   email: string;
   firstName: string;
   lastName: string;
-  registeredAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 //Used for displaying member information in the member dashboard
