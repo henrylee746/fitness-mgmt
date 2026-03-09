@@ -57,6 +57,7 @@ model ClassSession {
   roomId    Int
   name      String
   dateTime  DateTime
+  updatedAt DateTime  @updatedAt
   capacity  Int
   bookings  Booking[]
   room      Room      @relation(fields: [roomId], references: [id])
