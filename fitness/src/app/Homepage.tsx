@@ -11,7 +11,6 @@ import { TrainerCards } from "@/components/marqueecards/TrainerCards";
 import { AdminCards } from "@/components/marqueecards/AdminCards";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import Loading from "./loading";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { Loader } from "@/components/ui/loader";
@@ -109,7 +108,13 @@ export const Homepage = () => {
     });
   };
 
-  if (!isMounted) return <Loading />;
+  if (!isMounted)
+    return (
+      <div className="flex justify-center gap-2 items-center w-full h-full mt-48 sm:mt-96">
+        <p className="text-muted-foreground">Loading..</p>
+        <Loader className="size-6" />
+      </div>
+    );
 
   return (
     <div className="relative w-full group overflow-hidden">

@@ -17,6 +17,7 @@ import {
 import { registerSessions } from "@/lib/actions";
 import { useState, useActionState } from "react";
 import { Booking } from "@/lib/types";
+import { Loader } from "@/components/ui/loader";
 
 export const GroupClass = ({
   sessions,
@@ -33,7 +34,7 @@ export const GroupClass = ({
     (session) => !sessionIds.includes(session.id),
   );
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [state, formAction] = useActionState(registerSessions, {
+  const [state, formAction, isPending] = useActionState(registerSessions, {
     success: true,
   });
 
@@ -67,8 +68,11 @@ export const GroupClass = ({
           {!state.success && state.error && (
             <p className="text-xs text-red-500 mt-2">{state.error}</p>
           )}
-          <Button className="w-full mt-6 cursor-pointer rounded-none font-bold tracking-widest uppercase">
-            Register
+          <Button
+            className="w-full mt-6 cursor-pointer rounded-none font-bold tracking-widest uppercase"
+            disabled={selectedIds.length === 0 || isPending}
+          >
+            {isPending ? <Loader /> : "Register"}
           </Button>
         </form>
       </CardContent>

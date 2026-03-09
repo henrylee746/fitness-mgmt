@@ -80,7 +80,12 @@ export const AccountPage = () => {
   };
 
   if (!isMounted || isPending) {
-    return <Loader />;
+    return (
+      <div className="flex justify-center gap-2 items-center w-full h-full mt-48 sm:mt-96">
+        <p className="text-muted-foreground">Loading..</p>
+        <Loader className="size-6" />
+      </div>
+    );
   }
 
   if (!session) {
