@@ -165,6 +165,23 @@ export async function updateSessionRoom(
     return { success: false, error: "Missing sessionId or room" };
   }
 
+  const COOLDOWN_SECONDS = 30;
+
+  const lastUpdate = await prisma.classSession.findFirst({
+    where: { id: Number(sessionId) },
+    select: { updatedAt: true },
+  });
+
+  if (lastUpdate) {
+    const secondsSince = (Date.now() - lastUpdate.updatedAt.getTime()) / 1000;
+    if (secondsSince < COOLDOWN_SECONDS) {
+      return {
+        success: false,
+        error: "You must wait 30 seconds between updating a session room",
+      };
+    }
+  }
+
   // Get current class session to check its capacity
   const classSession = await prisma.classSession.findUnique({
     where: { id: Number(sessionId) },
