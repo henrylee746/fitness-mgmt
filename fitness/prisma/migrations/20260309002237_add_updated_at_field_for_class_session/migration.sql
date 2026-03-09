@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "class_session" ADD COLUMN "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE "class_session" ADD COLUMN "updatedAt" TIMESTAMP(3) NOT NULL;
