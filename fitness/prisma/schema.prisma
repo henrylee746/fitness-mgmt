@@ -16,7 +16,8 @@ model Member {
   firstName    String
   lastName     String
   email        String         @unique
-  registeredAt DateTime       @default(now())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   bookings     Booking[]
   metrics      HealthMetric[]
 

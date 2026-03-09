@@ -47,11 +47,8 @@ export async function getRooms(): Promise<Room[]> {
  */
 export async function getActiveMemberRole(): Promise<string | null> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user?.id) return null;
-    const member = await prisma.member.findUnique({
-      where: { userId: session.user.id },
-      select: { role: true },
+    const member = await auth.api.getActiveMemberRole({
+      headers: await headers(),
     });
     return member?.role ?? null;
   } catch {
@@ -185,7 +182,7 @@ export async function updateSessionRoom(
       select: { capacity: true },
     });
   } catch {
-    throw new Error("Failed to update session room");
+    return { success: false, error: "Failed to update session room" };
   }
 
   if (!room) {
@@ -211,7 +208,7 @@ export async function updateSessionRoom(
     // Re-fetch the table data after updating
     revalidatePath("/admin");
   } catch {
-    throw new Error("Failed to update session room");
+    return { success: false, error: "Failed to update session room" };
   }
 
   return { success: true };
@@ -243,7 +240,7 @@ export async function createSession(
       select: { capacity: true },
     });
   } catch {
-    throw new Error("Failed to create session");
+    return { success: false, error: "Failed to create session" };
   }
 
   if (!room) {
@@ -273,7 +270,7 @@ export async function createSession(
     });
     revalidatePath("/admin");
   } catch {
-    throw new Error("Failed to create session");
+    return { success: false, error: "Failed to create session" };
   }
 
   return { success: true };
@@ -348,8 +345,11 @@ export const registerMember = async (
  * @returns Void
  * @throws An error if the member cannot be updated
  */
-export const updateMember = async (formData: FormData): Promise<void> => {
+export const updateMember = async (
+  formData: FormData,
+): Promise<{ success: boolean; error?: string }> => {
   const userId = formData.get("userId") as string;
+  const memberId = formData.get("memberId") as string;
   const email = formData.get("email") as string | null;
   const firstName = formData.get("firstName") as string | null;
   const lastName = formData.get("lastName") as string | null;
@@ -357,7 +357,30 @@ export const updateMember = async (formData: FormData): Promise<void> => {
   const memberUpdateData: Record<string, unknown> = {};
   const userUpdateData: Record<string, unknown> = {};
 
-  if (!email && !firstName && !lastName) return;
+  if (!email && !firstName && !lastName)
+    return { success: false, error: "No fields to update" };
+
+  const COOLDOWN_SECONDS = 30;
+
+  //Finds most recent update for the member and grabs only the updatedAt field
+  const lastUpdate = await prisma.member.findFirst({
+    where: {
+      id: Number(memberId),
+    },
+    select: {
+      updatedAt: true,
+    },
+  });
+
+  if (lastUpdate) {
+    const secondsSince = (Date.now() - lastUpdate.updatedAt.getTime()) / 1000;
+    if (secondsSince < COOLDOWN_SECONDS) {
+      return {
+        success: false,
+        error: "You must wait 30 seconds between updating your profile",
+      };
+    }
+  }
 
   // Update Member fields
   if (email) memberUpdateData.email = email;
@@ -393,8 +416,9 @@ export const updateMember = async (formData: FormData): Promise<void> => {
     });
     revalidatePath("/member", "page");
   } catch {
-    throw new Error("Failed to update member profile");
+    return { success: false, error: "Failed to update member profile" };
   }
+  return { success: true };
 };
 
 /*
@@ -402,16 +426,18 @@ export const updateMember = async (formData: FormData): Promise<void> => {
  * @returns Void
  * @throws An error if the metrics cannot be updated
  */
-export const updateMetrics = async (formData: FormData): Promise<void> => {
+export const updateMetrics = async (
+  formData: FormData,
+): Promise<{ success: boolean; error?: string }> => {
   const memberId = formData.get("memberId");
   const weight = formData.get("currWeight");
   const weightGoal = formData.get("weightTarget");
 
   if (!memberId || !weight || !weightGoal) {
-    throw new Error("Missing required fields");
+    return { success: false, error: "Missing required fields" };
   }
 
-  const COOLDOWN_MINUTES = 1;
+  const COOLDOWN_SECONDS = 30;
 
   //Finds most recent metric for the member and grabs only the timestamp field
   const lastMetric = await prisma.healthMetric.findFirst({
@@ -427,9 +453,12 @@ export const updateMetrics = async (formData: FormData): Promise<void> => {
   });
 
   if (lastMetric) {
-    const minutesSince = (Date.now() - lastMetric.timestamp.getTime()) / 60000;
-    if (minutesSince < COOLDOWN_MINUTES) {
-      throw new Error("You must wait 1 minute between updating your metrics");
+    const secondsSince = (Date.now() - lastMetric.timestamp.getTime()) / 1000;
+    if (secondsSince < COOLDOWN_SECONDS) {
+      return {
+        success: false,
+        error: "You must wait 30 seconds between updating your metrics",
+      };
     }
   }
 
@@ -443,8 +472,9 @@ export const updateMetrics = async (formData: FormData): Promise<void> => {
     });
     revalidatePath("/member", "page");
   } catch {
-    throw new Error("Failed to create health metric");
+    return { success: false, error: "Failed to create health metric" };
   }
+  return { success: true };
 };
 
 /*
@@ -459,7 +489,7 @@ export const registerSessions = async (
   const ids = formData.getAll("sessionIds") as string[];
   const memberId = formData.get("memberId") as string;
 
-  const COOLDOWN_MINUTES = 1;
+  const COOLDOWN_SECONDS = 30;
 
   const lastBooking = await prisma.booking.findFirst({
     where: {
@@ -474,11 +504,11 @@ export const registerSessions = async (
   });
 
   if (lastBooking) {
-    const minutesSince = (Date.now() - lastBooking.createdAt.getTime()) / 60000;
-    if (minutesSince < COOLDOWN_MINUTES) {
+    const secondsSince = (Date.now() - lastBooking.createdAt.getTime()) / 1000;
+    if (secondsSince < COOLDOWN_SECONDS) {
       return {
         success: false,
-        error: "You must wait 1 minute between booking sessions",
+        error: "You must wait 30 seconds between booking sessions",
       };
     }
   }
@@ -507,6 +537,6 @@ export const registerSessions = async (
         error: "You are already registered for one or more of these sessions",
       };
     }
-    throw new Error("Failed to create booking");
+    return { success: false, error: "Failed to create booking" };
   }
 };
