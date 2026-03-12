@@ -46,8 +46,8 @@ const UserPill = ({ user, text, selected, onClick, index }: userPillProps) => {
         transition-all duration-300 cursor-pointer gap-3
         ${
           selected
-            ? "bg-primary border-primary text-primary-foreground"
-            : "bg-transparent border-border/60  hover:border-primary/60 hover:text-foreground"
+            ? "bg-primary border-primary text-primary-foreground dark:text-black"
+            : "bg-transparent border-border/60 hover:border-primary/60 text-white hover:text-white/80"
         }
       `}
     >
