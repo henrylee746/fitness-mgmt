@@ -42,7 +42,7 @@ A modern, full-stack gym management system supporting members, trainers, booking
 | **Auth**            | Better Auth 1.5                         |
 | **Styling**         | Tailwind CSS 4 + shadcn/ui              |
 | **Icons**           | Lucide React, React Icons, Tabler Icons |
-| **Package Manager** | pnpm                                    |
+| **Package Manager** | bun                                     |
 | **Deployment**      | Vercel                                  |
 
 ---
