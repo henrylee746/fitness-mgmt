@@ -127,8 +127,8 @@ export const Homepage = () => {
           src="/fitness.jpg"
           alt="Background"
           className="w-full h-full object-cover opacity-20 scale-110 group-hover:scale-100 transition-transform duration-1000"
-          width={1000}
-          height={1000}
+          fill
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/20" />
         <div className="sm:block hidden absolute top-8 left-8 w-12 h-12 border-t-2 border-l-2 border-primary/40" />
